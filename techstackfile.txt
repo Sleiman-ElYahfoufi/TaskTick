@@ -1,3 +1,0 @@
-Frontend: React and vite (Typescript)
-Backend: NestJS with typeORM
-Database: MySQL
