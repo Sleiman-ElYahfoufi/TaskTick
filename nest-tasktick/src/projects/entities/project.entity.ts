@@ -16,6 +16,13 @@ export enum PriorityLevel {
   HIGH = 'high'
 }
 
+export enum DetailDepth {
+  MINIMAL = 'minimal',
+  NORMAL = 'normal',
+  DETAILED = 'detailed',
+  COMPREHENSIVE = 'comprehensive'
+}
+
 @Entity('projects')
 export class Project {
   @PrimaryGeneratedColumn()
@@ -38,6 +45,13 @@ export class Project {
     default: PriorityLevel.MEDIUM
   })
   priority: PriorityLevel;
+
+  @Column({
+    type: 'enum',
+    enum: DetailDepth,
+    default: DetailDepth.NORMAL
+  })
+  detail_depth: DetailDepth;
 
   @Column({
     type: 'enum',
