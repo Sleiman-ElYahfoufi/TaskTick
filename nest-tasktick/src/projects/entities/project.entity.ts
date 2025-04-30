@@ -20,7 +20,6 @@ export enum DetailDepth {
   MINIMAL = 'minimal',
   NORMAL = 'normal',
   DETAILED = 'detailed',
-  COMPREHENSIVE = 'comprehensive'
 }
 
 @Entity('projects')
