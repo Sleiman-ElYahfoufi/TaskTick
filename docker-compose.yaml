@@ -1,0 +1,51 @@
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ./react-tasktick
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    volumes:
+      - ./react-tasktick:/app:ro
+      - /app/node_modules
+
+  # Backend service (NestJS with TypeORM)
+  backend:
+    build:
+      context: ./nest-tasktick
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_USERNAME=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_DATABASE=${DB_NAME:-tasktick}
+    volumes:
+      - ./nest-tasktick:/app
+      - /app/node_modules
+    restart: unless-stopped
+      
+  # MySQL service
+  database:
+    image: mysql:8.0-oracle
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_DATABASE=${DB_NAME:-tasktick}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  mysql-data:
