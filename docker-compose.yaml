@@ -10,6 +10,11 @@ services:
     volumes:
       - ./react-tasktick:/app:ro
       - /app/node_modules
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 100M
+
 
   # Backend service (NestJS with TypeORM)
   backend:
@@ -29,7 +34,10 @@ services:
       - ./nest-tasktick:/app
       - /app/node_modules
     restart: unless-stopped
-      
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 150M  
   # MySQL service
   database:
     image: mysql:8.0-oracle
@@ -42,6 +50,9 @@ services:
       - mysql-data:/var/lib/mysql
     restart: unless-stopped
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M
 volumes:
   mysql-data:
