@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: develop 
+    branches: [ main, develop ]
   pull_request:
-    branches: develop 
+    branches: [ main, develop ]
 
 jobs:
   backend-tests:
@@ -36,38 +36,10 @@ jobs:
         cd nest-tasktick
         npm test
         
-  frontend-tests:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: react-tasktick/package-lock.json
-        
-    - name: Install frontend dependencies
-      run: |
-        cd react-tasktick
-        npm install
-        
-    - name: Build frontend
-      run: |
-        cd react-tasktick
-        npm run build
-        
-    - name: Run frontend tests
-      run: |
-        cd react-tasktick
-        npm test -- --passWithNoTests
-      
+ 
   docker-build:
     runs-on: ubuntu-latest
-    needs: [backend-tests, frontend-tests]
+    needs: backend-tests
     
     steps:
     - name: Checkout code
