@@ -1,9 +1,7 @@
 services:
   # Frontend service
   frontend:
-    build:
-      context: ./react-tasktick
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/react-tasktick:latest
     ports:
       - "8080:80"
     depends_on:
@@ -15,19 +13,17 @@ services:
 
   # Backend service (NestJS with TypeORM)
   backend:
-    build:
-      context: ./nest-tasktick
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/nest-tasktick:latest
     ports:
       - "3000:3000"
     depends_on:
       - database
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=development 
       - DB_HOST=database
       - DB_PORT=3306
       - DB_USERNAME=${DB_USER:-root}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_NAME:-tasktick}
     volumes:
       - ./nest-tasktick:/app
@@ -40,7 +36,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME:-tasktick}
     volumes:
       - mysql-data:/var/lib/mysql
