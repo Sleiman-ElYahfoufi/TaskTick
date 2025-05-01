@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json* ./
 
-RUN npm install
+RUN npm install && npm install -g @nestjs/cli
 
 COPY start.sh ./
 RUN chmod +x ./start.sh
