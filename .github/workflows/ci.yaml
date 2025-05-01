@@ -53,7 +53,7 @@ jobs:
     - name: Install frontend dependencies
       run: |
         cd react-tasktick
-        npm ci
+        npm install
         
     - name: Build frontend
       run: |
