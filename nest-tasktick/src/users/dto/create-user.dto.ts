@@ -1,4 +1,3 @@
-// create-user.dto.ts
 import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { ExperienceLevel, UserRole } from '../entities/user.entity';
 
