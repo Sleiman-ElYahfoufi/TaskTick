@@ -34,13 +34,12 @@ jobs:
     - name: Run backend tests
       run: |
         cd nest-tasktick
-        npm test
+        npm test -- --verbose
         
  
   docker-build-push:
     runs-on: ubuntu-latest
     needs: backend-tests
-    if: github.event_name != 'pull_request' # Only push on direct pushes to main branches
     
     steps:
     - name: Checkout code
