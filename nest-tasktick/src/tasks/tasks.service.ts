@@ -15,7 +15,6 @@ export class TasksService {
   ) {}
 
   async create(createTaskDto: CreateTaskDto): Promise<Task> {
-    // Verify that the project exists
     await this.projectsService.findOne(createTaskDto.project_id);
     
     const task = this.tasksRepository.create(createTaskDto);
