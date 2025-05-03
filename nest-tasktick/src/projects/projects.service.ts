@@ -15,7 +15,6 @@ export class ProjectsService {
   ) {}
 
   async create(createProjectDto: CreateProjectDto): Promise<Project> {
-    // Check if user exists
     await this.usersService.findOne(createProjectDto.user_id);
 
     const project = this.projectsRepository.create(createProjectDto);
