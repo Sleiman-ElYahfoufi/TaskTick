@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateTimeTrackingDto {
   @IsNotEmpty()
@@ -19,9 +19,13 @@ export class CreateTimeTrackingDto {
 
   @IsOptional()
   @IsNumber()
-  session_duration?: number;
+  duration_hours?: number;
 
   @IsNotEmpty()
   @IsDateString()
   date: Date;
+
+  @IsOptional()
+  @IsBoolean()
+  is_active?: boolean = true;
 }
