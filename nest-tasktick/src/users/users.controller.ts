@@ -12,7 +12,6 @@ export class UsersController {
     private readonly authService: AuthService
   ) {}
 
-  @Public()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {

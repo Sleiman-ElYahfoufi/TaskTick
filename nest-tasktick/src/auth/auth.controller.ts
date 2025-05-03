@@ -11,11 +11,19 @@ import {
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Public()
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  async register(@Body() createUserDto: CreateUserDto) {
+    return this.authService.register(createUserDto);
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)
