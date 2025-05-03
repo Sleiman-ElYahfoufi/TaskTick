@@ -5,11 +5,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRole, ExperienceLevel } from './entities/user.entity';
 import { ConflictException, NotFoundException } from '@nestjs/common';
+import { AuthService } from '../auth/auth.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
-
 
   const mockUser = {
     id: 1,
@@ -25,7 +25,6 @@ describe('UsersController', () => {
     userTechStacks: [],
     aiInsights: []
   } as User;
-
 
   const mockUserResponse = {
     id: 1,
@@ -54,6 +53,12 @@ describe('UsersController', () => {
             update: jest.fn(),
             remove: jest.fn()
           }
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            generateToken: jest.fn().mockResolvedValue('mock-token'),
+          }
         }
       ]
     }).compile();
@@ -81,8 +86,9 @@ describe('UsersController', () => {
       const result = await controller.create(createUserDto);
 
       expect(service.create).toHaveBeenCalledWith(createUserDto);
-      expect(result).toEqual(mockUserResponse);
-      expect(result).not.toHaveProperty('password');
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('access_token');
+      expect(result.user).toEqual(mockUserResponse);
     });
 
     it('should handle ConflictException from service', async () => {
