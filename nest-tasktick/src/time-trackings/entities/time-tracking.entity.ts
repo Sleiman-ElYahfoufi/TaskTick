@@ -32,7 +32,7 @@ export class TimeTracking {
   is_paused: boolean;
   
   @Column('timestamp', { nullable: true })
-  pause_time: Date;
+  pause_time: Date | null;
   
   @Column('float', { default: 0 })
   paused_duration_hours: number;
