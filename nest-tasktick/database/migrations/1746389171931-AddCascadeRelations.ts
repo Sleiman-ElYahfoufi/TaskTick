@@ -1,11 +1,9 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddCascadeRelations1746387987653 implements MigrationInterface {
-    name = 'AddCascadeRelations1746387987653'
+export class AddCascadeRelations1746389171931 implements MigrationInterface {
+    name = 'AddCascadeRelations1746389171931'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE \`tech_stacks\` ADD \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)`);
-        await queryRunner.query(`ALTER TABLE \`tech_stacks\` ADD \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)`);
         await queryRunner.query(`ALTER TABLE \`time_trackings\` CHANGE \`start_time\` \`start_time\` timestamp NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`time_trackings\` CHANGE \`end_time\` \`end_time\` timestamp NULL`);
         await queryRunner.query(`ALTER TABLE \`time_trackings\` CHANGE \`duration_hours\` \`duration_hours\` float NULL`);
@@ -25,8 +23,6 @@ export class AddCascadeRelations1746387987653 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`time_trackings\` CHANGE \`duration_hours\` \`duration_hours\` float(12) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`time_trackings\` CHANGE \`end_time\` \`end_time\` timestamp NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`time_trackings\` CHANGE \`start_time\` \`start_time\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()`);
-        await queryRunner.query(`ALTER TABLE \`tech_stacks\` DROP COLUMN \`updated_at\``);
-        await queryRunner.query(`ALTER TABLE \`tech_stacks\` DROP COLUMN \`created_at\``);
     }
 
 }
