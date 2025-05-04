@@ -55,19 +55,24 @@ export class Task {
   @Max(100)
   progress: number;
 
-  @CreateDateColumn()
-  created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
 
   @Column()
   project_id: number;
 
-  @ManyToOne(() => Project, project => project.tasks)
+  @ManyToOne(() => Project, project => project.tasks, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
   @OneToMany(() => TimeTracking, timeTracking => timeTracking.task)
   timeTrackings: TimeTracking[];
+  
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

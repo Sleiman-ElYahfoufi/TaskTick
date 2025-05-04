@@ -17,17 +17,25 @@ export class UserTechStack {
   @Max(5)
   proficiency_level: number;
 
+
+
+  @ManyToOne(() => User, user => user.userTechStacks, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => TechStack, techStack => techStack.userTechStacks, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinColumn({ name: 'tech_id' })
+  techStack: TechStack;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @ManyToOne(() => User, user => user.userTechStacks)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
-
-  @ManyToOne(() => TechStack, techStack => techStack.userTechStacks)
-  @JoinColumn({ name: 'tech_id' })
-  techStack: TechStack;
 }

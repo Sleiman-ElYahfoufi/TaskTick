@@ -69,19 +69,24 @@ export class Project {
   @Max(100)
   accuracy_rating: number;
 
-  @CreateDateColumn()
-  created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
 
   @Column()
   user_id: number;
 
-  @ManyToOne(() => User, user => user.projects)
+  @ManyToOne(() => User, user => user.projects, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
   @OneToMany(() => Task, task => task.project)
   tasks: Task[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
