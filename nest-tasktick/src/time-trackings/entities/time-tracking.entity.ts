@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { IsNotEmpty, IsNumber, IsDateString } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Task } from '../../tasks/entities/task.entity';
 
@@ -21,12 +20,28 @@ export class TimeTracking {
   end_time: Date;
 
   @Column('float', { nullable: true })
-  @IsNumber()
-  session_duration: number;
+  duration_hours: number;
 
   @Column('date')
-  @IsDateString()
   date: Date;
+
+  @Column('boolean', { default: true })
+  is_active: boolean;
+  
+  @Column('boolean', { default: false })
+  is_paused: boolean;
+  
+  @Column('timestamp', { nullable: true })
+  pause_time: Date | null;
+  
+  @Column('float', { default: 0 })
+  paused_duration_hours: number;
+  
+  @Column('timestamp', { nullable: true })
+  last_heartbeat: Date;
+  
+  @Column('boolean', { default: false })
+  auto_paused: boolean;
 
   @CreateDateColumn()
   created_at: Date;

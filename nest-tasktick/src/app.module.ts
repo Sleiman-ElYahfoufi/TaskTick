@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -11,6 +12,8 @@ import { TechStacksModule } from './tech-stacks/tech-stacks.module';
 import { UserTechStacksModule } from './user-tech-stacks/user-tech-stacks.module';
 import { AiInsightsModule } from './ai-insights/ai-insights.module';
 import { dataSourceOptions } from '../database/data-source';
+import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -22,9 +25,16 @@ import { dataSourceOptions } from '../database/data-source';
     TimeTrackingsModule, 
     TechStacksModule, 
     UserTechStacksModule, 
-    AiInsightsModule
+    AiInsightsModule, 
+    AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
