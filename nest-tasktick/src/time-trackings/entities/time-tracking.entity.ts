@@ -25,8 +25,23 @@ export class TimeTracking {
   @Column('date')
   date: Date;
 
-  @Column('boolean', { default: false })
+  @Column('boolean', { default: true })
   is_active: boolean;
+  
+  @Column('boolean', { default: false })
+  is_paused: boolean;
+  
+  @Column('timestamp', { nullable: true })
+  pause_time: Date;
+  
+  @Column('float', { default: 0 })
+  paused_duration_hours: number;
+  
+  @Column('timestamp', { nullable: true })
+  last_heartbeat: Date;
+  
+  @Column('boolean', { default: false })
+  auto_paused: boolean;
 
   @CreateDateColumn()
   created_at: Date;
