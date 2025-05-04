@@ -1,4 +1,3 @@
-
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { TimeTracking } from '../../src/time-trackings/entities/time-tracking.entity';
@@ -58,11 +57,18 @@ export class TimeTrackingSeeder implements Seeder {
         timeTracking.user_id = user.id;
         timeTracking.task_id = task.id;
         timeTracking.start_time = startTime;
+        timeTracking.is_active = !isCompleted;
+        timeTracking.is_paused = false;
+        timeTracking.paused_duration_hours = 0;
+        timeTracking.auto_paused = false;
         
         if (isCompleted) {
           timeTracking.end_time = endTime;
-          timeTracking.session_duration = durationHours;
+          timeTracking.duration_hours = durationHours;
+        } else {
+          timeTracking.last_heartbeat = new Date(startTime);
         }
+        
         timeTracking.date = new Date(date.setHours(0, 0, 0, 0));
         
         
