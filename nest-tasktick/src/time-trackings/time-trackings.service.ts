@@ -336,32 +336,35 @@ export class TimeTrackingsService {
   }
   
   @Cron('0 */5 * * * *') // Run every 5 minutes
-  async checkForStaleTimers() {
-    const threshold = new Date();
-    threshold.setMinutes(threshold.getMinutes() - 10); // 10 minute threshold
-    
-    const staleSessions = await this.timeTrackingRepository.find({
-      where: {
-        is_active: true,
-        is_paused: false, // Only check non-paused sessions
-        last_heartbeat: LessThan(threshold)
-      }
-    });
-    
-    for (const session of staleSessions) {
-      // Calculate time until last heartbeat
-      const startTime = new Date(session.start_time).getTime();
-      const heartbeatTime = new Date(session.last_heartbeat).getTime();
-      
-      // Subtract any previously paused time
-      const durationHours = (heartbeatTime - startTime) / (1000 * 60 * 60) - session.paused_duration_hours;
-      
-      session.auto_paused = true;
-      session.duration_hours = parseFloat(durationHours.toFixed(2));
-      
-      await this.timeTrackingRepository.save(session);
+async checkForStaleTimers() {
+  const threshold = new Date();
+  threshold.setMinutes(threshold.getMinutes() - 10); // 10 minute threshold
+  
+  const staleSessions = await this.timeTrackingRepository.find({
+    where: {
+      is_active: true,
+      is_paused: false, // Only check non-paused sessions
+      last_heartbeat: LessThan(threshold)
     }
+  });
+  
+  for (const session of staleSessions) {
+    // Calculate time until last heartbeat
+    const startTime = new Date(session.start_time).getTime();
+    const heartbeatTime = new Date(session.last_heartbeat).getTime();
+    
+    // Subtract any previously paused time
+    let durationHours = (heartbeatTime - startTime) / (1000 * 60 * 60) - session.paused_duration_hours;
+    
+    // Ensure duration is never negative
+    durationHours = Math.max(0, durationHours);
+    
+    session.auto_paused = true;
+    session.duration_hours = parseFloat(durationHours.toFixed(2));
+    
+    await this.timeTrackingRepository.save(session);
   }
+}
   
   async resumeAutoPausedSession(id: number): Promise<TimeTracking> {
     const session = await this.findOne(id);
@@ -455,7 +458,12 @@ export class TimeTrackingsService {
     const tasksPerDay = {};
     
     timeTrackings.forEach(tracking => {
-      const dateStr = tracking.date.toISOString().split('T')[0];
+
+      const dateObj = tracking.date instanceof Date ? 
+      tracking.date : 
+      new Date(tracking.date);
+    
+      const dateStr = dateObj.toISOString().split('T')[0];
       
       if (!dailyTotals[dateStr]) {
         dailyTotals[dateStr] = 0;
