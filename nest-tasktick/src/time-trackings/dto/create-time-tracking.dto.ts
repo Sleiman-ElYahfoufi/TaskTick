@@ -28,4 +28,20 @@ export class CreateTimeTrackingDto {
   @IsOptional()
   @IsBoolean()
   is_active?: boolean = true;
+  
+  @IsOptional()
+  @IsBoolean()
+  is_paused?: boolean = false;
+  
+  @IsOptional()
+  @IsDateString()
+  pause_time?: Date;
+  
+  @IsOptional()
+  @IsNumber()
+  paused_duration_hours?: number = 0;
+  
+  @IsOptional()
+  @IsBoolean()
+  auto_paused?: boolean = false;
 }
