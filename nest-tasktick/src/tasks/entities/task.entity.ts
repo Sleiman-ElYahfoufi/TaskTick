@@ -55,11 +55,7 @@ export class Task {
   @Max(100)
   progress: number;
 
-  @CreateDateColumn()
-  created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
 
   @Column()
   project_id: number;
@@ -73,4 +69,10 @@ export class Task {
 
   @OneToMany(() => TimeTracking, timeTracking => timeTracking.task)
   timeTrackings: TimeTracking[];
+  
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

@@ -69,11 +69,7 @@ export class Project {
   @Max(100)
   accuracy_rating: number;
 
-  @CreateDateColumn()
-  created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
 
   @Column()
   user_id: number;
@@ -87,4 +83,10 @@ export class Project {
 
   @OneToMany(() => Task, task => task.project)
   tasks: Task[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
