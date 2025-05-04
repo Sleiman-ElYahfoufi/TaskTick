@@ -27,4 +27,10 @@ export class TechStack {
 
   @OneToMany(() => UserTechStack, userTechStack => userTechStack.techStack)
   userTechStacks: UserTechStack[];
+
+    @CreateDateColumn()
+    created_at: Date;
+  
+    @UpdateDateColumn()
+    updated_at: Date;
 }

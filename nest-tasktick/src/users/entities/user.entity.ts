@@ -52,11 +52,7 @@ export class User {
   })
   experience_level: ExperienceLevel;
 
-  @CreateDateColumn()
-  created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
 
   @OneToMany(() => Project, project => project.user)
   projects: Project[];
@@ -69,4 +65,10 @@ export class User {
 
   @OneToMany(() => AiInsight, aiInsight => aiInsight.user)
   aiInsights: AiInsight[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

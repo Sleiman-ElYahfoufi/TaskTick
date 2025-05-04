@@ -43,17 +43,25 @@ export class TimeTracking {
   @Column('boolean', { default: false })
   auto_paused: boolean;
 
+
+
+  @ManyToOne(() => User, user => user.timeTrackings, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => Task, task => task.timeTrackings, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinColumn({ name: 'task_id' })
+  task: Task;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @ManyToOne(() => User, user => user.timeTrackings)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
-
-  @ManyToOne(() => Task, task => task.timeTrackings)
-  @JoinColumn({ name: 'task_id' })
-  task: Task;
 }

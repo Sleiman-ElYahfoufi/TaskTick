@@ -78,7 +78,10 @@ export class Project {
   @Column()
   user_id: number;
 
-  @ManyToOne(() => User, user => user.projects)
+  @ManyToOne(() => User, user => user.projects, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
