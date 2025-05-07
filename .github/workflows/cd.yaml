@@ -3,7 +3,7 @@ name: CD
 on:
   workflow_run:
     workflows: ["CI"]
-    branches: [main,develop]
+    branches: [main, develop]
     types: [completed]
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
           # Create or update .env file with required variables
           cat > /home/${{ secrets.EC2_USER }}/.env << EOF
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
           DB_NAME=tasktick
           DB_USER=root
           EOF
