@@ -39,7 +39,7 @@ jobs:
           DB_USER=root
           EOF
       
-    - name: Run deployment script
+    - name: Run deployment with migrations and seeds
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -52,5 +52,5 @@ jobs:
           # Change to directory with deployment files
           cd /home/${{ secrets.EC2_USER }}
           
-          # Run deployment script
-          ./deploy.sh
+          # Run deployment script with migrations and seeds
+          ./deploy.sh --with-migrations --with-seed
