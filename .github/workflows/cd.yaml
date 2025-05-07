@@ -3,7 +3,7 @@ name: CD
 on:
   workflow_run:
     workflows: ["CI"]
-    branches: [main]
+    branches: [main,develop]
     types: [completed]
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_KEY }}
+        key: ${{ secrets.    }}
         source: "docker-compose.yaml,deploy.sh"
         target: "/home/${{ secrets.EC2_USER }}/"
       
