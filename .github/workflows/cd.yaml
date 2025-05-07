@@ -1,0 +1,70 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - name: Checkout code for deployment files
+      uses: actions/checkout@v3
+      
+    - name: Copy docker-compose to EC2
+      uses: appleboy/scp-action@v1
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "docker-compose.yaml"
+        target: "/home/${{ secrets.EC2_USER }}/"
+      
+    - name: Create .env file
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          # Create or update .env file with required variables
+          cat > /home/${{ secrets.EC2_USER }}/.env << EOF
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_NAME=tasktick
+          DB_USER=root
+          EOF
+      
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          # Change to directory with docker-compose file
+          cd /home/${{ secrets.EC2_USER }}
+          
+          # Stop running containers
+          sudo docker-compose down
+          
+          # Remove old images (don't fail if they don't exist)
+          sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/nest-tasktick:latest || true
+          sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/react-tasktick:latest || true
+          
+          # Pull latest images
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nest-tasktick:latest
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/react-tasktick:latest
+          
+          # Start new containers with environment variables
+          sudo docker-compose --env-file .env up -d
+          
+          # Wait for services to start
+          sleep 10
+          
+          # Check status
+          sudo docker-compose ps
