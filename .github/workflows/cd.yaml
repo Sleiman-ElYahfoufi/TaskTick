@@ -15,13 +15,13 @@ jobs:
     - name: Checkout code for deployment files
       uses: actions/checkout@v3
       
-    - name: Copy docker-compose to EC2
+    - name: Copy deployment files to EC2
       uses: appleboy/scp-action@v1
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
-        source: "docker-compose.yaml"
+        source: "docker-compose.yaml,deploy.sh"
         target: "/home/${{ secrets.EC2_USER }}/"
       
     - name: Create .env file
@@ -39,32 +39,18 @@ jobs:
           DB_USER=root
           EOF
       
-    - name: Deploy to EC2
+    - name: Run deployment script
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         script: |
-          # Change to directory with docker-compose file
+          # Make deployment script executable
+          chmod +x /home/${{ secrets.EC2_USER }}/deploy.sh
+          
+          # Change to directory with deployment files
           cd /home/${{ secrets.EC2_USER }}
           
-          # Stop running containers
-          sudo docker-compose down
-          
-          # Remove old images (don't fail if they don't exist)
-          sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/nest-tasktick:latest || true
-          sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/react-tasktick:latest || true
-          
-          # Pull latest images
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nest-tasktick:latest
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/react-tasktick:latest
-          
-          # Start new containers with environment variables
-          sudo docker-compose --env-file .env up -d
-          
-          # Wait for services to start
-          sleep 10
-          
-          # Check status
-          sudo docker-compose ps
+          # Run deployment script
+          ./deploy.sh
