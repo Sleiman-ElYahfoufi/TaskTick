@@ -2,22 +2,12 @@ name: CD
 
 on:
   workflow_run:
-    workflows: ["CI"] 
-    branches: [main, develop]
-    types: [completed]  
+    workflows: ["CI"]
+    branches: [main,develop]
+    types: [completed]
 
 jobs:
-  verify-workflow:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo workflow information
-        run: |
-          echo "Triggered by workflow: ${{ github.event.workflow_run.name }}"
-          echo "Workflow status: ${{ github.event.workflow_run.conclusion }}"
-          echo "Workflow branch: ${{ github.event.workflow_run.head_branch }}"
-  
   deploy:
-    needs: verify-workflow
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
