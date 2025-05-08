@@ -13,6 +13,9 @@ docker system prune -af --volumes
 echo "🚀 Starting essential services..."
 docker-compose up -d database
 
+echo "🚀 Starting application services..."
+docker-compose up -d frontend backend
+
 echo "⏳ Waiting for MySQL to be ready..."
 sleep 10
 
@@ -26,8 +29,7 @@ if [ "$1" == "--with-seed" ] || [ "$2" == "--with-seed" ]; then
   docker-compose exec -T backend ./start.sh seed
 fi
 
-echo "🚀 Starting application services..."
-docker-compose up -d frontend backend
+
 
 echo "✅ Deployment complete!"
 echo "📊 Resource usage:"
