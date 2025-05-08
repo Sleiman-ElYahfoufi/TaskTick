@@ -6,4 +6,9 @@ export class GeneratedTaskDto {
   @IsString()
   name: string;
 
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+ 
 }
