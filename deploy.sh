@@ -17,7 +17,7 @@ echo "⏳ Waiting for MySQL to be ready..."
 sleep 10
 
 echo "🚀 Starting application services..."
-docker-compose up -d  backend
+docker-compose up -d  backend frontend
 
 if [ "$1" == "--with-migrations" ]; then
   echo "🔄 Running database migrations..."
