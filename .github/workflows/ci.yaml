@@ -71,3 +71,4 @@ jobs:
 
             - name: Push React Image
               run: docker push ${{ secrets.DOCKER_USERNAME }}/react-tasktick:latest
+              
