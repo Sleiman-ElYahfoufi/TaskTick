@@ -6,5 +6,9 @@ export class ProjectDetailsDto {
   @IsString()
   name: string;
 
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+
   
 }
