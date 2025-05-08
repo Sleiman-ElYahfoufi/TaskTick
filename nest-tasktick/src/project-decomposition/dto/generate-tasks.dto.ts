@@ -11,5 +11,9 @@ export class GenerateTasksDto {
   @IsNumber()
   userId: number;
 
- 
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(50)
+  maxTasks?: number = 20;
 }
