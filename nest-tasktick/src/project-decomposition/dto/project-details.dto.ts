@@ -18,5 +18,6 @@ export class ProjectDetailsDto {
   @IsEnum(DetailDepth)
   detail_depth?: DetailDepth = DetailDepth.NORMAL;
 
-
+  @IsOptional()
+  deadline?: Date;
 }
