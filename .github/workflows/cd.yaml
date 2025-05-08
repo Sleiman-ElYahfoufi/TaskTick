@@ -3,8 +3,7 @@ name: CD
 on:
     workflow_dispatch:
     workflow_run:
-        workflows:
-            - "CI"
+        workflows: [CI]
         types: [completed]
         branches: [main, develop]
 
@@ -34,10 +33,10 @@ jobs:
                   key: ${{ secrets.EC2_KEY }}
                   script: |
                       # Make deployment script executable
-                      chmod +x /home/${{ secrets.EC2_USER }}/deploy.sh
+                      sudo chmod +x /home/${{ secrets.EC2_USER }}/deploy.sh
 
                       # Change to directory with deployment files
                       cd /home/${{ secrets.EC2_USER }}
 
                       # Run deployment script with migrations and seeds  
-                      ./deploy.sh --with-migrations --with-seed
+                      sudo ./deploy.sh --with-migrations --with-seed
