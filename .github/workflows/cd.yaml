@@ -37,5 +37,5 @@ jobs:
           # Change to directory with deployment files
           cd /home/${{ secrets.EC2_USER }}
           
-          # Run deployment script with migrations and seeds
+          # Run deployment script with migrations and seeds  
           ./deploy.sh --with-migrations --with-seed
