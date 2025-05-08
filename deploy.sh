@@ -16,6 +16,9 @@ docker-compose up -d database
 echo "⏳ Waiting for MySQL to be ready..."
 sleep 10
 
+echo "🚀 Starting application services..."
+docker-compose up -d frontend backend
+
 if [ "$1" == "--with-migrations" ]; then
   echo "🔄 Running database migrations..."
   docker-compose exec -T backend ./start.sh migration:run
@@ -26,8 +29,7 @@ if [ "$1" == "--with-seed" ] || [ "$2" == "--with-seed" ]; then
   docker-compose exec -T backend ./start.sh seed
 fi
 
-echo "🚀 Starting application services..."
-docker-compose up -d frontend backend
+
 
 echo "✅ Deployment complete!"
 echo "📊 Resource usage:"
