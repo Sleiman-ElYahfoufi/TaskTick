@@ -11,7 +11,7 @@ echo "🗑️ Removing unused Docker resources..."
 docker system prune -af --volumes
 
 echo "🚀 Starting essential services..."
-docker-compose up -d mysql
+docker-compose up -d database
 
 echo "⏳ Waiting for MySQL to be ready..."
 sleep 10
