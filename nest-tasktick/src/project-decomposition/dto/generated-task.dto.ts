@@ -10,5 +10,10 @@ export class GeneratedTaskDto {
   @IsString()
   description?: string;
 
- 
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0.1)
+  estimated_time: number;
+
+  
 }
