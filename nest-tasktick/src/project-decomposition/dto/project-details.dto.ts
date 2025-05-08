@@ -10,5 +10,8 @@ export class ProjectDetailsDto {
   @IsString()
   description: string;
 
-  
+  @IsOptional()
+  @IsEnum(PriorityLevel)
+  priority?: PriorityLevel = PriorityLevel.MEDIUM;
+
 }
