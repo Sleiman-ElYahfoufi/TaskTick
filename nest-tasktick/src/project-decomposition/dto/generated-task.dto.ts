@@ -15,5 +15,9 @@ export class GeneratedTaskDto {
   @Min(0.1)
   estimated_time: number;
 
+  @IsOptional()
+  @IsEnum(PriorityLevel)
+  priority?: PriorityLevel = PriorityLevel.MEDIUM;
+
   
 }
