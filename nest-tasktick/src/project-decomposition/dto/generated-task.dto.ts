@@ -23,5 +23,9 @@ export class GeneratedTaskDto {
   @IsDateString()
   dueDate?: Date;
 
- 
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  progress?: number = 0;
 }
