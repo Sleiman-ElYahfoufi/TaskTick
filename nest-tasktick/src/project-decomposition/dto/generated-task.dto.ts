@@ -19,5 +19,9 @@ export class GeneratedTaskDto {
   @IsEnum(PriorityLevel)
   priority?: PriorityLevel = PriorityLevel.MEDIUM;
 
-  
+  @IsOptional()
+  @IsDateString()
+  dueDate?: Date;
+
+ 
 }
