@@ -7,4 +7,9 @@ export class GenerateTasksDto {
   @Type(() => ProjectDetailsDto)
   projectDetails: ProjectDetailsDto;
 
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
+
+ 
 }
