@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - backenda
+      - backend
     restart: unless-stopped
     volumes:
       - ./react-tasktick:/app:ro
