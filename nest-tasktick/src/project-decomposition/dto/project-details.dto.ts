@@ -14,4 +14,9 @@ export class ProjectDetailsDto {
   @IsEnum(PriorityLevel)
   priority?: PriorityLevel = PriorityLevel.MEDIUM;
 
+  @IsOptional()
+  @IsEnum(DetailDepth)
+  detail_depth?: DetailDepth = DetailDepth.NORMAL;
+
+
 }
