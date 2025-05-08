@@ -14,6 +14,7 @@ import { AiInsightsModule } from './ai-insights/ai-insights.module';
 import { dataSourceOptions } from '../database/data-source';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
+import { ProjectDecompositionModule } from './project-decomposition/project-decomposition.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { AuthGuard } from './auth/auth.guard';
     TechStacksModule, 
     UserTechStacksModule, 
     AiInsightsModule, 
-    AuthModule
+    AuthModule, ProjectDecompositionModule
   ],
   controllers: [AppController],
   providers: [
