@@ -21,12 +21,12 @@ docker-compose up -d  backend frontend
 
 if [ "$1" == "--with-migrations" ]; then
   echo "🔄 Running database migrations..."
-  docker-compose exec -T backend ./start.sh migration:run
+  sudo docker-compose exec -T backend sudo ./start.sh migration:run
 fi
 
 if [ "$1" == "--with-seed" ] || [ "$2" == "--with-seed" ]; then
   echo "🌱 Running database seeders..."
-  docker-compose exec -T backend ./start.sh seed
+  sudo docker-compose exec -T backend sudo ./start.sh seed
 fi
 
 
