@@ -148,7 +148,16 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
     const accuracyRatio = totalEstimatedHours > 0 ?
       (totalActualHours / totalEstimatedHours).toFixed(2) : 'unknown';
 
-    
+    // Format task statistics
+    const taskStats = `
+  Task Completion Statistics (${completedTasks.length} tasks):
+  - Overall accuracy ratio: ${accuracyRatio} (>1 means underestimation, <1 means overestimation)
+  - High priority tasks: ${tasksByPriority.high.count} tasks, avg accuracy ratio: ${this.calculateRatio(tasksByPriority.high)}
+  - Medium priority tasks: ${tasksByPriority.medium.count} tasks, avg accuracy ratio: ${this.calculateRatio(tasksByPriority.medium)}
+  - Low priority tasks: ${tasksByPriority.low.count} tasks, avg accuracy ratio: ${this.calculateRatio(tasksByPriority.low)}
+    `;
+
+   
   }
 
   // Helper method for priority string validation
