@@ -68,7 +68,20 @@ export class ProjectDecompositionService {
 
     return validPriorities.includes(normalized) ? normalized : 'medium';
   }
+ // Convert string priority to ProjectPriorityLevel enum
+  private mapStringToProjectPriority(priority: string): ProjectPriorityLevel {
+    const normalized = (priority || '').toLowerCase();
 
+    switch (normalized) {
+      case 'high':
+        return ProjectPriorityLevel.HIGH;
+      case 'low':
+        return ProjectPriorityLevel.LOW;
+      case 'medium':
+      default:
+        return ProjectPriorityLevel.MEDIUM;
+    }
+  }
 
     // Convert string priority to TaskPriorityLevel enum
     private mapStringToTaskPriority(priority: string): TaskPriorityLevel {
