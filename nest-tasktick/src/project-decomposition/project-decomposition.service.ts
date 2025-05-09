@@ -84,7 +84,23 @@ Base your estimates on industry standards, but adjust for user experience and pa
 Ensure tasks are properly sized - not too large (max 8 hours) and not too granular.
 When assigning due dates, consider dependencies between tasks and space them out realistically.
 
-`;
+IMPORTANT: Your response MUST be ONLY a valid JSON array of tasks. Do not include any explanation, introduction, or conclusion text.
+Example of the expected response format:
+[
+  {{
+    "name": "Project Setup",
+    "description": "Initialize repository and setup development environment",
+    "estimated_time": 2,
+    "priority": "high",
+    "dueDate": "2025-05-15"
+  }},
+  {{
+    "name": "Database Schema Design",
+    "description": "Create entity relationship diagrams and database schema",
+    "estimated_time": 4,
+    "priority": "high"
+  }}
+]`;
   }
   // Helper method for priority string validation
   private validatePriority(priority: string): string {
