@@ -1,26 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProjectDecompositionDto } from './dto/create-project-decomposition.dto';
-import { UpdateProjectDecompositionDto } from './dto/update-project-decomposition.dto';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ChatOpenAI } from '@langchain/openai';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { z } from 'zod';
+import { UsersService } from '../users/users.service';
+import { TasksService } from '../tasks/tasks.service';
+import { ProjectsService } from '../projects/projects.service';
+import { UserTechStacksService } from '../user-tech-stacks/user-tech-stacks.service';
+import { TimeTrackingsService } from '../time-trackings/time-trackings.service';
+import { GenerateTasksDto } from './dto/generate-tasks.dto';
+import { GeneratedTaskDto } from './dto/generated-task.dto';
+import { DecompositionResult } from './interfaces/decomposition-result.interface';
+import { Project, PriorityLevel as ProjectPriorityLevel, DetailDepth } from '../projects/entities/project.entity';
+import { ExperienceLevel } from '../users/entities/user.entity';
+import { PriorityLevel as TaskPriorityLevel } from '../tasks/entities/task.entity';
 
 @Injectable()
 export class ProjectDecompositionService {
-  create(createProjectDecompositionDto: CreateProjectDecompositionDto) {
-    return 'This action adds a new projectDecomposition';
-  }
 
-  findAll() {
-    return `This action returns all projectDecomposition`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} projectDecomposition`;
-  }
-
-  update(id: number, updateProjectDecompositionDto: UpdateProjectDecompositionDto) {
-    return `This action updates a #${id} projectDecomposition`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} projectDecomposition`;
-  }
+ 
 }
