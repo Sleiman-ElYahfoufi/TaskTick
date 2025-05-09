@@ -73,7 +73,11 @@ export class ProjectDecompositionService {
       const { projectDetails, userId, maxTasks = 15 } = generateTasksDto;
       this.logger.log(`Generating tasks for project: ${projectDetails.name}`);
 
-      
+      // Normalize enum values
+      const priority = this.normalizeProjectPriority(projectDetails.priority);
+      const detailDepth = this.normalizeDetailDepth(projectDetails.detail_depth);
+
+     
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
       throw error;
