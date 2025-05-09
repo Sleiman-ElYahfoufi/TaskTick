@@ -10,5 +10,8 @@ import { ProjectsService } from '../../projects/projects.service';
 
 @Injectable()
 export class AiInsightGeneratorService {
- 
+  private readonly logger = new Logger(AiInsightGeneratorService.name);
+  private model: ChatOpenAI;
+
+
 }
