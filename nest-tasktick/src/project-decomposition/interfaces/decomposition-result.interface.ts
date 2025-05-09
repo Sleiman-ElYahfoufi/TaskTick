@@ -6,4 +6,5 @@ export interface DecompositionResult {
   tasks: GeneratedTaskDto[];
   projectId?: number;
   saved: boolean;
+  userId?: number; 
 }
