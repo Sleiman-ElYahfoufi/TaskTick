@@ -27,7 +27,9 @@ export class TasksService {
 
   async findAllByProjectId(projectId: number): Promise<Task[]> {
     return this.tasksRepository.find({
-      where: { project_id: projectId }
+      where: { project_id: projectId },
+      relations: ['timeTrackings'] 
+
     });
   }
 
