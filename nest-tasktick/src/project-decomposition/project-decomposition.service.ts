@@ -173,6 +173,9 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       })
       .join('\n\n');
 
+    // Format productivity data
+    const productivityInfo = `Average hours per day: ${timeTrackingData.averageHoursPerDay}h`;
+
    
   }
 
