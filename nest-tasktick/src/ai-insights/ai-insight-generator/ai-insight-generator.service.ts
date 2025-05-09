@@ -13,5 +13,12 @@ export class AiInsightGeneratorService {
   private readonly logger = new Logger(AiInsightGeneratorService.name);
   private model: ChatOpenAI;
 
-  
+  constructor(
+    private configService: ConfigService,
+    private usersService: UsersService,
+    private timeTrackingsService: TimeTrackingsService,
+    private projectsService: ProjectsService,
+    @InjectRepository(AiInsight)
+    private aiInsightsRepository: Repository<AiInsight>
+  ) 
 }
