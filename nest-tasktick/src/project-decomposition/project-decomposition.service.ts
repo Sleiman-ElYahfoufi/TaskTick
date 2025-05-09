@@ -101,10 +101,24 @@ export class ProjectDecompositionService {
             "For each task, include: name, description, estimated_time (hours), priority (LOW/MEDIUM/HIGH), and optionally dueDate. " +
             "Consider the user's experience level, tech stack proficiency, and estimation history."
         },
-        
+        {
+          role: "system", 
+          content: this.outputParser.getFormatInstructions()
+        },
+        {
+          role: "user", 
+          content: `USER CONTEXT:\n${userContext}\n\nPROJECT DETAILS:
+Name: ${projectDetails.name}
+Description: ${projectDetails.description}
+Priority: ${priority}
+Detail Level: ${detailDepth}
+Maximum Tasks: ${maxTasks}
+
+Please decompose this project into appropriate tasks.`
+        }
       ];
 
-     
+    
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
       throw error;
