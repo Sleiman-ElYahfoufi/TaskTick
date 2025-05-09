@@ -191,7 +191,10 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
   ${productivityInfo}
   `;
   }
-
+// Helper method to validate and transform tasks
+  private validateAndTransformTasks(jsonData: any[]): GeneratedTaskDto[] {
+   
+  }
   // Helper method for priority string validation
   private validatePriority(priority: string): string {
     const validPriorities = ['low', 'medium', 'high'];
