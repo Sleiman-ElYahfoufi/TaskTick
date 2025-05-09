@@ -77,7 +77,13 @@ export class ProjectDecompositionService {
       const priority = this.normalizeProjectPriority(projectDetails.priority);
       const detailDepth = this.normalizeDetailDepth(projectDetails.detail_depth);
 
-     
+      // Get user data and context
+      const user = await this.usersService.findOne(userId);
+      const userTechStacks = await this.userTechStacksService.findByUserId(userId);
+      const userProjects = await this.projectsService.findAllByUserId(userId);
+      const timeTrackingData = await this.timeTrackingsService.getUserProductivity(userId, 30);
+      
+      
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
       throw error;
