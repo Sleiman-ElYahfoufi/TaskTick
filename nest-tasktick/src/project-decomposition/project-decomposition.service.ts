@@ -20,9 +20,22 @@ export class ProjectDecompositionService {
     private readonly logger = new Logger(ProjectDecompositionService.name);
     private model: ChatOpenAI;
 
-    private readonly taskSchema = z.object({
-   
-    });
+      private readonly taskSchema = z.object({
+    name: z.string().min(1).default('Untitled Task'),
+    description: z.string().optional().default(''),
+    estimated_time: z.union([
+      z.number(),
+      z.string().transform(val => parseFloat(val) || 1)
+    ]).default(1),
+    priority: z.string().transform(val => this.validatePriority(val)).default('medium'),
+    dueDate: z.string().optional().transform(val => {
+      if (!val) return undefined;
+      const date = new Date(val);
+      return isNaN(date.getTime()) ? undefined : date;
+    }),
+    progress: z.number().optional().default(0)
+  });
+
   
  // Helper method for priority string validation
   private validatePriority(priority: string): string {
