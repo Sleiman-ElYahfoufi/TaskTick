@@ -37,7 +37,7 @@ export class ProjectDecompositionService {
   });
 
   private readonly tasksArraySchema = z.array(this.taskSchema);
-  constructor(
+ constructor(
     private configService: ConfigService,
     private usersService: UsersService,
     private tasksService: TasksService,
@@ -45,7 +45,21 @@ export class ProjectDecompositionService {
     private userTechStacksService: UserTechStacksService,
     private timeTrackingsService: TimeTrackingsService,
   ) {
+    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
+
+    if (!apiKey) {
+      this.logger.error('OPENAI_API_KEY not found in environment variables');
     }
+
+    // Initialize the OpenAI model
+    this.model = new ChatOpenAI({
+      openAIApiKey: apiKey,
+      modelName: 'o4-mini-2025-04-16',
+      temperature: 1,
+    });
+
+    this.logger.log('ProjectDecompositionService initialized');
+  }
 
   // Helper method for priority string validation
   private validatePriority(priority: string): string {
