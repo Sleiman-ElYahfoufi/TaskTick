@@ -73,6 +73,17 @@ For each task, you must include:
 4. Priority (LOW, MEDIUM, or HIGH)
 5. DueDate (optional, provide a realistic date in ISO format YYYY-MM-DD if appropriate)
 
+Consider both technical and non-technical tasks, such as:
+- Setup and configuration
+- Front-end and back-end development
+- Database design and implementation
+- Testing and quality assurance
+- Documentation
+
+Base your estimates on industry standards, but adjust for user experience and past performance when possible.
+Ensure tasks are properly sized - not too large (max 8 hours) and not too granular.
+When assigning due dates, consider dependencies between tasks and space them out realistically.
+
 `;
   }
   // Helper method for priority string validation
