@@ -208,7 +208,11 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
           dueDate: task.dueDate,
           progress: task.progress
         }));
-      } 
+      } else {
+        this.logger.warn(`Zod validation failed: ${JSON.stringify(validationResult.error.errors)}`);
+
+       
+      }
     } catch (e) {
       this.logger.error(`Error in validateAndTransformTasks: ${e.message}`, e.stack);
       return [];
