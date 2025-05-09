@@ -117,7 +117,16 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       `${uts.techStack.name} (Proficiency: ${uts.proficiency_level}/5)`
     ).join(', ');
 
-    
+    // Analyze all completed tasks for patterns
+    let totalEstimatedHours = 0;
+    let totalActualHours = 0;
+    let tasksByPriority = {
+      'high': { count: 0, estHours: 0, actualHours: 0 },
+      'medium': { count: 0, estHours: 0, actualHours: 0 },
+      'low': { count: 0, estHours: 0, actualHours: 0 }
+    };
+
+   
   }
 
   // Helper method for priority string validation
