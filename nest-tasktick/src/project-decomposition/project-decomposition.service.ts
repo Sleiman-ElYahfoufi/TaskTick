@@ -197,7 +197,18 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       this.logger.debug(`Validating ${jsonData.length} tasks`);
       const validationResult = this.tasksArraySchema.safeParse(jsonData);
 
-     
+      if (validationResult.success) {
+        this.logger.log('Zod validation succeeded');
+        // Convert string priorities to PriorityLevel enum
+        return validationResult.data.map(task => ({
+          name: task.name,
+          description: task.description,
+          estimated_time: task.estimated_time,
+          priority: this.mapStringToTaskPriority(task.priority),
+          dueDate: task.dueDate,
+          progress: task.progress
+        }));
+      } 
     } catch (e) {
       this.logger.error(`Error in validateAndTransformTasks: ${e.message}`, e.stack);
       return [];
