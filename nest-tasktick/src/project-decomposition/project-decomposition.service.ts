@@ -194,7 +194,12 @@ Please decompose this project into appropriate tasks.`
         throw new NotFoundException('No project details provided');
       }
 
-     
+      return {
+        projectDetails,
+        tasks,
+        projectId: project.id,
+        saved: true
+      };
     } catch (error) {
       this.logger.error(`Error saving tasks: ${error.message}`);
       throw error;
