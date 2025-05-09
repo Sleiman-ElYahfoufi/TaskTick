@@ -187,7 +187,10 @@ Please decompose this project into appropriate tasks.`
           user_id: userId || 1
         });
         
-       
+        for (const task of tasks) {
+          await this.tasksService.create({ ...task, project_id: project.id });
+        }
+      } 
     } catch (error) {
       this.logger.error(`Error saving tasks: ${error.message}`);
       throw error;
