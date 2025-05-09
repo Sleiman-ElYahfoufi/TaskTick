@@ -83,7 +83,14 @@ export class ProjectDecompositionService {
       const userProjects = await this.projectsService.findAllByUserId(userId);
       const timeTrackingData = await this.timeTrackingsService.getUserProductivity(userId, 30);
       
-      
+      // Get completed tasks from previous projects
+      const completedTasks: any[] = [];
+      for (const project of userProjects) {
+        const projectTasks = await this.tasksService.findAllByProjectId(project.id);
+        completedTasks.push(...projectTasks.filter(task => task.status === 'completed'));
+      }
+
+     
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
       throw error;
