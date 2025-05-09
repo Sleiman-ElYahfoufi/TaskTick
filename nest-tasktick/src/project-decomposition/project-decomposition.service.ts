@@ -172,7 +172,9 @@ Please decompose this project into appropriate tasks.`
         this.logger.log(`Adding ${tasks.length} tasks to existing project ID: ${projectId}`);
         project = await this.projectsService.findOne(projectId);
         
-        
+        for (const task of tasks) {
+          await this.tasksService.create({ ...task, project_id: project.id });
+        }
       } else if (projectDetails) {
         // Create a new project with tasks
         this.logger.log(`Creating new project "${projectDetails.name}" with ${tasks.length} tasks`);
@@ -245,6 +247,7 @@ Please decompose this project into appropriate tasks.`
     // Get recent task examples with accuracy info
     const taskExamples = completedTasks
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .slice(0, 5)
       .map(task => {
         const actual = task.timeTrackings?.reduce((sum, tt) => sum + (tt.duration_hours || 0), 0) || 0;
         const ratioNum = task.estimated_time ? actual / task.estimated_time : 0;
