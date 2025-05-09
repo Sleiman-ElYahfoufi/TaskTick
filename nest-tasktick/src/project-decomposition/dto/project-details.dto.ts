@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, IsDateString } from 'class-validator';
 import { DetailDepth, PriorityLevel } from '../../projects/entities/project.entity';
 
 export class ProjectDetailsDto {
@@ -11,13 +11,14 @@ export class ProjectDetailsDto {
   description: string;
 
   @IsOptional()
-  @IsEnum(PriorityLevel)
+  @IsEnum(PriorityLevel, { message: 'Priority must be LOW, MEDIUM, or HIGH' })
   priority?: PriorityLevel = PriorityLevel.MEDIUM;
 
   @IsOptional()
-  @IsEnum(DetailDepth)
+  @IsEnum(DetailDepth, { message: 'Detail depth must be MINIMAL, NORMAL, or DETAILED' })
   detail_depth?: DetailDepth = DetailDepth.NORMAL;
 
   @IsOptional()
+  @IsDateString()
   deadline?: Date;
 }
