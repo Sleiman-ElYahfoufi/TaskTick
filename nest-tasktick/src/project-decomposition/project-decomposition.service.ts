@@ -93,6 +93,17 @@ export class ProjectDecompositionService {
       // Build user context based on their history and skills
       const userContext = this.buildUserContext(user, userTechStacks, completedTasks, timeTrackingData);
       
+      // Create the messages directly without using templates
+      const messages = [
+        {
+          role: "system", 
+          content: "You are an expert software development project manager breaking down projects into tasks. " +
+            "For each task, include: name, description, estimated_time (hours), priority (LOW/MEDIUM/HIGH), and optionally dueDate. " +
+            "Consider the user's experience level, tech stack proficiency, and estimation history."
+        },
+        
+      ];
+
      
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
