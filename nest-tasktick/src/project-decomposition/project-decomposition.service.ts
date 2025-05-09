@@ -128,10 +128,23 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
 
     // Process all completed tasks
     completedTasks.forEach(task => {
-     
+      const actualHours = task.timeTrackings?.reduce((sum, tt) => sum + (tt.duration_hours || 0), 0) || 0;
+      const estimatedHours = task.estimated_time || 0;
+
+      // Add to total stats
+      totalEstimatedHours += estimatedHours;
+      totalActualHours += actualHours;
+
+      // Group by priority
+      const priority = task.priority?.toLowerCase();
+      if (priority && tasksByPriority[priority]) {
+        tasksByPriority[priority].count++;
+        tasksByPriority[priority].estHours += estimatedHours;
+        tasksByPriority[priority].actualHours += actualHours;
+      }
     });
 
-  
+    
   }
 
   // Helper method for priority string validation
