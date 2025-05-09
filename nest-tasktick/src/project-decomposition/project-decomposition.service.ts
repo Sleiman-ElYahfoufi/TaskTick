@@ -102,6 +102,11 @@ Example of the expected response format:
   }}
 ]`;
   }
+
+
+private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData): string {
+  }
+
   // Helper method for priority string validation
   private validatePriority(priority: string): string {
     const validPriorities = ['low', 'medium', 'high'];
