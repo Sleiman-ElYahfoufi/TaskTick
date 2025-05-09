@@ -20,6 +20,9 @@ export class ProjectDecompositionService {
     private readonly logger = new Logger(ProjectDecompositionService.name);
     private model: ChatOpenAI;
 
-
+    private readonly taskSchema = z.object({
+   
+    });
+  
  
 }
