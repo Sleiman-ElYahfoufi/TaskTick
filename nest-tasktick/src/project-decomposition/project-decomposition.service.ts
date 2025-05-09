@@ -93,8 +93,7 @@ export class ProjectDecompositionService {
       // Build user context based on their history and skills
       const userContext = this.buildUserContext(user, userTechStacks, completedTasks, timeTrackingData);
       
-      // Create the messages directly without using templates
-      // This bypasses the template parsing issue with curly braces
+      // Create the messages directly 
       const messages = [
         {
           role: "system", 
