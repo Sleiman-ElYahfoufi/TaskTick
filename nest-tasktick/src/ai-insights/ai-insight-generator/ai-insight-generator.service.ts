@@ -66,6 +66,20 @@ export class AiInsightGeneratorService {
   }
   
   private async generateInsight(type: InsightType, context: any): Promise<string> {
+    const prompts = {
+      [InsightType.TIME_ACCURACY]: 
+        `As a ${context.experience} ${context.role} working ${context.avgHoursPerDay} hours/day on ${context.projectCount} projects, generate a specific, data-backed insight about time estimation accuracy.`,
+      
+      [InsightType.PRODUCTIVITY_PATTERN]:
+        `For a ${context.experience} ${context.role} who works ${context.avgHoursPerDay} hours/day, generate a specific, data-backed insight about productivity patterns.`,
+      
+      [InsightType.TASK_BREAKDOWN]:
+        `For a ${context.experience} ${context.role} with ${context.projectCount} projects, generate a specific, data-backed insight about task breakdown and management.`,
+      
+      [InsightType.TECH_PERFORMANCE]:
+        `For a ${context.experience} ${context.role}, generate a specific, data-backed insight about technology performance and efficiency.`
+    };
+    
     
   }
 }
