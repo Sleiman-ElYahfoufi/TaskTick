@@ -9,5 +9,11 @@ import { DecompositionResult } from './interfaces/decomposition-result.interface
 export class ProjectDecompositionController {
   constructor(private readonly projectDecompositionService: ProjectDecompositionService) {}
 
+  @Post('generate')
+  @HttpCode(HttpStatus.OK)
+  async generateTasks(@Body() generateTasksDto: GenerateTasksDto): Promise<DecompositionResult> {
+    return this.projectDecompositionService.generateTasks(generateTasksDto);
+  }
 
+  
 }
