@@ -17,6 +17,8 @@ import { PriorityLevel as TaskPriorityLevel } from '../tasks/entities/task.entit
 
 @Injectable()
 export class ProjectDecompositionService {
+    private readonly logger = new Logger(ProjectDecompositionService.name);
+
 
  
 }
