@@ -65,5 +65,7 @@ export class AiInsightGeneratorService {
     }
   }
   
-  
+  private async generateInsight(type: InsightType, context: any): Promise<string> {
+    
+  }
 }
