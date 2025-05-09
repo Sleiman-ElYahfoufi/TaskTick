@@ -90,6 +90,9 @@ export class ProjectDecompositionService {
         completedTasks.push(...projectTasks.filter(task => task.status === 'completed'));
       }
 
+      // Build user context based on their history and skills
+      const userContext = this.buildUserContext(user, userTechStacks, completedTasks, timeTrackingData);
+      
      
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
