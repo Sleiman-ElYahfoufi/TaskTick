@@ -80,6 +80,11 @@ export class AiInsightGeneratorService {
         `For a ${context.experience} ${context.role}, generate a specific, data-backed insight about technology performance and efficiency.`
     };
     
-    
+    try {
+      
+    } catch (error) {
+      this.logger.error(`AI model error: ${error.message}`);
+      
+    }
   }
 }
