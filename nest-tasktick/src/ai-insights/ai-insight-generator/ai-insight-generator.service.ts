@@ -81,7 +81,21 @@ export class AiInsightGeneratorService {
     };
     
     try {
+      const response = await this.model.invoke([
+        { 
+          role: "system", 
+          content: "Generate a single, specific, actionable insight for a developer. Include specific percentages or metrics to make it feel data-driven. Limit to one concise sentence under 150 characters. No hypotheticals."
+        },
+        { role: "user", content: prompts[type] }
+      ]);
       
+      let insight = (response.content as string).trim();
+      
+      if (insight.length > 150) {
+        insight = insight.substring(0, 147) + "...";
+      }
+      
+      return insight;
     } catch (error) {
       this.logger.error(`AI model error: ${error.message}`);
       
