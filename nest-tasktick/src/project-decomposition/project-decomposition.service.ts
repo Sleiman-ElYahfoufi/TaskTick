@@ -190,7 +190,11 @@ Please decompose this project into appropriate tasks.`
         for (const task of tasks) {
           await this.tasksService.create({ ...task, project_id: project.id });
         }
-      } 
+      } else {
+        throw new NotFoundException('No project details provided');
+      }
+
+     
     } catch (error) {
       this.logger.error(`Error saving tasks: ${error.message}`);
       throw error;
