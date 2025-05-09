@@ -191,6 +191,10 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
   ${productivityInfo}
   `;
   }
+
+  private parseAIResponse(responseText: string): GeneratedTaskDto[] {
+    
+  }
 // Helper method to validate and transform tasks
   private validateAndTransformTasks(jsonData: any[]): GeneratedTaskDto[] {
     try {
