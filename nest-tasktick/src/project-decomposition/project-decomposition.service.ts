@@ -105,6 +105,14 @@ Example of the expected response format:
 
 
 private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData): string {
+    // Map experience level to years
+    const experienceYears = {
+      [ExperienceLevel.BEGINNER]: '0-2',
+      [ExperienceLevel.INTERMEDIATE]: '3-5',
+      [ExperienceLevel.EXPERT]: '6+'
+    };
+
+   
   }
 
   // Helper method for priority string validation
