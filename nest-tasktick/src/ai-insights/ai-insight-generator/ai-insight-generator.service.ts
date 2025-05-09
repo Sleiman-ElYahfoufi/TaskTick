@@ -29,5 +29,9 @@ export class AiInsightGeneratorService {
     });
   }
 
+  async generateInsightsForUser(userId: number): Promise<AiInsight[]> {
+   
+  }
+  
   
 }
