@@ -158,7 +158,9 @@ Please decompose this project into appropriate tasks.`
   }
 
   async saveTasks(decompositionResult: DecompositionResult): Promise<DecompositionResult> {
-   
+    const { tasks, projectId, projectDetails, userId } = decompositionResult as any;
+
+    
   }
 
   private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData): string {
