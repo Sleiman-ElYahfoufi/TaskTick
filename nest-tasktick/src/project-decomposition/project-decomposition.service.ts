@@ -193,7 +193,15 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
   }
 // Helper method to validate and transform tasks
   private validateAndTransformTasks(jsonData: any[]): GeneratedTaskDto[] {
-   
+    try {
+      this.logger.debug(`Validating ${jsonData.length} tasks`);
+      const validationResult = this.tasksArraySchema.safeParse(jsonData);
+
+     
+    } catch (e) {
+      this.logger.error(`Error in validateAndTransformTasks: ${e.message}`, e.stack);
+      return [];
+    }
   }
   // Helper method for priority string validation
   private validatePriority(priority: string): string {
