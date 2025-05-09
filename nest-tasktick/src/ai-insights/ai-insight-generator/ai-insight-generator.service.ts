@@ -43,12 +43,23 @@ export class AiInsightGeneratorService {
         hasActiveProjects: projects.some(p => p.status === 'in_progress')
       };
       
+      const results: AiInsight[] = [];
       
+      for (const type of Object.values(InsightType)) {
+        const insightText = await this.generateInsight(type, context);
+        
+        const insight = this.aiInsightsRepository.create({
+          user_id: userId,
+          type,
+          description: insightText
+        });
+        
+        
     } catch (error) {
       this.logger.error(`Error generating insights: ${error.message}`);
       throw error;
     }
   }
   
-  
+ 
 }
