@@ -35,7 +35,15 @@ export class AiInsightGeneratorService {
       const productivity = await this.timeTrackingsService.getUserProductivity(userId, 14);
       const projects = await this.projectsService.findAllByUserId(userId);
       
-     
+      const context = {
+        role: user.role,
+        experience: user.experience_level,
+        avgHoursPerDay: productivity?.averageHoursPerDay || 0,
+        projectCount: projects.length,
+        hasActiveProjects: projects.some(p => p.status === 'in_progress')
+      };
+      
+      
     } catch (error) {
       this.logger.error(`Error generating insights: ${error.message}`);
       throw error;
