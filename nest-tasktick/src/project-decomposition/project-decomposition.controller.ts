@@ -15,5 +15,9 @@ export class ProjectDecompositionController {
     return this.projectDecompositionService.generateTasks(generateTasksDto);
   }
 
-  
+  @Post('save')
+  @HttpCode(HttpStatus.CREATED)
+  async saveTasks(@Body() decompositionResult: DecompositionResult): Promise<DecompositionResult> {
+    return this.projectDecompositionService.saveTasks(decompositionResult);
+  }
 }
