@@ -247,7 +247,6 @@ Please decompose this project into appropriate tasks.`
     // Get recent task examples with accuracy info
     const taskExamples = completedTasks
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-      .slice(0, 5)
       .map(task => {
         const actual = task.timeTrackings?.reduce((sum, tt) => sum + (tt.duration_hours || 0), 0) || 0;
         const ratioNum = task.estimated_time ? actual / task.estimated_time : 0;
