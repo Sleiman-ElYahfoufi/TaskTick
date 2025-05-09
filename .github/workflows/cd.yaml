@@ -1,0 +1,48 @@
+name: CD
+
+on:
+    workflow_dispatch:
+    workflow_run:
+        workflows: [CI]
+        types: [completed]
+        branches: [main, develop]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+        steps:
+            - name: Print branch info
+              run: |
+                echo "Workflow triggered by branch: ${{ github.event.workflow_run.head_branch }}"
+            
+            - name: Checkout code for deployment files
+              uses: actions/checkout@v3
+              with:
+                ref: ${{ github.event.workflow_run.head_branch }}
+
+            - name: Copy deployment files to EC2
+              uses: appleboy/scp-action@v1
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_KEY }}
+                  source: "docker-compose.yaml,deploy.sh,.env"
+                  target: "/home/${{ secrets.EC2_USER }}/"
+
+            - name: Run deployment with migrations and seeds
+              uses: appleboy/ssh-action@v0.1.10
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_KEY }}
+                  script: |
+                      # Make deployment script executable
+                      sudo chmod +x /home/${{ secrets.EC2_USER }}/deploy.sh
+
+                      # Change to directory with deployment files
+                      cd /home/${{ secrets.EC2_USER }}
+
+                      # Run deployment script with migrations and seeds  
+                      sudo ./deploy.sh --with-migrations --with-seed

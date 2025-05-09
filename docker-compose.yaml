@@ -7,9 +7,9 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
-    volumes:
-      - ./react-tasktick:/app:ro
-      - /app/node_modules
+    # volumes:
+    #   - ./react-tasktick:/app:ro
+    #   - /app/node_modules
     # deploy:
     #   resources:
     #     limits:
@@ -30,9 +30,9 @@ services:
       - DB_USERNAME=${DB_USER:-root}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_NAME:-tasktick}
-    volumes:
-      - ./nest-tasktick:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./nest-tasktick:/app
+    #   - /app/node_modules
     restart: unless-stopped
     # deploy:
     #   resources:

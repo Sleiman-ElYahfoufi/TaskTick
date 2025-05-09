@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, UseGuards } from '@nestjs/common';
 import { AiInsightsService } from './ai-insights.service';
+import { AiInsightGeneratorService } from './ai-insight-generator/ai-insight-generator.service';
 import { CreateAiInsightDto } from './dto/create-ai-insight.dto';
 import { UpdateAiInsightDto } from './dto/update-ai-insight.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -8,12 +9,21 @@ import { InsightType } from './entities/ai-insight.entity';
 @Controller('ai-insights')
 @UseGuards(AuthGuard)
 export class AiInsightsController {
-  constructor(private readonly aiInsightsService: AiInsightsService) {}
+  constructor(
+    private readonly aiInsightsService: AiInsightsService,
+    private readonly aiInsightGeneratorService: AiInsightGeneratorService
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createAiInsightDto: CreateAiInsightDto) {
     return this.aiInsightsService.create(createAiInsightDto);
+  }
+
+  @Post('generate')
+  @HttpCode(HttpStatus.CREATED)
+  generateInsights(@Body('userId') userId: number) {
+    return this.aiInsightGeneratorService.generateInsightsForUser(userId);
   }
 
   @Get()
