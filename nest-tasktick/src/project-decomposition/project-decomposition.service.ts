@@ -167,7 +167,13 @@ Please decompose this project into appropriate tasks.`
     let project: Project;
 
     try {
-      
+      if (projectId) {
+        // Add tasks to existing project
+        this.logger.log(`Adding ${tasks.length} tasks to existing project ID: ${projectId}`);
+        project = await this.projectsService.findOne(projectId);
+        
+        
+      } 
     } catch (error) {
       this.logger.error(`Error saving tasks: ${error.message}`);
       throw error;
