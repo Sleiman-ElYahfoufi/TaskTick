@@ -82,7 +82,20 @@ export class ProjectDecompositionService {
         return ProjectPriorityLevel.MEDIUM;
     }
   }
+  // Convert string detail depth to DetailDepth enum
+  private mapStringToDetailDepth(detailDepth: string): DetailDepth {
+    const normalized = (detailDepth || '').toLowerCase();
 
+    switch (normalized) {
+      case 'detailed':
+        return DetailDepth.DETAILED;
+      case 'minimal':
+        return DetailDepth.MINIMAL;
+      case 'normal':
+      default:
+        return DetailDepth.NORMAL;
+    }
+  }
     // Convert string priority to TaskPriorityLevel enum
     private mapStringToTaskPriority(priority: string): TaskPriorityLevel {
       const normalized = (priority || '').toLowerCase();
