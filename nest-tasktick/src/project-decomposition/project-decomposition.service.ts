@@ -126,7 +126,12 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       'low': { count: 0, estHours: 0, actualHours: 0 }
     };
 
-   
+    // Process all completed tasks
+    completedTasks.forEach(task => {
+     
+    });
+
+  
   }
 
   // Helper method for priority string validation
