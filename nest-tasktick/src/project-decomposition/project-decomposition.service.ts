@@ -129,6 +129,17 @@ Please decompose this project into appropriate tasks.`
       const parsedTasks = await this.outputParser.parse(responseContent) as ParsedTask[];
       this.logger.log(`Successfully parsed ${parsedTasks.length} tasks from AI response`);
 
+      // Transform tasks to application format
+      const tasks: GeneratedTaskDto[] = parsedTasks.slice(0, maxTasks).map(task => ({
+        name: task.name,
+        description: task.description || '',
+        estimated_time: typeof task.estimated_time === 'number' ? 
+          task.estimated_time : parseFloat(String(task.estimated_time)) || 1,
+        priority: this.mapToTaskPriority(task.priority),
+        dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+        progress: task.progress || 0
+      }));
+
       
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
