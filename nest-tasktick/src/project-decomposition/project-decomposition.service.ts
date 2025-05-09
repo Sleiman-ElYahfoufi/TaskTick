@@ -122,6 +122,10 @@ Please decompose this project into appropriate tasks.`
       this.logger.log('Sending request to AI model...');
       const response = await this.model.invoke(messages);
       
+      // Then parse the response with LangChain's structured parser
+      const responseContent = response.content as string;
+      this.logger.log('Parsing response with LangChain parser...');
+      
       
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
