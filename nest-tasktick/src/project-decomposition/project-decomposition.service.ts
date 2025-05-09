@@ -144,6 +144,10 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       }
     });
 
+    // Calculate overall accuracy ratio
+    const accuracyRatio = totalEstimatedHours > 0 ?
+      (totalActualHours / totalEstimatedHours).toFixed(2) : 'unknown';
+
     
   }
 
