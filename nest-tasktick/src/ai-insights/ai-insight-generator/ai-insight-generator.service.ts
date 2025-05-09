@@ -20,5 +20,14 @@ export class AiInsightGeneratorService {
     private projectsService: ProjectsService,
     @InjectRepository(AiInsight)
     private aiInsightsRepository: Repository<AiInsight>
-  ) 
+  ) {
+    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
+    this.model = new ChatOpenAI({
+      openAIApiKey: apiKey,
+      modelName: 'gpt-4o-mini',
+      temperature: 0.7,
+    });
+  }
+
+  
 }
