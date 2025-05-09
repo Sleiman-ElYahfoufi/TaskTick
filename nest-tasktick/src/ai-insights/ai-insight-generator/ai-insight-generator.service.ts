@@ -54,12 +54,16 @@ export class AiInsightGeneratorService {
           description: insightText
         });
         
-        
+        const savedInsight = await this.aiInsightsRepository.save(insight);
+        results.push(savedInsight);
+      }
+      
+      return results;
     } catch (error) {
       this.logger.error(`Error generating insights: ${error.message}`);
       throw error;
     }
   }
   
- 
+  
 }
