@@ -30,7 +30,16 @@ export class AiInsightGeneratorService {
   }
 
   async generateInsightsForUser(userId: number): Promise<AiInsight[]> {
-   
+    try {
+      const user = await this.usersService.findOne(userId);
+      const productivity = await this.timeTrackingsService.getUserProductivity(userId, 14);
+      const projects = await this.projectsService.findAllByUserId(userId);
+      
+     
+    } catch (error) {
+      this.logger.error(`Error generating insights: ${error.message}`);
+      throw error;
+    }
   }
   
   
