@@ -166,7 +166,12 @@ Please decompose this project into appropriate tasks.`
 
     let project: Project;
 
-    
+    try {
+      
+    } catch (error) {
+      this.logger.error(`Error saving tasks: ${error.message}`);
+      throw error;
+    }
   }
 
   private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData): string {
