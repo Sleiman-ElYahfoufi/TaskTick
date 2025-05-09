@@ -70,6 +70,9 @@ export class ProjectDecompositionService {
 
   async generateTasks(generateTasksDto: GenerateTasksDto): Promise<DecompositionResult> {
     try {
+      const { projectDetails, userId, maxTasks = 15 } = generateTasksDto;
+      this.logger.log(`Generating tasks for project: ${projectDetails.name}`);
+
       
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
