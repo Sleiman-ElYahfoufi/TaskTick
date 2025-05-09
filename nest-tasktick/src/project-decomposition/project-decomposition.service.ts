@@ -176,7 +176,20 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
     // Format productivity data
     const productivityInfo = `Average hours per day: ${timeTrackingData.averageHoursPerDay}h`;
 
-   
+    return `
+  Developer Profile:
+  - Role: ${user.role}
+  - Experience: ${experienceYears[user.experience_level]} years
+  - Technologies: ${techStacksFormatted || 'No specific technologies listed'}
+  
+  ${taskStats}
+  
+  Detailed Examples of Past Tasks:
+  ${detailedTaskExamples || 'No completed tasks found'}
+  
+  Productivity Patterns:
+  ${productivityInfo}
+  `;
   }
 
   // Helper method for priority string validation
