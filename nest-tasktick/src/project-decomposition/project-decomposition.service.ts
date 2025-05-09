@@ -140,7 +140,16 @@ Please decompose this project into appropriate tasks.`
         progress: task.progress || 0
       }));
 
-      
+      return {
+        projectDetails: {
+          ...projectDetails,
+          priority,
+          detail_depth: detailDepth
+        },
+        tasks,
+        saved: false,
+        userId
+      };
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
       throw error;
