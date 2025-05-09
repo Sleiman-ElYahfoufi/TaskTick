@@ -157,6 +157,22 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
   - Low priority tasks: ${tasksByPriority.low.count} tasks, avg accuracy ratio: ${this.calculateRatio(tasksByPriority.low)}
     `;
 
+    // Include detailed examples of recent tasks with their descriptions
+    const detailedTaskExamples = completedTasks
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .slice(0, 8) // Include 8 examples for better context
+      .map(task => {
+        const actualHours = task.timeTrackings?.reduce((sum, tt) => sum + (tt.duration_hours || 0), 0) || 'unknown';
+        const ratioString = task.estimated_time ? (actualHours / task.estimated_time).toFixed(2) : 'unknown';
+        const ratioNumber = ratioString !== 'unknown' ? parseFloat(ratioString) : 0;
+
+        // Now compare the numeric value
+        const accuracyIndicator = ratioNumber > 1.1 ? '(UNDERESTIMATED)' : (ratioNumber < 0.9 ? '(OVERESTIMATED)' : '(ACCURATE)');
+
+        return `- Task: "${task.name}"\n  Description: "${task.description || 'No description provided'}"\n  Estimated: ${task.estimated_time}h, Actual: ${actualHours}h, Ratio: ${ratioString} ${accuracyIndicator}`;
+      })
+      .join('\n\n');
+
    
   }
 
