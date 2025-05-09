@@ -69,7 +69,12 @@ export class ProjectDecompositionService {
   }
 
   async generateTasks(generateTasksDto: GenerateTasksDto): Promise<DecompositionResult> {
-   
+    try {
+      
+    } catch (error) {
+      this.logger.error(`Error generating tasks: ${error.message}`);
+      throw error;
+    }
   }
 
  
