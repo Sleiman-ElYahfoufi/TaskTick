@@ -24,5 +24,11 @@ export class ProjectDecompositionService {
    
     });
   
- 
+ // Helper method for priority string validation
+  private validatePriority(priority: string): string {
+    const validPriorities = ['low', 'medium', 'high'];
+    const normalized = (priority || '').toLowerCase();
+
+    return validPriorities.includes(normalized) ? normalized : 'medium';
+  }
 }
