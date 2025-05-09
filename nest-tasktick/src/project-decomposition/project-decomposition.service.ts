@@ -112,7 +112,12 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       [ExperienceLevel.EXPERT]: '6+'
     };
 
-   
+    // Format tech stacks
+    const techStacksFormatted = userTechStacks.map(uts =>
+      `${uts.techStack.name} (Proficiency: ${uts.proficiency_level}/5)`
+    ).join(', ');
+
+    
   }
 
   // Helper method for priority string validation
