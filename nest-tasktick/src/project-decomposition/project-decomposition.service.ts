@@ -173,7 +173,21 @@ Please decompose this project into appropriate tasks.`
         project = await this.projectsService.findOne(projectId);
         
         
-      } 
+      } else if (projectDetails) {
+        // Create a new project with tasks
+        this.logger.log(`Creating new project "${projectDetails.name}" with ${tasks.length} tasks`);
+        
+        project = await this.projectsService.create({
+          name: projectDetails.name,
+          description: projectDetails.description,
+          priority: projectDetails.priority,
+          detail_depth: projectDetails.detail_depth,
+          deadline: projectDetails.deadline,
+          estimated_time: tasks.reduce((sum, task) => sum + task.estimated_time, 0),
+          user_id: userId || 1
+        });
+        
+       
     } catch (error) {
       this.logger.error(`Error saving tasks: ${error.message}`);
       throw error;
