@@ -126,6 +126,9 @@ Please decompose this project into appropriate tasks.`
       const responseContent = response.content as string;
       this.logger.log('Parsing response with LangChain parser...');
       
+      const parsedTasks = await this.outputParser.parse(responseContent) as ParsedTask[];
+      this.logger.log(`Successfully parsed ${parsedTasks.length} tasks from AI response`);
+
       
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
