@@ -118,7 +118,11 @@ Please decompose this project into appropriate tasks.`
         }
       ];
 
-    
+      // Call the model directly first
+      this.logger.log('Sending request to AI model...');
+      const response = await this.model.invoke(messages);
+      
+      
     } catch (error) {
       this.logger.error(`Error generating tasks: ${error.message}`);
       throw error;
