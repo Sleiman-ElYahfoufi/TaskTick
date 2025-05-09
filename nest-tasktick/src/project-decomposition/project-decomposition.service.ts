@@ -17,10 +17,10 @@ import { PriorityLevel as TaskPriorityLevel } from '../tasks/entities/task.entit
 
 @Injectable()
 export class ProjectDecompositionService {
-    private readonly logger = new Logger(ProjectDecompositionService.name);
-    private model: ChatOpenAI;
+  private readonly logger = new Logger(ProjectDecompositionService.name);
+  private model: ChatOpenAI;
 
-      private readonly taskSchema = z.object({
+  private readonly taskSchema = z.object({
     name: z.string().min(1).default('Untitled Task'),
     description: z.string().optional().default(''),
     estimated_time: z.union([
@@ -36,8 +36,18 @@ export class ProjectDecompositionService {
     progress: z.number().optional().default(0)
   });
 
-  
- // Helper method for priority string validation
+  private readonly tasksArraySchema = z.array(this.taskSchema);
+  constructor(
+    private configService: ConfigService,
+    private usersService: UsersService,
+    private tasksService: TasksService,
+    private projectsService: ProjectsService,
+    private userTechStacksService: UserTechStacksService,
+    private timeTrackingsService: TimeTrackingsService,
+  ) {
+    }
+
+  // Helper method for priority string validation
   private validatePriority(priority: string): string {
     const validPriorities = ['low', 'medium', 'high'];
     const normalized = (priority || '').toLowerCase();
