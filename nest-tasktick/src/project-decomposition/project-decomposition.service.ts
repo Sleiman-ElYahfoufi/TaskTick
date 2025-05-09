@@ -211,7 +211,17 @@ private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData)
       } else {
         this.logger.warn(`Zod validation failed: ${JSON.stringify(validationResult.error.errors)}`);
 
-       
+        // Fallback: manual transformation without Zod
+        return jsonData.map(task => {
+          return {
+            name: task.name || 'Untitled Task',
+            description: task.description || '',
+            estimated_time: parseFloat(task.estimated_time) || 1,
+            priority: this.mapStringToTaskPriority(task.priority || 'medium'),
+            dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+            progress: task.progress || 0
+          };
+        });
       }
     } catch (e) {
       this.logger.error(`Error in validateAndTransformTasks: ${e.message}`, e.stack);
