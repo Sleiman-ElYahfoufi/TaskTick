@@ -61,6 +61,20 @@ export class ProjectDecompositionService {
     this.logger.log('ProjectDecompositionService initialized');
   }
 
+
+
+  private getSystemPrompt(): string {
+    return `You are an expert software development project manager with years of experience breaking down projects into tasks. 
+Your job is to analyze a project description and create a detailed list of development tasks.
+For each task, you must include:
+1. Name (concise but descriptive)
+2. Description (what needs to be done, any technical details)
+3. Estimated time (in hours, be realistic)
+4. Priority (LOW, MEDIUM, or HIGH)
+5. DueDate (optional, provide a realistic date in ISO format YYYY-MM-DD if appropriate)
+
+`;
+  }
   // Helper method for priority string validation
   private validatePriority(priority: string): string {
     const validPriorities = ['low', 'medium', 'high'];
