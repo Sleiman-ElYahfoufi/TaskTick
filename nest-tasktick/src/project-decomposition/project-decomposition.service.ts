@@ -110,5 +110,8 @@ export class ProjectDecompositionService {
           return TaskPriorityLevel.MEDIUM;
       }
     }
-  
+  private calculateRatio(priorityStats): string {
+    return priorityStats.estHours > 0 ?
+      (priorityStats.actualHours / priorityStats.estHours).toFixed(2) : 'unknown';
+  }
 }
