@@ -94,6 +94,7 @@ export class ProjectDecompositionService {
       const userContext = this.buildUserContext(user, userTechStacks, completedTasks, timeTrackingData);
       
       // Create the messages directly without using templates
+      // This bypasses the template parsing issue with curly braces
       const messages = [
         {
           role: "system", 
@@ -156,7 +157,9 @@ Please decompose this project into appropriate tasks.`
     }
   }
 
- 
+  async saveTasks(decompositionResult: DecompositionResult): Promise<DecompositionResult> {
+   
+  }
 
   private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData): string {
     // Map experience level to years
