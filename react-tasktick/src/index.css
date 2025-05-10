@@ -35,3 +35,17 @@
   --ai-precision: #0054D5;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: "Inter", sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
+    /* font-family: 'Space Grotesk', sans-serif; */
+    /* font-family: 'Roboto Mono', monospace; */
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
