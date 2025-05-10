@@ -112,7 +112,8 @@ describe('TasksService', () => {
       const result = await service.findAllByProjectId(1);
       
       expect(repository.find).toHaveBeenCalledWith({
-        where: { project_id: 1 }
+        where: { project_id: 1 },
+        relations: ['timeTrackings']
       });
       expect(result).toEqual(tasks);
     });
