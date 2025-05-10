@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles.css";
+import "./Navbar.css";
 import TaskTickLogo from "../../assets/Sleiman_ElYahfoufi_TaskTick.png";
 const Navbar: React.FC = () => {
     return (
