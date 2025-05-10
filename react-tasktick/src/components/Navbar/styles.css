@@ -19,3 +19,16 @@
     height: 64px;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 60px;
+    width: auto;
+    cursor: pointer;
+}
+
+
+
