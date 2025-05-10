@@ -63,3 +63,8 @@
     color: var(--ai-precision);
 }
 
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
