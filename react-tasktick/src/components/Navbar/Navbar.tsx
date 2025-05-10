@@ -13,7 +13,21 @@ const Navbar: React.FC = () => {
                             className="logo-img"
                         />
                     </div>
-                    
+                    <div className="nav-right">
+                        <div className="nav-links">
+                            <a href="#features" className="nav-link">
+                                Features
+                            </a>
+                            <a href="#how-it-works" className="nav-link">
+                                How It Works
+                            </a>
+                            <a href="#testimonials" className="nav-link">
+                                Testimonials
+                            </a>
+                        </div>
+
+                       
+                    </div>
                 </div>
             </div>
         </nav>
