@@ -26,7 +26,11 @@ const Navbar: React.FC = () => {
                             </a>
                         </div>
 
-                       
+                        <div className="nav-actions">
+                            <button className="get-started-btn">
+                                Get Started
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
