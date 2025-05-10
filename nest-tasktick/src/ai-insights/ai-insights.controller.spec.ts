@@ -7,6 +7,7 @@ import { AiInsight, InsightType } from './entities/ai-insight.entity';
 import { NotFoundException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from '../auth/auth.guard';
+import { AiInsightGeneratorService } from './ai-insight-generator/ai-insight-generator.service';
 
 describe('AiInsightsController', () => {
   let controller: AiInsightsController;
@@ -42,6 +43,13 @@ describe('AiInsightsController', () => {
             findOne: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
+          },
+        },
+        // Add the missing AiInsightGeneratorService mock
+        {
+          provide: AiInsightGeneratorService,
+          useValue: {
+            generateInsightsForUser: jest.fn(),
           },
         },
       ],
