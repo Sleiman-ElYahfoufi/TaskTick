@@ -36,3 +36,12 @@
     transition: transform 0.3s ease;
 }
 
+.nav-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+
+
+
