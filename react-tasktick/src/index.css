@@ -4,4 +4,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 
+:root {
+  /* Primary Colors */
+  --primary: #01398E;
+  --secondary: #59E4D4;
+  --accent: #F8F9FA;
+  --black: #000000;
+  --background: #F3F4F6;
+  
+  /* Success Colors */
+  --success-btn: #EAF8F2;
+  --success-txt: #1EBF89;
+  
+  /* Text Colors */
+  --placeholder: #9CA3AF;
+  
+  /* Status Colors */
+  --blue-status: #DBEAFE;
+  --text-blue-status: #2563EB;
+  --purple-stroke: #6366F1;
+  --orange-status: #FEF3C7;
+  --text-orange-status: #D97706;
+  --orange-stroke: #F59E0B;
+  --red-status: #FEE2E2;
+  --text-red-status: #EF4444;
+  --green-status: #D1FAE5;
+  --text-green-status: #10B981;
+  
+  /* AI Color */
+  --ai-precision: #0054D5;
+}
 
