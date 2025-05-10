@@ -60,7 +60,7 @@ export class ProjectDecompositionService {
         description: z.string().optional().default(''),
         estimated_time: z.number().positive().or(z.string().transform(val => parseFloat(val) || 1)),
         priority: z.enum(['low', 'medium', 'high']).default('medium'),
-        dueDate: z.string().optional(),
+        dueDate: z.string(),
         progress: z.number().min(0).max(100).optional().default(0)
       }))
     );
@@ -72,6 +72,10 @@ export class ProjectDecompositionService {
     try {
       const { projectDetails, userId, maxTasks = 15 } = generateTasksDto;
       this.logger.log(`Generating tasks for project: ${projectDetails.name}`);
+
+      // Get the current date
+      const currentDate = new Date();
+      const todayStr = currentDate.toISOString().split('T')[0];
 
       // Normalize enum values
       const priority = this.normalizeProjectPriority(projectDetails.priority);
@@ -98,8 +102,10 @@ export class ProjectDecompositionService {
         {
           role: "system", 
           content: "You are an expert software development project manager breaking down projects into tasks. " +
-            "For each task, include: name, description, estimated_time (hours), priority (LOW/MEDIUM/HIGH), and optionally dueDate. " +
-            "Consider the user's experience level, tech stack proficiency, and estimation history."
+            "For each task, include: name, description, estimated_time (hours), priority (LOW/MEDIUM/HIGH), and dueDate. " +
+            "IMPORTANT: Today's date is " + todayStr + ". All due dates MUST start from today or later. " +
+            "Assign due dates based on task dependencies and priority, with earlier tasks having earlier due dates. " +
+            "High priority tasks should have due dates within the next 7 days, medium priority within 14 days, and low priority within 30 days."
         },
         {
           role: "system", 
@@ -113,8 +119,9 @@ Description: ${projectDetails.description}
 Priority: ${priority}
 Detail Level: ${detailDepth}
 Maximum Tasks: ${maxTasks}
+Current Date: ${todayStr}
 
-Please decompose this project into appropriate tasks.`
+Please decompose this project into appropriate tasks with realistic due dates starting from today.`
         }
       ];
 
@@ -129,16 +136,31 @@ Please decompose this project into appropriate tasks.`
       const parsedTasks = await this.outputParser.parse(responseContent) as ParsedTask[];
       this.logger.log(`Successfully parsed ${parsedTasks.length} tasks from AI response`);
 
-      // Transform tasks to application format
-      const tasks: GeneratedTaskDto[] = parsedTasks.slice(0, maxTasks).map(task => ({
-        name: task.name,
-        description: task.description || '',
-        estimated_time: typeof task.estimated_time === 'number' ? 
-          task.estimated_time : parseFloat(String(task.estimated_time)) || 1,
-        priority: this.mapToTaskPriority(task.priority),
-        dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
-        progress: task.progress || 0
-      }));
+      // Transform tasks to application format and ensure due dates are from today onwards
+      const tasks: GeneratedTaskDto[] = parsedTasks.slice(0, maxTasks).map(task => {
+        let dueDate: Date | undefined;
+        
+        if (task.dueDate) {
+          const parsedDate = new Date(task.dueDate);
+          // If the AI generated a past date, adjust it to be from today
+          if (parsedDate < currentDate) {
+            const daysDiff = Math.ceil((currentDate.getTime() - parsedDate.getTime()) / (1000 * 60 * 60 * 24));
+            dueDate = new Date(currentDate.getTime() + (daysDiff * 24 * 60 * 60 * 1000));
+          } else {
+            dueDate = parsedDate;
+          }
+        }
+
+        return {
+          name: task.name,
+          description: task.description || '',
+          estimated_time: typeof task.estimated_time === 'number' ? 
+            task.estimated_time : parseFloat(String(task.estimated_time)) || 1,
+          priority: this.mapToTaskPriority(task.priority),
+          dueDate,
+          progress: task.progress || 0
+        };
+      });
 
       return {
         projectDetails: {
