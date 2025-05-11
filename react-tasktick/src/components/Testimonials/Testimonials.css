@@ -59,3 +59,8 @@
     opacity: 0.3;
 }
 
+.testimonials .slick-prev:hover:before,
+.testimonials .slick-next:hover:before {
+    opacity: 0.7;
+}
+
