@@ -59,3 +59,20 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.3s;
 }
 
+@media (max-width: 768px) {
+  .dashboard-main {
+    margin-left: 0;
+  }
+  
+  .mobile-header {
+    display: flex;
+  }
+  
+  .sidebar-toggle {
+    display: flex;
+  }
+  
+  .dashboard-content {
+    padding: 1rem;
+  }
+}
