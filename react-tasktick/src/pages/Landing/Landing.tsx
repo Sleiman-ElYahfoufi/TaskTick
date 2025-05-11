@@ -5,6 +5,7 @@ import './Landing.css';
 import PowerfulFeatures from '../../components/PowerfulFeatures/PowerfulFeatures';
 import HowItWorks from '../../components/HowItWorks/HowItWorks';
 import Testimonials from '../../components/Testimonials/Testimonials';
+import CTASection from '../../components/CTASection/CTASection';
 
 const Landing: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const Landing: React.FC = () => {
       <PowerfulFeatures />
       <HowItWorks />
       <Testimonials />
+      <CTASection />
     </div>
   );
 };
