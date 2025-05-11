@@ -11,3 +11,21 @@
     margin-bottom: 1.5rem;
 }
 
+.step-icon {
+    width: 5rem;
+    height: 5rem;
+    background-color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+    z-index: 2;
+}
+
+.step-icon svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
