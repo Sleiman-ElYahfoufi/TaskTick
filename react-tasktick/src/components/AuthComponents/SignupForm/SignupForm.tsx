@@ -7,11 +7,15 @@ interface SignupFormProps {
 }
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
- 
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+  }
 
   return (
     <div className="signup-form">
-      
+     
     </div>
   )
 }
