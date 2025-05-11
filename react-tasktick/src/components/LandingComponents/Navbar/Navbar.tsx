@@ -19,7 +19,6 @@ const Navbar: React.FC = () => {
                         <div className="nav-links">
                             <Link
                                 to="features"
-                                spy={true}
                                 smooth={true}
                                 duration={500}
                                 className="nav-link"
@@ -28,7 +27,6 @@ const Navbar: React.FC = () => {
                             </Link>
                             <Link
                                 to="how-it-works"
-                                spy={true}
                                 smooth={true}
                                 duration={500}
                                 className="nav-link"
@@ -37,7 +35,6 @@ const Navbar: React.FC = () => {
                             </Link>
                             <Link
                                 to="testimonials"
-                                spy={true}
                                 smooth={true}
                                 duration={500}
                                 className="nav-link"
