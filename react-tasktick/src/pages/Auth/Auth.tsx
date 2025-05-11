@@ -20,7 +20,14 @@ const Auth: React.FC = () => {
       <div className="auth-left">
         {isLogin && <LoginForm onSwitchToSignup={handleSwitchToSignup} />}
       </div>
-     
+      <div className="auth-image-container">
+        <img 
+          src={AuthImage}
+          alt="Workspace" 
+          className="auth-image"
+        />
+      </div>
+      
     </div>
   )
 }
