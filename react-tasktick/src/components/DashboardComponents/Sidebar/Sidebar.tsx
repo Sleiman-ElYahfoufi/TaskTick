@@ -17,7 +17,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-      
+      <div className="sidebar-content">
+       
+      </div>
     </div>
   );
 };
