@@ -103,5 +103,12 @@
         font-size: 1rem;
     }
 
-   
+    .testimonials .slick-prev,
+    .testimonials .slick-next {
+        display: none !important;
+    }
+
+    .testimonials .slick-dots {
+        bottom: -2rem;
+    }
 }
