@@ -49,3 +49,18 @@
     position: relative;
 }
 
+@media (max-width: 768px) {
+    .how-it-works {
+        padding: 4rem 0;
+    }
+
+    .how-it-works-container {
+        padding: 0 1rem;
+    }
+
+    .how-it-works-header {
+        margin-bottom: 3rem;
+    }
+
+    }
+
