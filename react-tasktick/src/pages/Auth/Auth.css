@@ -54,3 +54,7 @@
   visibility: hidden;
 }
 
+.auth-page.signup-mode .auth-image-container {
+  transform: translateX(-100%);
+}
+
