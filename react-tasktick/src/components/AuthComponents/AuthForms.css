@@ -133,3 +133,21 @@
   letter-spacing: 0.5px;
 }
 
+.auth-button.compact {
+  width: auto;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.auth-button:hover {
+  background: #002D62;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 61, 130, 0.2);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 61, 130, 0.2);
+}
+
