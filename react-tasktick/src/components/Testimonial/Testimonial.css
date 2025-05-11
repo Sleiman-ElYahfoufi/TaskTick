@@ -12,3 +12,20 @@
 
 }
 
+.stars-container {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.star {
+    font-size: 1.5rem;
+        color: var(--secondary);
+
+}
+
+.star.filled svg{
+    fill: var(--secondary);
+}
+
+
