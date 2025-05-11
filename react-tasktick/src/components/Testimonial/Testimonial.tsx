@@ -19,7 +19,17 @@ const Testimonial: React.FC<TestimonialProps> = ({
     company,
     avatar,
 }) => {
-   
+    const renderStars = () => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <span key={i} className={`star ${i <= rating ? 'filled' : 'star'}`}>
+                    <Star/>
+                </span>
+            );
+        }
+        return stars;
+    };
 
     return (
         <div className="testimonial-card">
