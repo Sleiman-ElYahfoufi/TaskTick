@@ -18,7 +18,13 @@ const HeroSection: React.FC = () => {
                         <button className="cta-button">Get Started</button>
                     </div>
 
-                  
+                    <div className="illustration-wrapper">
+                        <img
+                            src={HeroImage}
+                            alt="Developer working with data"
+                            className="hero-image"
+                        />
+                    </div>
                 </div>
             </div>
         </section>
