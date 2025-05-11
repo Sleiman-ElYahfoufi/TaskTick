@@ -29,7 +29,16 @@ const PowerfulFeatures: React.FC = () => {
 
     return (
         <section className="powerful-features">
-           
+            <div className="features-container">
+                <div className="features-header">
+                    <h2 className="features-title">Powerful Features</h2>
+                    <p className="features-subtitle">
+                        TaskTick combines AI, data science, and real-world development
+                        patterns to deliver estimations you can actually rely on.
+                    </p>
+                </div>
+                
+            </div>
         </section>
     );
 };
