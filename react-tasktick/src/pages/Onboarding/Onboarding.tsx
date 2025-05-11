@@ -85,7 +85,23 @@ const Onboarding: React.FC = () => {
               </div>
             </div>
 
-            
+            <div className="form-group">
+              <label>I primarily work with... (select all that apply)</label>
+              <div className="technology-grid">
+                {techOptions.map((tech, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`tech-option ${technologies.includes(tech) ? 'selected' : ''}`}
+                    onClick={() => handleTechnologyToggle(tech)}
+                  >
+                    {tech}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+          
           </form>
         
         </div>
