@@ -47,3 +47,20 @@
     margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+    .functionality-component {
+        margin-bottom: 3rem;
+    }
+
+    .step-icon {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .step-icon svg {
+        width: 2rem;
+        height: 2rem;
+    }
+
+ 
+}
