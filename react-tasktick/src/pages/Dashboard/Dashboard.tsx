@@ -12,7 +12,23 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-     
+      <Sidebar isOpen={sidebarOpen} closeSidebar={() => setSidebarOpen(false)} />
+      {sidebarOpen && (
+        <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)}></div>
+      )}
+      <main className="dashboard-main">
+        <div className="mobile-header">
+          <button className="sidebar-toggle" onClick={toggleSidebar}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <h1>TaskTick</h1>
+        </div>
+        <div className="dashboard-content">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 };
