@@ -1,13 +1,15 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing/Landing'
 import './App.css'
 
 function App() {
-
-
   return (
-    <>
-<Landing />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+  
+      </Routes>
+    </Router>
   )
 }
 
