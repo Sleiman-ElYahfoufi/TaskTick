@@ -27,16 +27,17 @@
     font-weight: 700;
     line-height: 1.1;
     margin: 0;
-    max-width: 10ch;
+    max-width: 15ch;
 }
 
 .highlight {
-    color: var(--ai-precision);
+font-family: 'Roboto Mono', monospace;    
+color: var(--ai-precision);
 }
 
 .description {
     font-size: 1.125rem;
-    color: var(--placeholder);
+    color: var(--dark-placeholder);
     max-width: 28rem;
     margin: 0;
     line-height: 1.6;
