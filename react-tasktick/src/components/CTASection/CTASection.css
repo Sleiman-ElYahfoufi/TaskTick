@@ -49,3 +49,45 @@
         0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
+.cta-button:hover {
+    background-color: var(--ai-precision);
+
+}
+
+.cta-button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .cta-section {
+        padding: 4rem 0;
+    }
+
+    .cta-container {
+        padding: 0 1rem;
+    }
+
+    .cta-title {
+        font-size: 2rem;
+    }
+
+    .cta-subtitle {
+        font-size: 1.125rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-button {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cta-title {
+        font-size: 1.75rem;
+    }
+
+    .cta-subtitle {
+        font-size: 1rem;
+    }
+}
