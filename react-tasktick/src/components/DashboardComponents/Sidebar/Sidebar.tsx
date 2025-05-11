@@ -9,11 +9,15 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
- 
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-     
+      
     </div>
   );
 };
