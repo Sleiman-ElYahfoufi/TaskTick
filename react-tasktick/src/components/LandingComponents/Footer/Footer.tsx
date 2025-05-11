@@ -9,7 +9,18 @@ const Footer: React.FC = () => {
     return (
         <footer className="footer">
             <div className="footer-container">
-                
+                <div className="footer-content">
+                    <div className="footer-logo">
+                        <img 
+                            src={TaskTickLogo} 
+                            alt="TaskTick Logo" 
+                            className="footer-logo-img"
+                        />
+                    </div>
+
+                     </div>
+
+               
             </div>
         </footer>
     );
