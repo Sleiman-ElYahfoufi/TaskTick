@@ -41,3 +41,14 @@
     }
 }
 
+@media (max-width: 768px) {
+    .powerful-features {
+        padding: 4rem 0;
+    }
+
+    .features-container {
+        padding: 0 1rem;
+    }
+
+    
+}
