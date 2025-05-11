@@ -178,3 +178,15 @@
 }
 
 
+@media (max-width: 768px) {
+  .login-form h2,
+  .signup-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+}
+
