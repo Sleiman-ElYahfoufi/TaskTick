@@ -90,3 +90,17 @@
     margin: 0.25rem 0 0;
 }
 
+@media (max-width: 768px) {
+    .testimonial-card {
+        padding: 2rem;
+        margin: 0 0.5rem;
+    }
+
+    .testimonial-quote {
+        font-size: 1rem;
+    }
+
+    .star {
+        font-size: 1.25rem;
+    }
+}
