@@ -44,3 +44,13 @@
   object-fit: cover;
 }
 
+.auth-page.login-mode .auth-right {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.auth-page.signup-mode .auth-left {
+  opacity: 0;
+  visibility: hidden;
+}
+
