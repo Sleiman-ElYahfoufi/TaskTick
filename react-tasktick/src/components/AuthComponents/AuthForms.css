@@ -47,3 +47,13 @@
   color: var(--placeholder);
 }
 
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  padding-right: 2.5rem;
+}
+
