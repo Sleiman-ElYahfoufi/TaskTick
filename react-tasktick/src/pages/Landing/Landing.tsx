@@ -4,6 +4,7 @@ import HeroSection from '../../components/HeroSection/HeroSection';
 import './Landing.css';
 import PowerfulFeatures from '../../components/PowerfulFeatures/PowerfulFeatures';
 import HowItWorks from '../../components/HowItWorks/HowItWorks';
+import Testimonials from '../../components/Testimonials/Testimonials';
 
 const Landing: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const Landing: React.FC = () => {
       <HeroSection />
       <PowerfulFeatures />
       <HowItWorks />
+      <Testimonials />
     </div>
   );
 };
