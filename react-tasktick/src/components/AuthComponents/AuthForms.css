@@ -57,3 +57,25 @@
   padding-right: 2.5rem;
 }
 
+.password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--placeholder);
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  color: var(--dark-placeholder);
+}
+
+.password-toggle:focus {
+  outline: none;
+}
+
