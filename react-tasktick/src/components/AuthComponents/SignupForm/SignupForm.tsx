@@ -28,9 +28,20 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
           />
         </div>
         
-           </form>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="johndoe@email.com"
+            required
+          />
+        </div>
+        
+     
+      </form>
       
-    
+     
     </div>
   )
 }
