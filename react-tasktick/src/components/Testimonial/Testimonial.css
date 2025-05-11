@@ -29,3 +29,18 @@
 }
 
 
+.testimonial-quote {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--black);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
