@@ -74,3 +74,21 @@
     background-color: var(--secondary);
 }
 
+.nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.nav-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+
+.nav-text {
+    font-size: 0.9375rem;
+}
+
