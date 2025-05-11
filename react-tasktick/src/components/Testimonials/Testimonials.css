@@ -64,3 +64,11 @@
     opacity: 0.7;
 }
 
+.testimonials .slick-prev {
+    left: -3rem;
+}
+
+.testimonials .slick-next {
+    right: -3rem;
+}
+
