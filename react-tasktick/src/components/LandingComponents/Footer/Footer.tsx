@@ -18,9 +18,22 @@ const Footer: React.FC = () => {
                         />
                     </div>
 
-                     </div>
+                    <div className="footer-section">
+                        <h4 className="footer-title">Learn More</h4>
+                        <ul className="footer-links">
+                            <li><a href="#about">About TaskTick</a></li>
+                            <li><a href="#press">Press Releases</a></li>
+                            <li><a href="#environment">Environment</a></li>
+                            <li><a href="#jobs">Jobs</a></li>
+                            <li><a href="#privacy">Privacy Policy</a></li>
+                            <li><a href="#contact">Contact Us</a></li>
+                        </ul>
+                    </div>
 
-               
+                   
+                </div>
+
+              
             </div>
         </footer>
     );
