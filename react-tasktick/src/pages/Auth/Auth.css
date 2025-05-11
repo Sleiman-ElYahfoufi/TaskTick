@@ -58,3 +58,10 @@
   transform: translateX(-100%);
 }
 
+@media (max-width: 768px) {
+  .auth-left,
+  .auth-right {
+    padding: 2rem;
+  }
+}
+
