@@ -30,10 +30,24 @@ const Footer: React.FC = () => {
                         </ul>
                     </div>
 
-                   
+                    <div className="footer-section">
+                        <h4 className="footer-title">Contact Us</h4>
+                        <ul className="footer-links">
+                            <li>
+                                <span className="contact-label">Hotel Reservation</span>
+                                <span className="contact-number">123-456-7890</span>
+                            </li>
+                            <li>
+                                <span className="contact-label">Ticket Office</span>
+                                <span className="contact-number">123-456-7890</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    
                 </div>
 
-              
+                
             </div>
         </footer>
     );
