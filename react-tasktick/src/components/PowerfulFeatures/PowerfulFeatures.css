@@ -14,3 +14,18 @@
     margin-bottom: 4rem;
 }
 
+.features-title {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.features-subtitle {
+    font-size: 1.125rem;
+    color: var(--dark-placeholder);
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
