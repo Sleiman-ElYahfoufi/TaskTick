@@ -43,3 +43,9 @@
     z-index: 1;
 }
 
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    position: relative;
+}
+
