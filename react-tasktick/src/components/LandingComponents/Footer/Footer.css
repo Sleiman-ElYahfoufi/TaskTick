@@ -74,3 +74,20 @@
     font-size: 0.9375rem;
 }
 
+.social-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.social-link {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-placeholder);
+    transition: all 0.2s ease;
+}
+
+
