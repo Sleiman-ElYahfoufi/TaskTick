@@ -1,6 +1,6 @@
 import React from "react";
 import "./HeroSection.css";
-import HeroImage from "../../assets/hero-illustration.png";
+import HeroImage from "../../../assets/hero-illustration.png";
 import TypewriterComponent from "typewriter-effect";
 const HeroSection: React.FC = () => {
     return (
