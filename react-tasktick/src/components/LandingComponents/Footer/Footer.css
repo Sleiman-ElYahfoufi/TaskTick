@@ -100,3 +100,16 @@
     height: 1.5rem;
 }
 
+.footer-bottom {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--background);
+    text-align: center;
+}
+
+.copyright {
+    color: var(--dark-placeholder);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
