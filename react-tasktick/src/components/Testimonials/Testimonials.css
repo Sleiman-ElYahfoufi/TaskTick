@@ -45,3 +45,17 @@
     opacity: 1;
 }
 
+.testimonials .slick-prev,
+.testimonials .slick-next {
+    width: 3rem;
+    height: 3rem;
+    z-index: 2;
+}
+
+.testimonials .slick-prev:before,
+.testimonials .slick-next:before {
+    font-size: 2rem;
+    color: var(--primary);
+    opacity: 0.3;
+}
+
