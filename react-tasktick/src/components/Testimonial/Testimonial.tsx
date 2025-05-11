@@ -35,7 +35,21 @@ const Testimonial: React.FC<TestimonialProps> = ({
         <div className="testimonial-card">
             <div className="stars-container">{renderStars()}</div>
             <p className="testimonial-quote">"{quote}"</p>
-           
+            <div className="testimonial-author">
+                <div className="author-avatar">
+                    {avatar ? (
+                        <img src={avatar} alt={author} />
+                    ) : (
+                        <div className="avatar-placeholder">
+                            <CircleUser />
+                        </div>
+                    )}
+                </div>
+                <div className="author-info">
+                    <h4 className="author-name">{author}</h4>
+                    <p className="author-position">{position} at {company}</p>
+                </div>
+            </div>
         </div>
     );
 };
