@@ -68,7 +68,15 @@ const Testimonials: React.FC = () => {
 
     return (
         <section id="testimonials" className="testimonials">
-           
+            <div className="testimonials-container">
+                <div className="testimonials-header">
+                    <h2 className="testimonials-title">Trusted By Tech Teams</h2>
+                    <p className="testimonials-subtitle">
+                        See what development teams are saying about TaskTick
+                    </p>
+                </div>
+                
+            </div>
         </section>
     );
 };
