@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-scroll";
 import "./Navbar.css";
 import TaskTickLogo from "../../../assets/Sleiman_ElYahfoufi_TaskTick.png";
+
 const Navbar: React.FC = () => {
     return (
         <nav className="navbar">
@@ -15,15 +17,33 @@ const Navbar: React.FC = () => {
                     </div>
                     <div className="nav-right">
                         <div className="nav-links">
-                            <a href="#features" className="nav-link">
+                            <Link
+                                to="features"
+                                spy={true}
+                                smooth={true}
+                                duration={500}
+                                className="nav-link"
+                            >
                                 Features
-                            </a>
-                            <a href="#how-it-works" className="nav-link">
+                            </Link>
+                            <Link
+                                to="how-it-works"
+                                spy={true}
+                                smooth={true}
+                                duration={500}
+                                className="nav-link"
+                            >
                                 How It Works
-                            </a>
-                            <a href="#testimonials" className="nav-link">
+                            </Link>
+                            <Link
+                                to="testimonials"
+                                spy={true}
+                                smooth={true}
+                                duration={500}
+                                className="nav-link"
+                            >
                                 Testimonials
-                            </a>
+                            </Link>
                         </div>
 
                         <div className="nav-actions">
