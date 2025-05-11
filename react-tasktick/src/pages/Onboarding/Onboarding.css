@@ -205,3 +205,21 @@
   margin-bottom: 1.5rem;
 }
 
+.estimates-info {
+  text-align: center;
+  max-width: 400px;
+}
+
+.estimates-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.estimates-info p {
+  color: var(--placeholder);
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
