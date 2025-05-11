@@ -72,3 +72,13 @@
     right: -3rem;
 }
 
+@media (max-width: 1024px) {
+    .testimonials .slick-prev {
+        left: -2rem;
+    }
+
+    .testimonials .slick-next {
+        right: -2rem;
+    }
+}
+
