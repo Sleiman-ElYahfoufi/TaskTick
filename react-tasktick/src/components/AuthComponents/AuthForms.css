@@ -190,3 +190,22 @@
   }
 }
 
+@media (max-width: 480px) {
+  .login-form h2,
+  .signup-form h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group input {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+  }
+  
+  
+}
+
