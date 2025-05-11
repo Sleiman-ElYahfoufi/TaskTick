@@ -101,7 +101,9 @@ const Onboarding: React.FC = () => {
               </div>
             </div>
 
-          
+            <button type="submit" className="continue-button">
+              Continue to Dashboard
+            </button>
           </form>
         
         </div>
