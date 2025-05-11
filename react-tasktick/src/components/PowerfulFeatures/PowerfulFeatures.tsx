@@ -37,7 +37,16 @@ const PowerfulFeatures: React.FC = () => {
                         patterns to deliver estimations you can actually rely on.
                     </p>
                 </div>
-                
+                <div className="features-grid">
+                    {features.map((feature, index) => (
+                        <FeaturePanel
+                            key={index}
+                            icon={feature.icon}
+                            title={feature.title}
+                            description={feature.description}
+                        />
+                    ))}
+                </div>
             </div>
         </section>
     );
