@@ -48,7 +48,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
           </div>
         </div>
         
-      
+        <div className="form-submit-row">
+          <label className="remember-me">
+            <input type="checkbox" />
+            <span>Remember Me</span>
+          </label>
+          <button type="submit" className="auth-button compact">
+            SIGN IN
+          </button>
+        </div>
       </form>
       
      
