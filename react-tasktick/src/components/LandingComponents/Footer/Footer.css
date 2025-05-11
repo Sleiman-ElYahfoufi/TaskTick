@@ -159,3 +159,16 @@
     }
 }
 
+@media (max-width: 480px) {
+    .footer-logo-img {
+        height: 48px;
+    }
+    
+    .footer-links a,
+    .contact-label,
+    .contact-number {
+        font-size: 0.875rem;
+    }
+    
+   
+}
