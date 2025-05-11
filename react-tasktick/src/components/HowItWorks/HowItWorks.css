@@ -70,7 +70,17 @@
         font-size: 1rem;
     }
 
-   
-}
+    .steps-wrapper {
+        margin-top: 2rem;
+    }
 
+    .steps-line {
+        display: none;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
 
