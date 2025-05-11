@@ -17,6 +17,9 @@ const Auth: React.FC = () => {
 
   return (
     <div className={`auth-page ${isLogin ? 'login-mode' : 'signup-mode'}`}>
+      <div className="auth-left">
+        {isLogin && <LoginForm onSwitchToSignup={handleSwitchToSignup} />}
+      </div>
      
     </div>
   )
