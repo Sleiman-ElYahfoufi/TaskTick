@@ -99,3 +99,10 @@
   }
 }
 
+@media (max-height: 600px) {
+  .auth-left,
+  .auth-right {
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+}
