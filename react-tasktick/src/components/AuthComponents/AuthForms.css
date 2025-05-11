@@ -92,3 +92,29 @@
   flex: 1;
 }
 
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--dark-placeholder);
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: #00D4A4;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.remember-me input[type="checkbox"]:checked {
+  background-color: #00D4A4;
+}
+
+.remember-me span {
+  user-select: none;
+}
+
