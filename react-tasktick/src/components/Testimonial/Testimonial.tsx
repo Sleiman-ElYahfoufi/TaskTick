@@ -33,6 +33,8 @@ const Testimonial: React.FC<TestimonialProps> = ({
 
     return (
         <div className="testimonial-card">
+            <div className="stars-container">{renderStars()}</div>
+            <p className="testimonial-quote">"{quote}"</p>
            
         </div>
     );
