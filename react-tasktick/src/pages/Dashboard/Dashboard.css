@@ -23,3 +23,18 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
+.mobile-header {
+  display: none;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
