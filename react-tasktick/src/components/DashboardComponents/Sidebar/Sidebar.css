@@ -152,3 +152,25 @@
     z-index: 90;
 }
 
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-backdrop.open {
+        display: block;
+    }
+
+    .sidebar-close-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
