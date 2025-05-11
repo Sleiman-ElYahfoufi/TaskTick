@@ -64,7 +64,9 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
 
-               
+                <div className="footer-bottom">
+                    <p className="copyright">© 2025 TaskTick Media | All Rights Reserved</p>
+                </div>
             </div>
         </footer>
     );
