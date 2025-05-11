@@ -24,10 +24,22 @@ const Onboarding: React.FC = () => {
     'Python', 'Python', 'Python', 'Python'
   ];
 
-  
+  const handleTechnologyToggle = (tech: string) => {
+    setTechnologies(prev =>
+      prev.includes(tech)
+        ? prev.filter(t => t !== tech)
+        : [...prev, tech]
+    );
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ role, experience, technologies });
+  };
+
   return (
     <div className="onboarding-container">
-     
+      
     </div>
   );
 };
