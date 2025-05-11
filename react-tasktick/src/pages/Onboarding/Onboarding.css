@@ -33,3 +33,22 @@
   margin-bottom: 0.5rem;
 }
 
+.onboarding-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.onboarding-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.25rem;
+}
+
+.onboarding-header p {
+  color: var(--placeholder);
+  font-size: 0.875rem;
+}
+
