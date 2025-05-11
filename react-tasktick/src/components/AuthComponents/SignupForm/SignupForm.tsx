@@ -38,10 +38,29 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
           />
         </div>
         
-     
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <div className="password-input-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              placeholder="**************"
+              required
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+        </div>
+       
       </form>
       
-     
+      
     </div>
   )
 }
