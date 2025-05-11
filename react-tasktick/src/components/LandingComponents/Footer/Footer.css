@@ -17,3 +17,13 @@
     align-items: flex-start;
 }
 
+.footer-logo {
+    display: flex;
+    align-items: flex-start;
+}
+
+.footer-logo-img {
+    height: 120px;
+    width: auto;
+}
+
