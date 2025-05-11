@@ -105,3 +105,30 @@
   z-index: 1;
 }
 
+.experience-card {
+  border: 1px solid #E5E7EB;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 60px;
+  justify-content: center;
+}
+
+.experience-label {
+  font-weight: 600;
+  color: var(--black);
+  display: block;
+  margin-bottom: 0.125rem;
+  font-size: 0.875rem;
+}
+
+.experience-years {
+  font-size: 0.75rem;
+  color: var(--placeholder);
+  display: block;
+}
+
