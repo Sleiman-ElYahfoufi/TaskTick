@@ -5,3 +5,15 @@ body{
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
 }
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-main {
+  flex: 1;
+  margin-left: 260px; 
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
