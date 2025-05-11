@@ -54,5 +54,16 @@
         margin-bottom: 3rem;
     }
 
-    
+    .features-title {
+        font-size: 2rem;
+    }
+
+    .features-subtitle {
+        font-size: 1rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
 }
