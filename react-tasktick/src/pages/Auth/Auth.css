@@ -92,3 +92,10 @@
   }
 }
 
+@media (max-width: 480px) {
+  .auth-left,
+  .auth-right {
+    padding: 1rem;
+  }
+}
+
