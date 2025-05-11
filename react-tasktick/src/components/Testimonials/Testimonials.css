@@ -34,3 +34,14 @@
 
 
 
+.testimonials .slick-dots li button:before {
+    font-size: 0.75rem;
+    color: var(--secondary);
+    opacity: 0.25;
+}
+
+.testimonials .slick-dots li.slick-active button:before {
+    color: var(--secondary);
+    opacity: 1;
+}
+
