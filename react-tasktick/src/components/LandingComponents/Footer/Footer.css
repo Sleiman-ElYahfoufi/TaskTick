@@ -27,3 +27,14 @@
     width: auto;
 }
 
+.footer-section {
+    flex: 1;
+}
+
+.footer-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+}
+
