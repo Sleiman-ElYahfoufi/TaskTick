@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import HeroSection from '../../components/HeroSection/HeroSection';
 import './Landing.css';
 import PowerfulFeatures from '../../components/PowerfulFeatures/PowerfulFeatures';
+import HowItWorks from '../../components/HowItWorks/HowItWorks';
 
 const Landing: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const Landing: React.FC = () => {
       <Navbar />
       <HeroSection />
       <PowerfulFeatures />
+      <HowItWorks />
     </div>
   );
 };
