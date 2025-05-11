@@ -84,7 +84,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         </nav>
       </div>
       
-    
+      <div className="sidebar-footer">
+        <div className="user-profile">
+          <div className="avatar">
+            <span>J</span>
+          </div>
+          <div className="user-info">
+            <h3>John Smith</h3>
+            <p>Software Engineer</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
