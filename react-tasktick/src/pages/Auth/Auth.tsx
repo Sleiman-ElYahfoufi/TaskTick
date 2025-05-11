@@ -27,7 +27,9 @@ const Auth: React.FC = () => {
           className="auth-image"
         />
       </div>
-      
+      <div className="auth-right">
+        {!isLogin && <SignupForm onSwitchToLogin={handleSwitchToLogin} />}
+      </div>
     </div>
   )
 }
