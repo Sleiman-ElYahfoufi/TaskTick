@@ -63,6 +63,22 @@
         padding: 4rem 0;
     }
 
-    
+    .cta-container {
+        padding: 0 1rem;
+    }
+
+    .cta-title {
+        font-size: 2rem;
+    }
+
+    .cta-subtitle {
+        font-size: 1.125rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-button {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
 }
 
