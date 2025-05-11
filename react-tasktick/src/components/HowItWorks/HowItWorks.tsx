@@ -28,7 +28,17 @@ const HowItWorks: React.FC = () => {
     ];
 
     return (
-        <></>
+        <section id="how-it-works" className="how-it-works">
+            <div className="how-it-works-container">
+                <div className="how-it-works-header">
+                    <h2 className="how-it-works-title">How It Works</h2>
+                    <p className="how-it-works-subtitle">
+                        Get accurate estimates in three simple steps
+                    </p>
+                </div>
+            
+            </div>
+        </section>
     );
 };
 
