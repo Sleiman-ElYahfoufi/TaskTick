@@ -81,6 +81,14 @@
     display: none;
   }
   
-
+  .auth-page.login-mode .auth-right {
+    display: none;
+  }
+  
+  .auth-page.signup-mode .auth-right,
+  .auth-page.login-mode .auth-left {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
