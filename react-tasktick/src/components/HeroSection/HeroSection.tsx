@@ -1,6 +1,7 @@
 import React from "react";
 import "./HeroSection.css";
 import HeroImage from "../../assets/hero-illustration.png";
+import TypewriterComponent from "typewriter-effect";
 const HeroSection: React.FC = () => {
     return (
         <section className="hero">
@@ -9,7 +10,15 @@ const HeroSection: React.FC = () => {
                     <div className="text-content">
                         <h1 className="title">
                             Estimate Development Projects with{" "}
-                            <span className="highlight">AI Precision</span>
+                            <span className="highlight">
+                                <TypewriterComponent
+                                    options={{
+                                        strings: ["AI Precision"],
+                                        autoStart: true,
+                                        loop: true,
+                                    }}
+                                />
+                            </span>
                         </h1>
                         <p className="description">
                             Get eerily accurate time estimates based on
