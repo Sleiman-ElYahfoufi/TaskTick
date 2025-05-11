@@ -3,3 +3,19 @@
   display: flex;
 }
 
+.onboarding-content {
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+}
+
+.onboarding-left {
+  flex: 1;
+  padding: 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
