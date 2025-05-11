@@ -58,3 +58,11 @@
     transform: translateY(0);
 }
 
+@media (max-width: 768px) {
+    .cta-section {
+        padding: 4rem 0;
+    }
+
+    
+}
+
