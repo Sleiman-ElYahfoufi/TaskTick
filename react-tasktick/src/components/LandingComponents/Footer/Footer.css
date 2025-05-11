@@ -113,3 +113,15 @@
     margin: 0;
 }
 
+@media (max-width: 1024px) {
+    .footer-content {
+        grid-template-columns: auto 1fr 1fr;
+        gap: 3rem;
+    }
+    
+    .footer-section:last-child {
+        grid-column: 1 / -1;
+        margin-top: 1rem;
+    }
+}
+
