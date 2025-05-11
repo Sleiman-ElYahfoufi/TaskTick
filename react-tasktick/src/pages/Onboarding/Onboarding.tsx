@@ -108,7 +108,13 @@ const Onboarding: React.FC = () => {
         
         </div>
 
-       
+        <div className="onboarding-right">
+          <img src={OnboardingImage} alt="Authentication illustration" className="auth-image" />
+          <div className="estimates-info">
+            <h3>Estimates that improve with your work</h3>
+            <p>Our AI learns from your development patterns to create increasingly accurate time estimates for your projects.</p>
+          </div>
+        </div>
       </div>
     </div>
   );
