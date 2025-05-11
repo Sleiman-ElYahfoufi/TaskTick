@@ -73,3 +73,20 @@
     height: 2rem;
 }
 
+.author-info {
+    flex: 1;
+}
+
+.author-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0;
+}
+
+.author-position {
+    font-size: 0.875rem;
+    color: var(--dark-placeholder);
+    margin: 0.25rem 0 0;
+}
+
