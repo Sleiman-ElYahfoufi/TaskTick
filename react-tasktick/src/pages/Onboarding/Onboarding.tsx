@@ -47,11 +47,28 @@ const Onboarding: React.FC = () => {
             <p>Help us personalize your time estimates</p>
           </div>
 
-       
+          <form onSubmit={handleSubmit} className="onboarding-form">
+            <div className="form-group">
+              <label>I am a...</label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="form-select"
+              >
+                <option value="">Select your role</option>
+                <option value="Web Developer">Web Developer</option>
+                <option value="Mobile Developer">Mobile Developer</option>
+                <option value="Full Stack Developer">Full Stack Developer</option>
+                <option value="Frontend Developer">Frontend Developer</option>
+                <option value="Backend Developer">Backend Developer</option>
+              </select>
+            </div>
+
+                   </form>
         
         </div>
 
-      
+       
       </div>
     </div>
   );
