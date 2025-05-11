@@ -13,3 +13,15 @@
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+.feature-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1.5rem;
+    color: var(--secondary);
+}
+
+.feature-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
