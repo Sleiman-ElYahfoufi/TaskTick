@@ -64,7 +64,29 @@ const Onboarding: React.FC = () => {
               </select>
             </div>
 
-                   </form>
+            <div className="form-group">
+              <label>My experience level is...</label>
+              <div className="experience-options">
+                {experienceLevels.map((level) => (
+                  <label key={level.label} className="experience-option">
+                    <input
+                      type="radio"
+                      name="experience"
+                      value={level.label}
+                      checked={experience === level.label}
+                      onChange={(e) => setExperience(e.target.value)}
+                    />
+                    <div className="experience-card">
+                      <span className="experience-label">{level.label}</span>
+                      <span className="experience-years">{level.years}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            
+          </form>
         
         </div>
 
