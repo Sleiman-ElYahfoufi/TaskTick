@@ -1,0 +1,11 @@
+.testimonials {
+    background-color: var(--background);
+    padding: 6rem 0;
+}
+
+.testimonials-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
