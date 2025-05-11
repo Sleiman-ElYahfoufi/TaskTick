@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import HeroSection from '../../components/HeroSection/HeroSection';
-import './styles.css';
+import './Landing.css';
 
 const Landing: React.FC = () => {
   return (
