@@ -13,7 +13,15 @@ const FunctionalityComponent: React.FC<FunctionalityComponentProps> = ({
     description
 }) => {
     return (
-       <></>
+        <div className="functionality-component">
+            <div className="step-icon-wrapper">
+                <div className="step-icon">
+                    {icon}
+                </div>
+            </div>
+            <h3 className="step-title">{title}</h3>
+            <p className="step-description">{description}</p>
+        </div>
     );
 };
 
