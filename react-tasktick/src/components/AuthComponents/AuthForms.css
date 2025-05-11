@@ -249,3 +249,21 @@
   }
 }
 
+@media (max-height: 600px) {
+  .login-form h2,
+  .signup-form h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+  
+  .form-submit-row {
+    margin-bottom: 1.25rem;
+  }
+  
+  .auth-footer {
+    margin-top: 1rem;
+  }
+}
