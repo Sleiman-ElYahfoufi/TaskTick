@@ -28,7 +28,7 @@ const PowerfulFeatures: React.FC = () => {
     ];
 
     return (
-        <section className="powerful-features">
+        <section id="features" className="powerful-features">
             <div className="features-container">
                 <div className="features-header">
                     <h2 className="features-title">Powerful Features</h2>
