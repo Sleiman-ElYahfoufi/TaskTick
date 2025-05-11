@@ -75,7 +75,21 @@ const Testimonials: React.FC = () => {
                         See what development teams are saying about TaskTick
                     </p>
                 </div>
-                
+                <div className="testimonials-slider">
+                    <Slider {...settings}>
+                        {testimonials.map((testimonial, index) => (
+                            <Testimonial
+                                key={index}
+                                rating={testimonial.rating}
+                                quote={testimonial.quote}
+                                author={testimonial.author}
+                                position={testimonial.position}
+                                company={testimonial.company}
+                                avatar={testimonial.avatar}
+                            />
+                        ))}
+                    </Slider>
+                </div>
             </div>
         </section>
     );
