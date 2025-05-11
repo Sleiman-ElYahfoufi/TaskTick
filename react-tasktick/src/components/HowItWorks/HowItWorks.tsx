@@ -36,7 +36,19 @@ const HowItWorks: React.FC = () => {
                         Get accurate estimates in three simple steps
                     </p>
                 </div>
-            
+                <div className="steps-wrapper">
+                    <div className="steps-line"></div>
+                    <div className="steps-grid">
+                        {steps.map((step, index) => (
+                            <FunctionalityComponent
+                                key={index}
+                                icon={step.icon}
+                                title={step.title}
+                                description={step.description}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </section>
     );
