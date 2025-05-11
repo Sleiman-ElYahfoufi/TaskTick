@@ -9,7 +9,12 @@ interface ExperienceLevel {
 }
 
 const Onboarding: React.FC = () => {
- 
+  const [role, setRole] = useState('');
+  const [experience, setExperience] = useState('');
+  const [technologies, setTechnologies] = useState<string[]>([]);
+
+  
+
   return (
     <div className="onboarding-container">
       
