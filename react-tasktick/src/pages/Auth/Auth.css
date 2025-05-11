@@ -26,3 +26,11 @@
   overflow-y: auto; 
 }
 
+.auth-left {
+  left: 0;
+}
+
+.auth-right {
+  right: 0;
+}
+
