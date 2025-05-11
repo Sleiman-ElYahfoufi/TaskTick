@@ -6,3 +6,23 @@
   position: relative;
 }
 
+.auth-left,
+.auth-right,
+.auth-image-container {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  transition: all 0.8s ease;
+}
+
+.auth-left,
+.auth-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 3rem;
+  overflow-y: auto; 
+}
+
