@@ -144,6 +144,18 @@
         justify-content: center;
     }
     
-
+    .social-links {
+        justify-content: center;
+    }
+    
+    .footer-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-bottom {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+    }
 }
 
