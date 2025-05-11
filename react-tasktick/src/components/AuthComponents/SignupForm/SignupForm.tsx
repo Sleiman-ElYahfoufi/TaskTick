@@ -89,7 +89,14 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
         </div>
       </form>
       
-      
+      <div className="auth-footer">
+        <p className="auth-switch">
+          Own an Account? 
+          <button onClick={onSwitchToLogin} className="switch-button">
+            JUMP RIGHT IN
+          </button>
+        </p>
+      </div>
     </div>
   )
 }
