@@ -29,3 +29,21 @@
     height: 2.5rem;
 }
 
+.step-title {
+    color: var(--primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+    position: relative;
+}
+
+.step-description {
+    color: var(--dark-placeholder);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 20rem;
+    margin: 0 auto;
+}
+
