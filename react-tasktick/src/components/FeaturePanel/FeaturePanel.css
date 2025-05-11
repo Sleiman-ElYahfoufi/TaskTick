@@ -40,3 +40,16 @@
     margin: 0;
 }
 
+@media (max-width: 768px) {
+    .feature-panel {
+        padding: 2rem;
+    }
+
+    .feature-title {
+        font-size: 1.125rem;
+    }
+
+    .feature-description {
+        font-size: 0.9375rem;
+    }
+}
