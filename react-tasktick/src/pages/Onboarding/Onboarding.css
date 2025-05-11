@@ -223,3 +223,25 @@
   font-size: 0.875rem;
 }
 
+@media (max-width: 768px) {
+  .onboarding-content {
+    flex-direction: column;
+  }
+  
+  .onboarding-left {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+  
+  .experience-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .technology-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .onboarding-right {
+    display: none;
+  }
+}
