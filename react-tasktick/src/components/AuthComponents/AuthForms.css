@@ -79,3 +79,16 @@
   outline: none;
 }
 
+.form-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-submit-row .remember-me {
+  margin: 0;
+  flex: 1;
+}
+
