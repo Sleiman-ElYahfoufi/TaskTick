@@ -65,3 +65,22 @@
   }
 }
 
+@media (max-width: 640px) {
+  .auth-image-container {
+    display: none;
+  }
+  
+  .auth-left,
+  .auth-right {
+    width: 100%;
+    position: relative;
+    padding: 1.5rem;
+  }
+  
+  .auth-page.signup-mode .auth-left {
+    display: none;
+  }
+  
+
+}
+
