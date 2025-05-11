@@ -118,3 +118,18 @@
   user-select: none;
 }
 
+.auth-button {
+  width: 100%;
+  padding: 0.75rem 2rem;
+  background: #003D82;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
