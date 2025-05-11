@@ -59,7 +59,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
         </div>
       </form>
       
-     
+      <div className="auth-footer">
+        <p className="auth-switch">
+          Don't have an account? 
+          <button onClick={onSwitchToSignup} className="switch-button">
+            SIGN UP
+          </button>
+        </p>
+      </div>
     </div>
   )
 }
