@@ -151,3 +151,30 @@
   box-shadow: 0 2px 4px rgba(0, 61, 130, 0.2);
 }
 
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.auth-switch {
+  font-size: 0.875rem;
+  color: var(--dark-placeholder);
+}
+
+.switch-button {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-left: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.switch-button:hover {
+  color: #002D62;
+  text-decoration: underline;
+}
+
+
