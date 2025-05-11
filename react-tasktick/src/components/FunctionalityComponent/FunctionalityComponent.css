@@ -62,5 +62,11 @@
         height: 2rem;
     }
 
- 
+    .step-title {
+        font-size: 1.125rem;
+    }
+
+    .step-description {
+        font-size: 0.9375rem;
+    }
 }
