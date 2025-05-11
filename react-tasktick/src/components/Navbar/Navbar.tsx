@@ -4,7 +4,7 @@ import TaskTickLogo from "../../assets/Sleiman_ElYahfoufi_TaskTick.png";
 const Navbar: React.FC = () => {
     return (
         <nav className="navbar">
-            <div className="container">
+            <div className="navbar-container">
                 <div className="nav-content">
                     <div className="logo">
                         <img
