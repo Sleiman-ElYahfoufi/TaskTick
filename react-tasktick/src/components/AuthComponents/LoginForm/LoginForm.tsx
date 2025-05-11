@@ -15,6 +15,24 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
 
   return (
     <div className="login-form">
+      <h2>Join & Use the Best Growing Project Manager</h2>
+      
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="johndoe@email.com"
+            required
+          />
+        </div>
+        
+        
+        
+      
+      </form>
+      
      
     </div>
   )
