@@ -28,3 +28,18 @@
     line-height: 1.6;
 }
 
+.steps-wrapper {
+    position: relative;
+    margin-top: 3rem;
+}
+
+.steps-line {
+    position: absolute;
+    top: 2.5rem;
+    left: 16.67%;
+    right: 16.67%;
+    height: 4px;
+    background-color: var(--ai-precision);
+    z-index: 1;
+}
+
