@@ -39,7 +39,20 @@ const Onboarding: React.FC = () => {
 
   return (
     <div className="onboarding-container">
+      <div className="onboarding-content">
+        <div className="onboarding-left">
+          <div className="onboarding-header">
+            <img src={TaskTickLogo} alt="TaskTick" className="logo" />
+            <h2>Tell us about yourself</h2>
+            <p>Help us personalize your time estimates</p>
+          </div>
+
+       
+        
+        </div>
+
       
+      </div>
     </div>
   );
 };
