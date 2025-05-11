@@ -60,3 +60,17 @@
     color: var(--primary);
 }
 
+.contact-label {
+    display: block;
+    color: var(--dark-placeholder);
+    font-size: 0.9375rem;
+    margin-bottom: 0.25rem;
+}
+
+.contact-number {
+    display: block;
+    color: var(--black);
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
