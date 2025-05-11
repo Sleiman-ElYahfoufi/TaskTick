@@ -82,3 +82,18 @@
     }
 }
 
+@media (max-width: 768px) {
+    .testimonials {
+        padding: 4rem 0;
+    }
+
+    .testimonials-container {
+        padding: 0 1rem;
+    }
+
+    .testimonials-header {
+        margin-bottom: 3rem;
+    }
+
+    
+}
