@@ -49,7 +49,24 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
 
   return (
     <div className="project-filters-container">
+      <div className="project-filters-header">
+        <h1 className="projects-title">Projects</h1>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search Projects..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+
      
+
+       
+         
+       
+      
     </div>
   );
 };
