@@ -101,7 +101,9 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
             </div>
           </div>
 
-          
+          <button className="new-project-button" onClick={onNewProject}>
+            + New Project
+          </button>
         </div>
       </div>
     </div>
