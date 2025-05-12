@@ -158,3 +158,21 @@
   text-decoration: underline;
 }
 
+@media (max-width: 768px) {
+  .project-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .project-info-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .last-updated {
+    align-items: flex-start;
+  }
+}
