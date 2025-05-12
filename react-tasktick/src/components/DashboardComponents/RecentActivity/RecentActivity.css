@@ -13,3 +13,14 @@
   margin: 0 0 16px 0;
 }
 
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+}
+
