@@ -27,7 +27,10 @@ const StatCards: React.FC<StatCardsProps> = ({
         <div className="stat-period">{completedMonth}</div>
       </div>
       
-      
+      <div className="stat-card due-today">
+        <h3>Due Today</h3>
+        <div className="stat-value">{dueToday}</div>
+      </div>
     </div>
   );
 };
