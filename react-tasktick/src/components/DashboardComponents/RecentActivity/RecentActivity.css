@@ -37,3 +37,14 @@
   border-radius: 50%;
 }
 
+.activity-content {
+  flex: 1;
+}
+
+.activity-description {
+  font-size: 14px;
+  color: #4B5563;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
