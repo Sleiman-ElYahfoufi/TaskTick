@@ -26,7 +26,10 @@ const ActiveProjects: React.FC<ActiveProjectsProps> = ({ projects, onAddProject 
     <div className="active-projects-section">
       <div className="section-header">
         <h2>Active Projects</h2>
-       
+        <button className="add-project-btn" onClick={onAddProject}>Add Project</button>
+      </div>
+      
+      
     </div>
   );
 };
