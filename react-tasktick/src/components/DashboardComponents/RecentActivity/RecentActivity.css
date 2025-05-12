@@ -48,3 +48,12 @@
   line-height: 1.4;
 }
 
+.activity-project {
+  font-weight: 500;
+  color: #111827;
+}
+
+.activity-timestamp {
+  font-size: 12px;
+  color: #9CA3AF;
+}
