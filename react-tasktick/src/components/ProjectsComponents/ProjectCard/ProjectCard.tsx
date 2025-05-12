@@ -42,7 +42,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <h3 className="project-title">{title}</h3>
         <p className="project-description">{description}</p>
         
-      
+        <div className="project-details">
+          <div className="project-status-section">
+            <span className={`status-badge ${status}`}>
+              {currentStatus.text}
+            </span>
+            
+            
+          </div>
+        </div>
       </div>
     </div>
   );
