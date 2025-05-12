@@ -106,7 +106,9 @@ const Dashboard: React.FC = () => {
         dueToday={stats.dueToday}
       />
       
-      
+      <div className="dashboard-layout">
+        
+      </div>
     </div>
   );
 };
