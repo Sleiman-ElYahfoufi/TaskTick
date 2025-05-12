@@ -4,6 +4,7 @@ import "./App.css";
 import Auth from "./pages/Auth/Auth";
 import Onboarding from "./pages/Onboarding/Onboarding";
 
+import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/dashboard" element={<DashboardLayout />}>
-                   
+                    <Route index element={<Dashboard />} />
+                  
                 </Route>
             </Routes>
         </Router>
