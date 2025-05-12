@@ -92,10 +92,52 @@ const Projects: React.FC = () => {
   const applyFilters = (search: string, filter: string, sort: string) => {
     let result = [...projects];
 
-   
+    if (search) {
+      result = result.filter(
+        project => 
+          project.title.toLowerCase().includes(search.toLowerCase()) ||
+          project.description.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    if (filter !== 'All') {
+      const statusMap: { [key: string]: ProjectStatus } = {
+        'Active': 'in-progress',
+        'Completed': 'completed',
+        'Planning': 'planning'
+      };
+      
+      if (statusMap[filter]) {
+        result = result.filter(project => project.status === statusMap[filter]);
+      }
+    }
+
+    // Apply sorting
+    switch (sort) {
+      case 'Name A-Z':
+        result.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'Name Z-A':
+        result.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case 'Oldest First':
+        result.sort((a, b) => a.id.localeCompare(b.id));
+        break;
+      case 'Newest First':
+        result.sort((a, b) => b.id.localeCompare(a.id));
+        break;
+      default: 
+        result = [...result]; 
+    }
+
+    setFilteredProjects(result);
   };
 
-  
+  const handleNewProject = () => {
+    console.log('Create new project clicked');
+    alert('Create new project functionality would go here');
+  };
+
   return (
     <div className="projects-page">
 
