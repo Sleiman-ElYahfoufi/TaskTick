@@ -107,7 +107,16 @@ const Dashboard: React.FC = () => {
       />
       
       <div className="dashboard-layout">
+        <div className="left-column">
+          <ActiveProjects 
+            projects={projects}
+            onAddProject={handleAddProject}
+          />
+          
+          
+        </div>
         
+      
       </div>
     </div>
   );
