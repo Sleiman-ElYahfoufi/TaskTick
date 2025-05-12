@@ -24,3 +24,16 @@
   gap: 12px;
 }
 
+.activity-icon {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.activity-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #3B82F6;
+  border-radius: 50%;
+}
+
