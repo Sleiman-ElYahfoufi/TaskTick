@@ -21,3 +21,8 @@
   gap: 24px;
 }
 
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr; 
+  }
+}
