@@ -22,7 +22,15 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  
+  const sortOptions: SortOption[] = [
+    'Last Updated',
+    'Name A-Z',
+    'Name Z-A',
+    'Oldest First',
+    'Newest First'
+  ];
+
+ 
 
   return (
     <div className="project-filters-container">
