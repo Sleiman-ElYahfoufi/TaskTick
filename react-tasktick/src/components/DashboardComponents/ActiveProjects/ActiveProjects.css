@@ -109,3 +109,16 @@
   color: #EF4444;
 }
 
+.progress-track {
+  height: 8px;
+  background-color: #E5E7EB;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #3B82F6;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
