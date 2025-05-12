@@ -82,3 +82,30 @@
   font-size: 14px;
 }
 
+.project-hours {
+  color: #6B7280;
+}
+
+.active-projects-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.active-projects-status.in-progress {
+  background-color: #DBEAFE;
+  color: #2563EB;
+}
+
+.active-projects-status.completed {
+  background-color: #D1FAE5;
+  color: #10B981;
+}
+
+.active-projects-status.delayed {
+  background-color: #FEE2E2;
+  color: #EF4444;
+}
+
