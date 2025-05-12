@@ -116,7 +116,10 @@ const Dashboard: React.FC = () => {
           <RecentActivity activities={activities} />
         </div>
         
-   
+        <div className="right-column">
+          <ProductivityHeatmap />
+          
+        </div>
       </div>
     </div>
   );
