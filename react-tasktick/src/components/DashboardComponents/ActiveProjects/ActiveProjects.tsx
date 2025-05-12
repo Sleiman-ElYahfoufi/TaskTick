@@ -41,7 +41,24 @@ const ActiveProjects: React.FC<ActiveProjectsProps> = ({
                         className="project-card"
                         onClick={() => handleProjectClick(project.id)}
                     >
-                       
+                        <div className="active-projects-info">
+                            <h3 className="active-projects-name">
+                                {project.name}
+                            </h3>
+                            <div className="project-meta">
+                                <span className="project-hours">
+                                    {project.hours} hours
+                                </span>
+                                <span
+                                    className={`active-projects-status ${project.status
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "-")}`}
+                                >
+                                    {project.status}
+                                </span>
+                            </div>
+                        </div>
+                        
                     </div>
                 ))}
             </div>
