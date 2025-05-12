@@ -11,8 +11,18 @@ interface ProjectFiltersProps {
   onNewProject: () => void;
 }
 
-const ProjectFilters: React.FC = () => {
- 
+const ProjectFilters: React.FC<ProjectFiltersProps> = ({
+  onSearch,
+  onFilterChange,
+  onSortChange,
+  onNewProject
+}) => {
+  const [activeFilter, setActiveFilter] = useState<FilterOption>('All');
+  const [sortBy, setSortBy] = useState<SortOption>('Last Updated');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  
 
   return (
     <div className="project-filters-container">
