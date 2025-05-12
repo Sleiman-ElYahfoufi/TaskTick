@@ -75,9 +75,34 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
         </div>
 
         <div className="project-controls">
-         
+          <div className="sort-dropdown">
+            <span className="sort-label">Sort by</span>
+            <div className="dropdown-container">
+              <button
+                className="dropdown-button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                {sortBy} <span className="dropdown-arrow">▼</span>
+              </button>
+              
+              {isDropdownOpen && (
+                <div className="dropdown-menu">
+                  {sortOptions.map(option => (
+                    <button
+                      key={option}
+                      className={`dropdown-item ${sortBy === option ? 'active' : ''}`}
+                      onClick={() => handleSortSelect(option)}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
+          
+        </div>
       </div>
     </div>
   );
