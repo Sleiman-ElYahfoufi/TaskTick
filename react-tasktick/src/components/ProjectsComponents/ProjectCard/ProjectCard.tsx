@@ -15,10 +15,17 @@ interface ProjectCardProps {
   lastUpdatedTime: string;
 }
 
-const ProjectCard: React.FC = () => {
-  
-
-  
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  id,
+  title,
+  description,
+  status,
+  estimatedHours,
+  tasksCompleted,
+  totalTasks,
+  lastUpdatedDate,
+  lastUpdatedTime,
+}) => {
 
   return (
    <></>
