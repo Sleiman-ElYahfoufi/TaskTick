@@ -65,3 +65,20 @@
   background-color: #3B82F6;
 }
 
+.active-projects-info {
+  margin-bottom: 16px;
+}
+
+.active-projects-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.project-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
