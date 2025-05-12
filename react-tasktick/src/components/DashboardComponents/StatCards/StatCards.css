@@ -31,3 +31,15 @@
   margin-top: 4px;
 }
 
+.active-projects .stat-value {
+  color: #2563EB;
+}
+
+.tasks-completed .stat-value {
+  color: #10B981;
+}
+
+.due-today .stat-value {
+  color: #EF4444;
+}
+
