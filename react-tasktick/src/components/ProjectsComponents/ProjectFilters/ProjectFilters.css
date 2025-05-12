@@ -131,3 +131,13 @@
   cursor: pointer;
 }
 
+.dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdown-item.active {
+  background-color: #f3f4f6;
+  font-weight: 500;
+  color: #2563eb;
+}
+
