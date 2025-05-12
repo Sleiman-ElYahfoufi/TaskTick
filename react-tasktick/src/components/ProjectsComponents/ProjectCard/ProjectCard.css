@@ -144,3 +144,17 @@
   color: #111827;
 }
 
+.view-details-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.view-details-btn:hover {
+  text-decoration: underline;
+}
+
