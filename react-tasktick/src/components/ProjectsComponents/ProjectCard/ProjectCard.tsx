@@ -48,12 +48,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               {currentStatus.text}
             </span>
             
-            
-          </div>
+            <div className="project-metrics">
+              <div className="metric">
+                <span className="metric-label">
+                  {status === 'completed' ? 'Total Time' : 'Est. Time'}
+                </span>
+                <span className="metric-value">{estimatedHours} hours</span>
+              </div>
+              
+              
         </div>
       </div>
     </div>
-  );
+  ); 
 };
 
 export default ProjectCard;
