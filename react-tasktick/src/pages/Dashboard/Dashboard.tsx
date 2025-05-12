@@ -98,6 +98,14 @@ const Dashboard: React.FC = () => {
   
   return (
     <div className="dashboard-page">
+      <h1 className="page-title">Dashboard</h1>
+      
+      <StatCards 
+        activeProjects={stats.activeProjects}
+        tasksCompleted={stats.tasksCompleted}
+        dueToday={stats.dueToday}
+      />
+      
       
     </div>
   );
