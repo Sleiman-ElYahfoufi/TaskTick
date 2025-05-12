@@ -119,6 +119,7 @@ const Dashboard: React.FC = () => {
         <div className="right-column">
           <ProductivityHeatmap />
           
+          <AIInsights insights={insights} />
         </div>
       </div>
     </div>
