@@ -21,6 +21,12 @@ const StatCards: React.FC<StatCardsProps> = ({
         <div className="stat-value">{activeProjects}</div>
       </div>
       
+      <div className="stat-card tasks-completed">
+        <h3>Tasks Completed</h3>
+        <div className="stat-value">{tasksCompleted}</div>
+        <div className="stat-period">{completedMonth}</div>
+      </div>
+      
       
     </div>
   );
