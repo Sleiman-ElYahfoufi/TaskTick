@@ -56,7 +56,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 <span className="metric-value">{estimatedHours} hours</span>
               </div>
               
-              
+              <div className="metric">
+                <span className="metric-label">Tasks</span>
+                <span className="metric-value">{tasksCompleted}/{totalTasks}</span>
+              </div>
+            </div>
+          </div>
+          
+         
         </div>
       </div>
     </div>
