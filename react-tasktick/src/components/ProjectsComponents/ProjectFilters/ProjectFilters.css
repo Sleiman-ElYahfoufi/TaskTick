@@ -6,3 +6,10 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+.project-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
