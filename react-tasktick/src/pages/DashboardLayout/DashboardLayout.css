@@ -4,3 +4,16 @@
   min-height: 100vh;
 }
 
+.dashboard-main {
+  flex: 1;
+  margin-left: 260px; 
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+.dashboard-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
