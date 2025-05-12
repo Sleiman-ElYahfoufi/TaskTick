@@ -43,3 +43,9 @@
   color: #EF4444;
 }
 
+@media (max-width: 768px) {
+  .stat-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
