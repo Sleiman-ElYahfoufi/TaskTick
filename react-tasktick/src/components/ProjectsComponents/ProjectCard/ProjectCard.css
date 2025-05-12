@@ -23,3 +23,19 @@
   background-color: #ddd;
 }
 
+.project-card.in-progress::before {
+  background-color: #3b82f6; 
+}
+
+.project-card.planning::before {
+  background-color: #f59e0b; 
+}
+
+.project-card.delayed::before {
+  background-color: #ef4444; 
+}
+
+.project-card.completed::before {
+  background-color: #10b981;
+}
+
