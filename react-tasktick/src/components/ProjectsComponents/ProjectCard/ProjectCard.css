@@ -39,3 +39,21 @@
   background-color: #10b981;
 }
 
+.project-content {
+  padding: 20px 24px;
+}
+
+.project-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.project-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
