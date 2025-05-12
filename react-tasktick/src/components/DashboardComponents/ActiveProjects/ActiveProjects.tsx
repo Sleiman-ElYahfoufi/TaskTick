@@ -58,7 +58,12 @@ const ActiveProjects: React.FC<ActiveProjectsProps> = ({
                                 </span>
                             </div>
                         </div>
-                        
+                        <div className="progress-track">
+                            <div
+                                className="progress-bar"
+                                style={{ width: `${project.progress}%` }}
+                            ></div>
+                        </div>
                     </div>
                 ))}
             </div>
