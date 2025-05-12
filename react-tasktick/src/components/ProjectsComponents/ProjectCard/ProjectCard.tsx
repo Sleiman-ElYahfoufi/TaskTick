@@ -63,7 +63,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
           </div>
           
-         
+          <div className="project-info-right">
+            <div className="last-updated">
+              <span className="update-label">Last Updated</span>
+              <span className="update-value">{lastUpdatedDate}, {lastUpdatedTime}</span>
+            </div>
+            
+            <button className="view-details-btn">View Details</button>
+          </div>
         </div>
       </div>
     </div>
