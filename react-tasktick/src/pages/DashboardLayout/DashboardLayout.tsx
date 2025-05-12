@@ -16,7 +16,12 @@ const DashboardLayout: React.FC = () => {
       {sidebarOpen && (
         <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)}></div>
       )}
-      
+      <main className="dashboard-main">
+       
+        <div className="dashboard-content">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 };
