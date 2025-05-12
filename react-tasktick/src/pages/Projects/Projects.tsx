@@ -148,7 +148,31 @@ const Projects: React.FC = () => {
         onNewProject={handleNewProject}
       />
 
-      
+      <div className="projects-list">
+        {filteredProjects.length > 0 ? (
+          filteredProjects.map(project => (
+            <ProjectCard
+              key={project.id}
+              {...project}
+            />
+          ))
+        ) : (
+          <div className="no-projects">
+            <p>No projects match your filters.</p>
+            <button 
+              className="reset-filters-btn"
+              onClick={() => {
+                setSearchTerm('');
+                setActiveFilter('All');
+                setSortBy('Last Updated');
+                setFilteredProjects(projects);
+              }}
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
