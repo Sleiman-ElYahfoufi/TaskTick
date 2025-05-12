@@ -30,7 +30,22 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
     'Newest First'
   ];
 
- 
+  const handleFilterClick = (filter: FilterOption) => {
+    setActiveFilter(filter);
+    onFilterChange(filter);
+  };
+
+  const handleSortSelect = (sort: SortOption) => {
+    setSortBy(sort);
+    onSortChange(sort);
+    setIsDropdownOpen(false);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearch(value);
+  };
 
   return (
     <div className="project-filters-container">
