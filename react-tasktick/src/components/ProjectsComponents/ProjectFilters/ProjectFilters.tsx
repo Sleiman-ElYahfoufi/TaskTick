@@ -61,12 +61,22 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
         </div>
       </div>
 
-     
+      <div className="project-filters-actions">
+        <div className="filter-tabs">
+          {(['All', 'Active', 'Completed', 'Planning'] as FilterOption[]).map(filter => (
+            <button
+              key={filter}
+              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => handleFilterClick(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
 
        
-         
        
-      
+      </div>
     </div>
   );
 };
