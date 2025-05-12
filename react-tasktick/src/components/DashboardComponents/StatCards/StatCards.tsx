@@ -16,6 +16,11 @@ const StatCards: React.FC<StatCardsProps> = ({
 }) => {
   return (
     <div className="stat-cards">
+      <div className="stat-card active-projects">
+        <h3>Active Projects</h3>
+        <div className="stat-value">{activeProjects}</div>
+      </div>
+      
       
     </div>
   );
