@@ -22,7 +22,80 @@ const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [sortBy, setSortBy] = useState('Last Updated');
 
+  useEffect(() => {
+    const mockProjects: Project[] = [
+      {
+        id: '1',
+        title: 'E-commerce Platform Redesign',
+        description: 'Redesign the UI/UX of our e-commerce platform with focus on mobile experience',
+        status: 'in-progress',
+        estimatedHours: '230-245',
+        tasksCompleted: 28,
+        totalTasks: 45,
+        lastUpdatedDate: 'Today',
+        lastUpdatedTime: '9:15 AM'
+      },
+      {
+        id: '2',
+        title: 'Mobile App Development',
+        description: 'Create a new mobile application with React Native for both iOS and Android platforms',
+        status: 'planning',
+        estimatedHours: '320-350',
+        tasksCompleted: 5,
+        totalTasks: 60,
+        lastUpdatedDate: 'Yesterday',
+        lastUpdatedTime: '2:30 PM'
+      },
+      {
+        id: '3',
+        title: 'Backend API Integration',
+        description: 'Integrate payment gateways and shipping APIs into our existing backend infrastructure',
+        status: 'delayed',
+        estimatedHours: '150-180',
+        tasksCompleted: 12,
+        totalTasks: 35,
+        lastUpdatedDate: 'Today',
+        lastUpdatedTime: '11:20 AM'
+      },
+      {
+        id: '4',
+        title: 'Marketing Website Refresh',
+        description: 'Update design and content of our marketing website to align with new brand guidelines',
+        status: 'completed',
+        estimatedHours: '180-200',
+        tasksCompleted: 42,
+        totalTasks: 42,
+        lastUpdatedDate: 'May 8',
+        lastUpdatedTime: '4:45 PM'
+      }
+    ];
 
+    setProjects(mockProjects);
+    setFilteredProjects(mockProjects);
+  }, []);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    applyFilters(term, activeFilter, sortBy);
+  };
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    applyFilters(searchTerm, filter, sortBy);
+  };
+
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort);
+    applyFilters(searchTerm, activeFilter, sort);
+  };
+
+  const applyFilters = (search: string, filter: string, sort: string) => {
+    let result = [...projects];
+
+   
+  };
+
+  
   return (
     <div className="projects-page">
 
