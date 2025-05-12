@@ -19,3 +19,15 @@
   margin: 0 0 12px 0;
 }
 
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-period {
+  font-size: 14px;
+  color: #9CA3AF;
+  margin-top: 4px;
+}
+
