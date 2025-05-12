@@ -61,67 +61,11 @@ const Dashboard: React.FC = () => {
     }
   ]);
   
-  const [insights, setInsights] = useState<Insight[]>([
-    { id: '1', text: 'Frontend tasks take 15% longer' },
-    { id: '2', text: 'API integrations 23% faster' },
-    { id: '3', text: 'Break down Auth tasks more' },
-    { id: '4', text: 'Productivity peaks at 10-12am' }
-  ]);
-  
-  const [activities, setActivities] = useState<ActivityItem[]>([
-    {
-      id: '1',
-      type: 'task_added',
-      project: 'Database Migration',
-      description: 'New task "Schema Validation" added',
-      timestamp: 'Today, 11:23 AM'
-    },
-    {
-      id: '2',
-      type: 'task_added',
-      project: 'Database Migration',
-      description: 'New task "Schema Validation" added',
-      timestamp: 'Today, 11:23 AM'
-    },
-    {
-      id: '3',
-      type: 'task_added',
-      project: 'Database Migration',
-      description: 'New task "Schema Validation" added',
-      timestamp: 'Today, 11:23 AM'
-    }
-  ]);
-  
-  const handleAddProject = () => {
-    navigate('/dashboard/projects/new');
-  };
+ 
   
   return (
     <div className="dashboard-page">
-      <h1 className="page-title">Dashboard</h1>
       
-      <StatCards 
-        activeProjects={stats.activeProjects}
-        tasksCompleted={stats.tasksCompleted}
-        dueToday={stats.dueToday}
-      />
-      
-      <div className="dashboard-layout">
-        <div className="left-column">
-          <ActiveProjects 
-            projects={projects}
-            onAddProject={handleAddProject}
-          />
-          
-          <RecentActivity activities={activities} />
-        </div>
-        
-        <div className="right-column">
-          <ProductivityHeatmap />
-          
-          <AIInsights insights={insights} />
-        </div>
-      </div>
     </div>
   );
 };
