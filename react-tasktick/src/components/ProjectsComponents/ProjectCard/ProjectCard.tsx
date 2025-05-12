@@ -26,9 +26,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   lastUpdatedDate,
   lastUpdatedTime,
 }) => {
+  const statusConfig = {
+    'in-progress': { text: 'In Progress', color: 'blue' },
+    'planning': { text: 'Planning', color: 'yellow' },
+    'delayed': { text: 'Delayed', color: 'red' },
+    'completed': { text: 'Completed', color: 'green' }
+  };
+
+  const currentStatus = statusConfig[status];
+  
 
   return (
-   <></>
+    <div className={`project-card ${status}`}>
+   
+    </div>
   );
 };
 
