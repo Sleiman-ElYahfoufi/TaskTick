@@ -141,7 +141,14 @@ const Projects: React.FC = () => {
   return (
     <div className="projects-page">
 
-     
+      <ProjectFilters
+        onSearch={handleSearch}
+        onFilterChange={handleFilterChange} 
+        onSortChange={handleSortChange}
+        onNewProject={handleNewProject}
+      />
+
+      
     </div>
   );
 };
