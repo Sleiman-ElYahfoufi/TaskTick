@@ -157,3 +157,31 @@
   background-color: #1d4ed8;
 }
 
+@media (max-width: 768px) {
+  .project-filters-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .project-filters-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .filter-tabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .project-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
