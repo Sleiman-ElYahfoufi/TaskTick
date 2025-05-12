@@ -25,3 +25,13 @@
   gap: 10px;
 }
 
+.insight-icon {
+  color: #3B82F6;
+  margin-top: 2px;
+}
+
+.insight-text {
+  font-size: 14px;
+  color: #4B5563;
+  line-height: 1.4;
+}
