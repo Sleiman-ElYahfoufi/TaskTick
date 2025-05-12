@@ -113,10 +113,10 @@ const Dashboard: React.FC = () => {
             onAddProject={handleAddProject}
           />
           
-          
+          <RecentActivity activities={activities} />
         </div>
         
-      
+   
       </div>
     </div>
   );
