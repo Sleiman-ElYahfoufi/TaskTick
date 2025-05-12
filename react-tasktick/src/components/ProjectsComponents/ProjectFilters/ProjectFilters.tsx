@@ -74,8 +74,10 @@ const ProjectFilters: React.FC<ProjectFiltersProps> = ({
           ))}
         </div>
 
-       
-       
+        <div className="project-controls">
+         
+          </div>
+
       </div>
     </div>
   );
