@@ -59,3 +59,21 @@
   box-shadow: 0 0 0 2px rgba(1, 57, 142, 0.1);
 }
 
+@media (max-width: 992px) {
+  .task-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-bar {
+    max-width: none;
+  }
+  
+  .filter-dropdowns {
+    justify-content: space-between;
+  }
+  
+  .filter-dropdown {
+    flex: 1;
+  }
+}
