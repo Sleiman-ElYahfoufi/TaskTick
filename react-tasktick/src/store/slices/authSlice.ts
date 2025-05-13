@@ -128,3 +128,30 @@ try {
     console.error('Failed to parse stored user data');
 }
 
+const initialState: AuthState = {
+    user: storedUser,
+    token: getTokenFromStorage(),
+    isAuthenticated: !!getTokenFromStorage(),
+    isLoading: false,
+    error: null,
+};
+
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        logout: (state) => {
+            state.user = null;
+            state.token = null;
+            state.isAuthenticated = false;
+            state.error = null;
+            removeAuthFromStorage();
+        },
+        clearError: (state) => {
+            state.error = null;
+        },
+    },
+});
+
+export const { logout, clearError } = authSlice.actions;
+export default authSlice.reducer; 
