@@ -1,0 +1,15 @@
+.step-indicator {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  max-width: 400px; 
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
