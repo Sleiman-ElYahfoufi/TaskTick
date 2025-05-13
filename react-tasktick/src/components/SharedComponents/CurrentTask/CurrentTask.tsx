@@ -56,6 +56,25 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
                   <StopIcon fontSize="small" />
                 </button>
               </div>
+            </div>
+          
+          <div className="category-badge">{category}</div>
+          
+          <div className="task-details">
+            <div className="time-info">
+              <div className="estimated-time">
+                <span className="info-label">Est. Time</span>
+                <span className="info-value">{estimatedTime}</span>
+              </div>
+              
+              
+            </div>
+          </div>
+        </div>
+        
+       
+          
+         
         </div>
       </div>
     </div>
