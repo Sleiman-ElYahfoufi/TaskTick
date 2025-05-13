@@ -124,3 +124,23 @@ textarea.form-control {
   background-color: #1D4ED8;
 }
 
+.back-btn {
+  background-color: #F9FAFB;
+  color: #4B5563;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #F3F4F6;
+}
+
+.generated-tasks {
+  min-height: 300px;
+}
+
