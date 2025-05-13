@@ -86,3 +86,13 @@
   font-size: 12px;
 }
 
+@media (max-width: 640px) {
+  .project-overview-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .project-overview-right {
+    align-self: flex-start;
+  }
+}
