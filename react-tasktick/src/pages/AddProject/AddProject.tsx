@@ -6,6 +6,7 @@ import projectDecompositionService, {
     ProjectDetailsDto,
 } from "../../services/projectDecompositionService";
 import { PriorityLevel, DetailDepth } from "../../types/priority";
+import TaskBreakerLoader from "../../components/Loader/TaskBreakerLoader";
 import "./AddProject.css";
 
 const AddProject: React.FC = () => {
@@ -59,17 +60,20 @@ const AddProject: React.FC = () => {
                 JSON.stringify(result)
             );
 
-            navigate("/dashboard/generated-tasks");
+            setTimeout(() => {
+                navigate("/dashboard/generated-tasks");
+                setIsLoading(false);
+            }, 3000);
         } catch (err) {
             console.error("Error generating tasks:", err);
             setError("Failed to generate tasks. Please try again.");
-        } finally {
             setIsLoading(false);
         }
     };
 
     return (
         <div className="add-project-container">
+            <TaskBreakerLoader isGenerating={isLoading} />
             <h1 className="add-project-title">Add New Project</h1>
 
             <div className="add-project-content">
