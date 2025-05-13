@@ -231,3 +231,26 @@
   gap: 0.625rem;
 }
 
+.settings-tech-option {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.375rem;
+  background-color: white;
+  color: var(--dark-placeholder);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.settings-tech-option:hover {
+  border-color: var(--primary);
+}
+
+.settings-tech-option.selected {
+  background-color: var(--accent);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 500;
+}
+
