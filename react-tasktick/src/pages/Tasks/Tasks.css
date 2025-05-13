@@ -5,3 +5,10 @@
   font-family: "Inter", sans-serif;
 }
 
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 24px;
+}
+
