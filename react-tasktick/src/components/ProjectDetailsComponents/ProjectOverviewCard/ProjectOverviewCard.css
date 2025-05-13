@@ -77,3 +77,12 @@
   font-size: 12px;
 }
 
+.project-overview-card.compact .project-overview-stat-value {
+  font-size: 14px;
+}
+
+.project-overview-card.compact .project-overview-accuracy-badge {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
