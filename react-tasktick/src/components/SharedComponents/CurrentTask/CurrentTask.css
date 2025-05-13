@@ -23,3 +23,23 @@
   gap: 8px;
 }
 
+.current-task-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0;
+  margin-right: 6px;
+}
+
+.task-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
