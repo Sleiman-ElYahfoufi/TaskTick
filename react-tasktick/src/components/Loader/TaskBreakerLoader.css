@@ -126,3 +126,17 @@
     margin-right: -10px;
 }
 
+.message-container {
+    position: relative;
+    height: 50px;
+    margin-bottom: 2rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.message {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: white;
+}
+
