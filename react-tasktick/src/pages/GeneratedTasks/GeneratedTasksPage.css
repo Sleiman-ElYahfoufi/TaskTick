@@ -81,3 +81,39 @@
   color: #111827;
 }
 
+.generated-tasks-accuracy-badge {
+  background-color: #D1FAE5;
+  color: #047857;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tasks-table {
+  margin-bottom: 24px;
+}
+
+.tasks-priority-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.tasks-priority-badge.high {
+  background-color: #FEE2E2;
+  color: #EF4444;
+}
+
+.tasks-priority-badge.medium {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.tasks-priority-badge.low {
+  background-color: #DBEAFE;
+  color: #2563EB;
+}
+
