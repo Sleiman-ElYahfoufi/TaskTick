@@ -54,11 +54,51 @@ const AddProject: React.FC = () => {
               />
             </div>
             
-           
+            <div className="form-group">
+              <label htmlFor="projectDescription">Project Description</label>
+              <textarea
+                id="projectDescription"
+                className="form-control"
+                rows={5}
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+                placeholder="Describe your project..."
+              />
+            </div>
             
-           
+            <div className="form-options">
+              <div className="form-option">
+                <label>Deadline</label>
+                <input
+                  type="date"
+                  className="form-control date-input"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                />
+              </div>
               
-              
+              <div className="form-option">
+                <label>Details</label>
+                <select 
+                  className="form-control select-input"
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value)}
+                >
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="form-actions">
+              <button 
+                className="generate-tasks-btn"
+                onClick={handleGenerateTasks}
+              >
+                Generate Tasks
+              </button>
+            </div>
           </div>
         ) : (
           <div className="generated-tasks">
