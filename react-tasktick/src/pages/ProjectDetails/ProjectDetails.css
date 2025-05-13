@@ -42,3 +42,23 @@
   margin-right: 8px;
 }
 
+.project-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+    align-items: end;
+  margin-top: 8px;
+}
+
+.tasks-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
