@@ -117,3 +117,30 @@
   color: #2563EB;
 }
 
+.actions-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.create-project-btn {
+  background-color: #01398E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.create-project-btn:hover {
+  background-color: #002a6b;
+}
+
+.tasks-table {
+  min-height: 400px;
+  width: 100%;
+}
+
