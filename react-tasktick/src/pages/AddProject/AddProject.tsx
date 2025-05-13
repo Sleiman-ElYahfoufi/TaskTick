@@ -38,9 +38,33 @@ const AddProject: React.FC = () => {
           currentStep={currentStep}
         />
         
-      
+        {currentStep === 1 ? (
+          <div className="project-details-form">
+            <h2 className="form-section-title">Project Details</h2>
+            
+            <div className="form-group">
+              <label htmlFor="projectName">Project Name</label>
+              <input
+                type="text"
+                id="projectName"
+                className="form-control"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                placeholder="Enter project name"
+              />
+            </div>
+            
+           
+            
+           
               
-             
+              
+          </div>
+        ) : (
+          <div className="generated-tasks">
+            
+          </div>
+        )}
       </div>
     </div>
   );
