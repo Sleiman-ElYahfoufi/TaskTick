@@ -118,3 +118,13 @@ const setFailed = (state: AuthState, action: PayloadAction<any>) => {
     state.error = action.payload as string;
 };
 
+let storedUser = null;
+try {
+    const userData = localStorage.getItem(USER_STORAGE_KEY);
+    if (userData) {
+        storedUser = JSON.parse(userData);
+    }
+} catch (e) {
+    console.error('Failed to parse stored user data');
+}
+
