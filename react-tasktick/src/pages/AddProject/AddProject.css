@@ -106,3 +106,21 @@ textarea.form-control {
   margin-top: 32px;
 }
 
+.generate-tasks-btn,
+.save-project-btn {
+  background-color: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.generate-tasks-btn:hover,
+.save-project-btn:hover {
+  background-color: #1D4ED8;
+}
+
