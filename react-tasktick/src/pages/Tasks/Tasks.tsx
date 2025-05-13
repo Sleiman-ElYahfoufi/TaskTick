@@ -172,7 +172,19 @@ const Tasks: React.FC = () => {
         completedThisMonth={stats.completedThisMonth}
       />
       
-     
+      <div className="current-task-wrapper">
+        <CurrentTask
+          taskName={currentTask.name}
+          category={currentTask.category}
+          estimatedTime={currentTask.estimatedTime}
+          progress={currentTask.progress}
+          elapsedTime={currentTask.elapsedTime}
+          sessions={currentTask.sessions}
+          totalTime={currentTask.totalTime}
+        />
+
+        
+      </div>
       
       
     </div>
