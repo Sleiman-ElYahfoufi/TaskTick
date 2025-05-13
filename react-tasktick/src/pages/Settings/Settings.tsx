@@ -69,7 +69,15 @@ const Settings: React.FC = () => {
                   />
                 </div>
                 
-               
+                <div className="settings-form-group">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="settings-form-input"
+                  />
+                </div>
 
                
                     
