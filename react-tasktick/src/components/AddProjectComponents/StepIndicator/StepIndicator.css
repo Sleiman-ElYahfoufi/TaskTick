@@ -51,3 +51,15 @@
   font-weight: 600;
 }
 
+.step-connector {
+  width: 100px; 
+  height: 2px;
+  background-color: #E5E7EB;
+  margin: 0 8px;
+  margin-bottom: 28px; 
+}
+
+.step-connector.active {
+  background-color: #01398E;
+}
+
