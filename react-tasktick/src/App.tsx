@@ -3,6 +3,7 @@ import Landing from "./pages/Landing/Landing";
 import "./App.css";
 import Auth from "./pages/Auth/Auth";
 import Onboarding from "./pages/Onboarding/Onboarding";
+import Tasks from "./pages/Tasks/Tasks";
 import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
 import GeneratedTasks from "./pages/GeneratedTasks/GeneratedTasks";
 import AddProject from "./pages/AddProject/AddProject";
@@ -29,6 +30,8 @@ function App() {
                         path="project-details"
                         element={<ProjectDetails />}
                     />
+                    <Route path="tasks" element={<Tasks />} />
+                 
                 </Route>
             </Routes>
         </Router>
