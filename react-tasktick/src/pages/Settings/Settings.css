@@ -254,3 +254,31 @@
   font-weight: 500;
 }
 
+.settings-actions {
+  padding: 1.5rem;
+  border-top: 1px solid #E5E7EB;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.settings-save-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-save-button:hover {
+  background-color: #012a6b;
+  transform: translateY(-1px);
+}
+
+.settings-save-button:active {
+  transform: translateY(0);
+}
+
