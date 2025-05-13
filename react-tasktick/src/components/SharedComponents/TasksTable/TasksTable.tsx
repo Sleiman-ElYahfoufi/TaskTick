@@ -90,10 +90,66 @@ function TasksTable<T extends BaseTask>({
   );
 }
 
+export const renderPriorityCell = (params: GridRenderCellParams) => (
+  <div className={`priority-badge ${params.value?.toString().toLowerCase()}`}>
+    {params.value}
+  </div>
+);
 
+export const renderProgressCell = (params: GridRenderCellParams) => (
+  <div className="progress-bar-container">
+    <div className="progress-bar-wrapper">
+      <div 
+        className="progress-bar"
+        style={{ width: `${params.value}%` }}
+      ></div>
+    </div>
+    <span className="progress-text">{params.value}%</span>
+  </div>
+);
 
+export const renderTimerCell = (onStartTimer: (id: string) => void) => (params: GridRenderCellParams) => (
+  <button 
+    className={`timer-button ${params.row.status === 'Completed' ? 'completed' : ''}`}
+    onClick={() => params.row.status !== 'Completed' && onStartTimer(params.row.id)}
+    disabled={params.row.status === 'Completed'}
+  >
+    {params.row.status === 'Completed' ? 'Completed' : 'Start'}
+  </button>
+);
 
+export const renderActionsCell = (
+  onDeleteTask: (id: string) => void, 
+  onEditTask: (id: string) => void
+) => (params: GridRenderCellParams) => (
+  <div className="action-buttons">
+    <button 
+      className="action-button delete"
+      onClick={() => onDeleteTask(params.row.id)}
+      title="Delete Task"
+    >
+      <DeleteIcon fontSize="small" />
+    </button>
+    <button 
+      className="action-button edit"
+      onClick={() => onEditTask(params.row.id)}
+      title="Edit Task"
+    >
+      <EditIcon fontSize="small" />
+    </button>
+  </div>
+);
 
+export const renderStatusCell = (params: GridRenderCellParams) => (
+  <div className={`status-badge ${params.value?.toString().toLowerCase().replace(/\s+/g, '-')}`}>
+    {params.value}
+  </div>
+);
 
+export const renderProjectCell = (params: GridRenderCellParams) => (
+  <div className="project-badge">
+    {params.value}
+  </div>
+);
 
 export default TasksTable;
