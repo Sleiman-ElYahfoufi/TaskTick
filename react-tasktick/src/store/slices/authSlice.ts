@@ -100,3 +100,21 @@ export const register = createAsyncThunk(
     }
 );
 
+const setPending = (state: AuthState) => {
+    state.isLoading = true;
+    state.error = null;
+};
+
+const setSuccess = (state: AuthState, action: PayloadAction<AuthResponse>) => {
+    state.isLoading = false;
+    state.isAuthenticated = true;
+    state.user = action.payload.user;
+    state.token = action.payload.access_token;
+    state.error = null;
+};
+
+const setFailed = (state: AuthState, action: PayloadAction<any>) => {
+    state.isLoading = false;
+    state.error = action.payload as string;
+};
+
