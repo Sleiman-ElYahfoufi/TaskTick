@@ -43,3 +43,19 @@
   margin-left: 8px;
 }
 
+.category-badge {
+  background-color: #E1EFFE;
+  color: #1E40AF;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+}
+
