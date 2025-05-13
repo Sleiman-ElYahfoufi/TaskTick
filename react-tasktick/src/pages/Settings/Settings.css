@@ -215,3 +215,19 @@
   padding: 0;
 }
 
+.settings-tech-stack-group {
+  margin-top: 1.5rem;
+}
+
+.settings-tech-stack-description {
+  color: var(--placeholder);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.settings-technology-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.625rem;
+}
+
