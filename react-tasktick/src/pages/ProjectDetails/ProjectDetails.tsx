@@ -183,10 +183,23 @@ const ProjectDetails: React.FC = () => {
         />
         
         <div className="tasks-header">
-         
+          <CurrentTask
+            taskName={project.currentTask.name}
+            category={project.currentTask.category}
+            estimatedTime={project.currentTask.estimatedTime}
+            progress={project.currentTask.progress}
+            elapsedTime={project.currentTask.elapsedTime}
+            sessions={4}
+            totalTime="2h 15m total"
+          />
+          
+          <button className="add-task-button" onClick={handleAddTask}>
+            Add Task
+          </button>
         </div>
         
-       
+      
+      </div>
     </div>
   );
 };
