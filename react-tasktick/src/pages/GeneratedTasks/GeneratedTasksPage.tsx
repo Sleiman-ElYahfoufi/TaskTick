@@ -34,9 +34,23 @@ const GeneratedTasksPage: React.FC = () => {
     { id: uuidv4(), name: 'Feedback Implementation', estimatedTime: 3, dueDate: 'May 15th', priority: 'High' },
   ]);
 
-  
-  
-  
+  const totalEstimatedTime = tasks.reduce((total, task) => total + task.estimatedTime, 0);
+
+  const handleDeleteTask = (id: GridRowId) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  const handleAddTask = () => {
+    const newTask: Task = {
+      id: uuidv4(),
+      name: '',
+      estimatedTime: 2,
+      dueDate: 'May 16th',
+      priority: 'Medium'
+    };
+    setTasks([...tasks, newTask]);
+  };
+
   
 
   
