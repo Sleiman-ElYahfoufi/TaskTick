@@ -39,7 +39,11 @@ const ProjectOverviewCard: React.FC<ProjectOverviewCardProps> = ({
           </div>
         </div>
         
-        
+        <div className="project-overview-right">
+          <div className="project-overview-accuracy-badge">
+            <span>{accuracy}% Accurate</span>
+          </div>
+        </div>
       </div>
     </div>
   );
