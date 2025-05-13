@@ -11,7 +11,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { v4 as uuidv4 } from "uuid";
 import StepIndicator from "../../components/AddProjectComponents/StepIndicator/StepIndicator";
-import  {
+import {
     DecompositionResult,
     GeneratedTaskDto,
 } from "../../services/projectDecompositionService";
@@ -186,8 +186,6 @@ const GeneratedTasks: React.FC = () => {
 
         try {
             // Prepare the data for saving
-         
-
 
             setSuccessMessage("Project successfully created!");
 
