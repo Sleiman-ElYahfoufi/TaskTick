@@ -196,3 +196,22 @@
   border-color: var(--primary);
 }
 
+.settings-password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.settings-password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--placeholder);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
