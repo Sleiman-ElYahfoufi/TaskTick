@@ -164,7 +164,17 @@ const Tasks: React.FC = () => {
         onStatusFilterChange={setStatusFilter}
         onDueDateFilterChange={setDueDateFilter}
       />
+      
+      <TaskStats
+        activeTasks={stats.activeTasks}
+        completedTasks={stats.completedTasks}
+        dueToday={stats.dueToday}
+        completedThisMonth={stats.completedThisMonth}
+      />
+      
      
+      
+      
     </div>
   );
 };
