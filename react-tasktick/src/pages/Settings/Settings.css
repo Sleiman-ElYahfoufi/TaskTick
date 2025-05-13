@@ -111,3 +111,19 @@
   box-shadow: 0 0 0 2px rgba(1, 57, 142, 0.1);
 }
 
+.settings-experience-group {
+  width: 100%;
+}
+
+.settings-experience-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.settings-experience-option {
+  position: relative;
+  cursor: pointer;
+}
+
