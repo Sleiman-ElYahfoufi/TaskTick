@@ -4,6 +4,7 @@ import "./App.css";
 import Auth from "./pages/Auth/Auth";
 import Onboarding from "./pages/Onboarding/Onboarding";
 
+import GeneratedTasksPage from "./pages/GeneratedTasks/GeneratedTasksPage";
 import AddProject from "./pages/AddProject/AddProject";
 import Projects from "./pages/Projects/Projects";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -20,7 +21,11 @@ function App() {
                     <Route index element={<Dashboard />} />
                     <Route path="projects" element={<Projects />} />
                     <Route path="add-project" element={<AddProject />} />
-                   
+                    <Route
+                        path="generated-tasks"
+                        element={<GeneratedTasksPage />}
+                    />
+               
                 </Route>
             </Routes>
         </Router>
