@@ -49,7 +49,43 @@ function TasksTable<T extends BaseTask>({
 
   return (
     <div className={`tasks-table-container ${className}`}>
-     
+      <DataGrid
+        rows={tasks}
+        columns={columns}
+        autoHeight
+        disableRowSelectionOnClick
+        disableColumnFilter
+        disableColumnMenu
+        hideFooterPagination={hideFooter}
+        hideFooter={hideFooter || tasks.length <= 10}
+        processRowUpdate={onTaskUpdate ? processRowUpdate : undefined}
+        sx={{
+          '& .MuiDataGrid-cell:focus': {
+            outline: 'none',
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: '#f9fafb',
+          },
+          border: 'none',
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#f9fafb',
+            borderBottom: '1px solid #e5e7eb',
+          },
+          '& .MuiDataGrid-columnHeader': {
+            padding: '16px',
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontWeight: '600',
+            color: '#6b7280',
+            fontSize: '0.75rem',
+            textTransform: 'uppercase',
+          },
+          '& .MuiDataGrid-cell': {
+            padding: '12px 16px',
+            borderBottom: '1px solid #e5e7eb',
+          },
+        }}
+      />
     </div>
   );
 }
