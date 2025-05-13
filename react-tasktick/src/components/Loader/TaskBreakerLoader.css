@@ -37,3 +37,49 @@
     align-items: center;
 }
 
+.robot-head {
+    width: 60px;
+    height: 40px;
+    background-color: var(--accent);
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.robot-antenna {
+    position: absolute;
+    top: -10px;
+    width: 5px;
+    height: 15px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+
+.robot-eyes {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 8px 0;
+}
+
+.robot-eye {
+    width: 12px;
+    height: 12px;
+    background-color: var(--ai-precision);
+    border-radius: 50%;
+}
+
+.robot-body {
+    width: 80px;
+    height: 100px;
+    background-color: var(--accent);
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
