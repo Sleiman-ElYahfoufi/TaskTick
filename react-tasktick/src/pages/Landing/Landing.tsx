@@ -10,7 +10,7 @@ import Footer from "../../components/LandingComponents/Footer/Footer";
 
 const Landing: React.FC = () => {
     return (
-        <div>
+        <div className="landing-container">
             <Navbar />
             <HeroSection />
             <PowerfulFeatures />
