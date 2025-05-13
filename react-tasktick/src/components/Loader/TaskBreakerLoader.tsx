@@ -192,8 +192,20 @@ const TaskBreakerLoader: React.FC<TaskBreakerLoaderProps> = ({
                             </motion.div>
                         </div>
 
-                     
+                        <div className="message-container">
+                            <motion.div
+                                key={currentMessageIndex}
+                                className="message"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                {messages[currentMessageIndex]}
+                            </motion.div>
+                        </div>
 
+                        
                         <div className="loader-title">TaskBreaker AI</div>
                     </div>
                 </motion.div>
