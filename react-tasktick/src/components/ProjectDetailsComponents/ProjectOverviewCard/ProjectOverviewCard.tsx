@@ -26,12 +26,17 @@ const ProjectOverviewCard: React.FC<ProjectOverviewCardProps> = ({
         <div className="project-overview-left">
           <h2 className="project-overview-project-name">{name}</h2>
           
-
+          <div className="project-overview-stats">
+            <div className="project-stat">
+              <span className="project-overview-stat-label">Tasks</span>
+              <span className="project-overview-stat-value">{completedTasks}/{totalTasks} tasks</span>
+            </div>
             
            
+          </div>
         </div>
         
-       
+      
       </div>
     </div>
   );
