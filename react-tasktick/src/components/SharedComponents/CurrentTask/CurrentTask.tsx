@@ -76,7 +76,14 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
         </div>
         
         <div className="timer-container">
-         
+          <div className="sessions-info">
+            <span className="sessions-count">{sessions} sessions</span>
+            <span className="total-time">{totalTime}</span>
+          </div>
+          
+          <div className="timer-controls">
+            <div className="timer-display">{elapsedTime}</div>
+          </div>
         </div>
       </div>
     </div>
