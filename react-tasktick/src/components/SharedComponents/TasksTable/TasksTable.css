@@ -6,3 +6,28 @@
   width: 100%;
 }
 
+.priority-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  width: fit-content;
+  text-align: center;
+  min-width: 60px;
+}
+
+.priority-badge.high {
+  background-color: #FEE2E2;
+  color: #EF4444;
+}
+
+.priority-badge.medium {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.priority-badge.low {
+  background-color: #DBEAFE;
+  color: #2563EB;
+}
+
