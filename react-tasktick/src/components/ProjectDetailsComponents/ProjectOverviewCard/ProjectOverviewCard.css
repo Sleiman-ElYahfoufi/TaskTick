@@ -18,3 +18,14 @@
   margin: 0 0 16px 0;
 }
 
+.project-overview-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.project-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
