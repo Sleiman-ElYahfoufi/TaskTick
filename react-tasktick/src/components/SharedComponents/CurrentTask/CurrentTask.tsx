@@ -35,7 +35,29 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
   
   return (
     <div className="current-task-section">
-     
+      <div className="current-task-content">
+        <div className="current-task-info">
+            <div className="task-header">
+              <h3 className="current-task-title">Current Task</h3>
+              <span className="task-name">{taskName}</span>
+              <div className="control-buttons">
+                <button 
+                  className="control-button" 
+                  onClick={handlePlayPause}
+                  title={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? <PauseIcon fontSize="small" /> : <PlayArrowIcon fontSize="small" />}
+                </button>
+                <button 
+                  className="control-button stop" 
+                  onClick={handleStop}
+                  title="Stop"
+                >
+                  <StopIcon fontSize="small" />
+                </button>
+              </div>
+        </div>
+      </div>
     </div>
   );
 };
