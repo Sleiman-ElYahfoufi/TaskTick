@@ -64,6 +64,42 @@ const Tasks: React.FC = () => {
     setFilteredTasks(mockTasks);
   }, []);
 
+  useEffect(() => {
+    let result = [...tasks];
+
+    if (searchTerm) {
+      result = result.filter(task => 
+        task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.project.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (projectFilter !== 'All Projects') {
+      result = result.filter(task => task.project === projectFilter);
+    }
+
+    if (statusFilter !== 'All Statuses') {
+      result = result.filter(task => task.status === statusFilter);
+    }
+
+    if (dueDateFilter === 'Due Today') {
+      result = result.filter(task => task.dueDate === 'May 8th'); 
+    }
+
+    setFilteredTasks(result);
+  }, [searchTerm, projectFilter, statusFilter, dueDateFilter, tasks]);
+
+  const handleStartTimer = (taskId: string) => {
+    console.log('Start timer for task:', taskId);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
+
+  const handleEditTask = (taskId: string) => {
+    console.log('Edit task:', taskId);
+  };
 
 
   return (
