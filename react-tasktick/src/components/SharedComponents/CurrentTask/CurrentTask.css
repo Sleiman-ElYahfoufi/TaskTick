@@ -6,3 +6,20 @@
   max-width: 1000px;
 }
 
+.current-task-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.current-task-info {
+  flex: 1;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
