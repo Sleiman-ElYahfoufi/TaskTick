@@ -53,3 +53,37 @@
   transition: width 0.3s ease;
 }
 
+.progress-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #111827;
+  min-width: 36px;
+  text-align: right;
+}
+
+.timer-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: #F3F4F6;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4B5563;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.timer-button:hover:not(:disabled) {
+  background-color: #E5E7EB;
+}
+
+.timer-button.completed {
+  background-color: #D1FAE5;
+  color: #047857;
+  cursor: default;
+}
+
