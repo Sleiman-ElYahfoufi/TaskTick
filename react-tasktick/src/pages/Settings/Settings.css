@@ -173,3 +173,16 @@
   position: absolute;
 }
 
+.settings-experience-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-experience-label {
+  font-weight: 600;
+  color: var(--black);
+  display: block;
+  margin-bottom: 0.125rem;
+  font-size: 0.875rem;
+}
+
