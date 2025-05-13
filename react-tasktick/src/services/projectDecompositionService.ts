@@ -46,7 +46,14 @@ class ProjectDecompositionService {
         return response.data;
     }
 
-    
+    async saveTasks(data: DecompositionResult): Promise<DecompositionResult> {
+        const requestData = JSON.parse(JSON.stringify(data));
+
+      
+
+        const response = await api.post<DecompositionResult>('/project-decomposition/save', requestData);
+        return response.data;
+    }
 }
 
 export default new ProjectDecompositionService(); 
