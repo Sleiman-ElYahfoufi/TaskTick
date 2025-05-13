@@ -157,3 +157,19 @@
   background-color: #FEE2E2;
 }
 
+@media (max-width: 768px) {
+  .current-task-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .timer-container {
+    width: 100%;
+    align-items: flex-start;
+  }
+  
+  .sessions-info {
+    align-items: flex-start;
+  }
+}
