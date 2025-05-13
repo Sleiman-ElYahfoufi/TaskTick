@@ -21,7 +21,19 @@ const ProjectOverviewCard: React.FC<ProjectOverviewCardProps> = ({
   compact = false
 }) => {
   return (
-   <></>
+    <div className={`project-overview-card ${compact ? 'compact' : ''}`}>
+      <div className="project-overview-content">
+        <div className="project-overview-left">
+          <h2 className="project-overview-project-name">{name}</h2>
+          
+
+            
+           
+        </div>
+        
+       
+      </div>
+    </div>
   );
 };
 
