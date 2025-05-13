@@ -22,9 +22,16 @@ export interface GenerateTasksDto {
     userId: number;
 }
 
+export interface DecompositionResult {
+    projectDetails?: ProjectDetailsDto;
+    tasks: GeneratedTaskDto[];
+    projectId?: number;
+    saved: boolean;
+    userId?: number;
+}
 
 class ProjectDecompositionService {
-  
+
 }
 
 export default new ProjectDecompositionService(); 
