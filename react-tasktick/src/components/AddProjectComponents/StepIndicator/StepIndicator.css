@@ -63,3 +63,19 @@
   background-color: #01398E;
 }
 
+@media (max-width: 640px) {
+  .step-label {
+    font-size: 12px;
+  }
+  
+  .step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .step-connector {
+    margin: 0 8px;
+    margin-bottom: 24px;
+  }
+}
