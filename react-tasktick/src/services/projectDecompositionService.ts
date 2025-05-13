@@ -8,10 +8,19 @@ export interface ProjectDetailsDto {
     deadline?: string;
 }
 
+export interface GeneratedTaskDto {
+    name: string;
+    description?: string;
+    estimated_time: number;
+    priority?: string;
+    dueDate?: string;
+    progress?: number;
+}
+
 
 
 class ProjectDecompositionService {
-   
+  
 }
 
 export default new ProjectDecompositionService(); 
