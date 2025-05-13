@@ -71,3 +71,14 @@
   gap: 2px;
 }
 
+.info-label {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #1F2937;
+  font-weight: 500;
+}
+
