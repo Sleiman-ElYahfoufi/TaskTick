@@ -23,8 +23,30 @@ interface Task {
 }
 
 const Tasks: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [projectFilter, setProjectFilter] = useState('All Projects');
+  const [statusFilter, setStatusFilter] = useState('All Statuses');
+  const [dueDateFilter, setDueDateFilter] = useState('Due Date');
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
+  // Current task data
+  const currentTask = {
+    name: 'Initial UI/UX Analysis',
+    category: 'E-commerce',
+    estimatedTime: '3/4 hrs',
+    progress: 65,
+    elapsedTime: '00:47:23',
+    sessions: 4,
+    totalTime: '2h 15m total'
+  };
 
+  const stats = {
+    activeTasks: 7,
+    completedTasks: 28,
+    dueToday: 2,
+    completedThisMonth: 'this month'
+  };
 
 
 
