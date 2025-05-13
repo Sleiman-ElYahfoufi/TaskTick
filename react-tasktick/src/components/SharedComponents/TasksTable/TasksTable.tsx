@@ -10,6 +10,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import './TasksTable.css';
 
+export interface BaseTask {
+  id: string;
+  [key: string]: any;
+}
 
 interface TasksTableProps<T extends BaseTask> {
   tasks: T[];
@@ -33,19 +37,22 @@ function TasksTable<T extends BaseTask>({
   className = ''
 }: TasksTableProps<T>) {
   
-  // Handle cell edit if onTaskUpdate is provided
-  
+  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
+    const updatedRow = { ...newRow } as T;
+    
+    if (onTaskUpdate) {
+      onTaskUpdate(updatedRow);
+    }
+    
+    return updatedRow;
+  };
+
   return (
     <div className={`tasks-table-container ${className}`}>
      
     </div>
   );
 }
-
-
-
-
-
 
 
 
