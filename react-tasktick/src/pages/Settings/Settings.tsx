@@ -21,9 +21,26 @@ const Settings: React.FC = () => {
     { label: 'Expert', years: '3+ years of experience' }
   ];
 
+  const techOptions = [
+    'JavaScript', 'Java', 'Python', 'Python',
+    'Python', 'Python', 'Python', 'Python'
+  ];
 
+  const handleTechnologyToggle = (tech: string) => {
+    setTechnologies(prev =>
+      prev.includes(tech)
+        ? prev.filter(t => t !== tech)
+        : [...prev, tech]
+    );
+  };
 
-
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ username, email, password, role, experience, technologies });
+  };
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="settings-container">
