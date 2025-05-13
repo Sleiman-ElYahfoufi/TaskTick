@@ -38,12 +38,50 @@ const Settings: React.FC = () => {
     e.preventDefault();
     console.log({ username, email, password, role, experience, technologies });
   };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   return (
     <div className="settings-container">
+      <h1 className="settings-title">Settings</h1>
+      
+      <div className="settings-card">
+        <div className="profile-settings-header">
+          <h2>Profile Settings</h2>
+          <p>Manage your account information and preferences</p>
+        </div>
+
+        
+          
+            
+                
+               
+
+               
+                    
+
+               
+
+              
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          
+            </div>
+          </div>
+
+          <div className="settings-actions">
+            <button type="submit" className="settings-save-button">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
