@@ -48,6 +48,21 @@ const Tasks: React.FC = () => {
     completedThisMonth: 'this month'
   };
 
+  useEffect(() => {
+    const mockTasks: Task[] = [
+      { id: '1', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '2', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '3', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '4', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '5', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '6', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '7', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+      { id: '8', name: 'Initial UI/UX Analysis', project: 'E-commerce Site', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    ];
+    
+    setTasks(mockTasks);
+    setFilteredTasks(mockTasks);
+  }, []);
 
 
 
