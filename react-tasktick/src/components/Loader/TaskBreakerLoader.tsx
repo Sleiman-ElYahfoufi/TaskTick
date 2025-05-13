@@ -54,7 +54,17 @@ const TaskBreakerLoader: React.FC<TaskBreakerLoaderProps> = ({
 
     return (
         <AnimatePresence>
-            
+            {isGenerating && (
+                <motion.div
+                    className="task-breaker-loader"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    
+                </motion.div>
+            )}
         </AnimatePresence>
     );
 };
