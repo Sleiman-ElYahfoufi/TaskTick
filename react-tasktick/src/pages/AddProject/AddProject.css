@@ -19,3 +19,22 @@
   padding: 32px;
 }
 
+.form-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 24px 0 20px 0;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
