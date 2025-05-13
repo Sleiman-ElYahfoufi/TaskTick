@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing/Landing";
+import "./App.css";
+import Auth from "./pages/Auth/Auth";
+import Onboarding from "./pages/Onboarding/Onboarding";
+import Tasks from "./pages/Tasks/Tasks";
+import Settings from "./pages/Settings/Settings";
+import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
+import GeneratedTasks from "./pages/GeneratedTasks/GeneratedTasks";
+import AddProject from "./pages/AddProject/AddProject";
+import Projects from "./pages/Projects/Projects";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="projects" element={<Projects />} />
+                    <Route path="add-project" element={<AddProject />} />
+                    <Route
+                        path="generated-tasks"
+                        element={<GeneratedTasks />}
+                    />
+                    <Route
+                        path="project-details"
+                        element={<ProjectDetails />}
+                    />
+                    <Route path="tasks" element={<Tasks />} />
+                    <Route path="settings" element={<Settings />} />
+                </Route>
+            </Routes>
+        </Router>
+    );
 }
 
-export default App
+export default App;

@@ -1,0 +1,21 @@
+.tasks-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  font-family: "Inter", sans-serif;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 24px;
+}
+
+.current-task-wrapper {
+  margin-bottom: 24px;
+    display: flex;
+  justify-content: space-between;
+    align-items: end;
+
+}

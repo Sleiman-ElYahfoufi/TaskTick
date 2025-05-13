@@ -1,0 +1,98 @@
+.navbar {
+    background-color: var(--accent);
+    border-bottom: 1px solid var(--background);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.navbar-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 60px;
+    width: auto;
+    cursor: pointer;
+}
+
+
+.logo-img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+
+
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-link {
+    cursor: pointer;
+    color: var(--black);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--ai-precision);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+.get-started-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.get-started-btn:hover {
+    background-color: var(--ai-precision);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+    .navbar-container {
+        padding: 0 1rem;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}

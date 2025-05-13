@@ -1,0 +1,151 @@
+.tasks-table-container {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+}
+
+.priority-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  width: fit-content;
+  text-align: center;
+  min-width: 60px;
+}
+
+.priority-badge.high {
+  background-color: #FEE2E2;
+  color: #EF4444;
+}
+
+.priority-badge.medium {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.priority-badge.low {
+  background-color: #DBEAFE;
+  color: #2563EB;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.progress-bar-wrapper {
+  height: 8px;
+  background-color: #E5E7EB;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #60A5FA;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #111827;
+  min-width: 36px;
+  text-align: right;
+}
+
+.timer-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: #F3F4F6;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4B5563;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.timer-button:hover:not(:disabled) {
+  background-color: #E5E7EB;
+}
+
+.timer-button.completed {
+  background-color: #D1FAE5;
+  color: #047857;
+  cursor: default;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: #6B7280;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: #F3F4F6;
+}
+
+.action-button.delete:hover {
+  color: #EF4444;
+}
+
+.action-button.edit:hover {
+  color: #2563EB;
+}
+
+@media (max-width: 768px) {
+  .MuiDataGrid-root .MuiDataGrid-cell {
+    padding: 8px !important;
+  }
+  
+  .MuiDataGrid-root .MuiDataGrid-columnHeader {
+    padding: 8px !important;
+  }
+  
+  .priority-badge {
+    padding: 2px 8px;
+    min-width: 40px;
+    font-size: 10px;
+  }
+  
+  .timer-button {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
+  .action-buttons {
+    gap: 2px;
+  }
+  
+  .action-button {
+    padding: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timer-button span {
+    display: none;
+  }
+}
