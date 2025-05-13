@@ -1,126 +1,174 @@
-import React, { useState } from 'react';
-import StepIndicator from '../../components/AddProjectComponents/StepIndicator/StepIndicator';
-import './AddProject.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store/hooks";
+import StepIndicator from "../../components/AddProjectComponents/StepIndicator/StepIndicator";
+import projectDecompositionService, {
+    ProjectDetailsDto,
+} from "../../services/projectDecompositionService";
+import { PriorityLevel, DetailDepth } from "../../types/priority";
+import "./AddProject.css";
 
 const AddProject: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [projectName, setProjectName] = useState('');
-  const [projectDescription, setProjectDescription] = useState('');
-  const [deadline, setDeadline] = useState('');
-  const [priority, setPriority] = useState('High');
-  
-  const handleGenerateTasks = () => {
-    if (!projectName.trim()) {
-      alert('Please enter a project name');
-      return;
-    }
-    
-    setCurrentStep(2);
-    
-    console.log('Generating tasks for:', {
-      projectName,
-      projectDescription,
-      deadline,
-      priority
-    });
-  };
-  
-  return (
-    <div className="add-project-container">
-      <h1 className="add-project-title">Add New Project</h1>
-      
-      <div className="add-project-content">
-        <StepIndicator 
-          steps={[
-            { number: 1, label: 'Project Details' },
-            { number: 2, label: 'Generated Tasks' }
-          ]}
-          currentStep={currentStep}
-        />
-        
-        {currentStep === 1 ? (
-          <div className="project-details-form">
-            <h2 className="form-section-title">Project Details</h2>
-            
-            <div className="form-group">
-              <label htmlFor="projectName">Project Name</label>
-              <input
-                type="text"
-                id="projectName"
-                className="form-control"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                placeholder="Enter project name"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="projectDescription">Project Description</label>
-              <textarea
-                id="projectDescription"
-                className="form-control"
-                rows={5}
-                value={projectDescription}
-                onChange={(e) => setProjectDescription(e.target.value)}
-                placeholder="Describe your project..."
-              />
-            </div>
-            
-            <div className="form-options">
-              <div className="form-option">
-                <label>Deadline</label>
-                <input
-                  type="date"
-                  className="form-control date-input"
-                  value={deadline}
-                  onChange={(e) => setDeadline(e.target.value)}
+    const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
+    const [projectName, setProjectName] = useState("");
+    const [projectDescription, setProjectDescription] = useState("");
+    const [priority, setPriority] = useState<PriorityLevel>(PriorityLevel.HIGH);
+    const [detailDepth, setDetailDepth] = useState<DetailDepth>(
+        DetailDepth.NORMAL
+    );
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleGenerateTasks = async () => {
+        if (!projectName.trim()) {
+            setError("Please enter a project name");
+            return;
+        }
+
+        if (!projectDescription.trim()) {
+            setError("Please enter a project description");
+            return;
+        }
+
+        const userId = user?.id ? parseInt(user.id) : 0;
+
+        if (userId === 0) {
+            setError("Invalid user ID. Please log in again.");
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const projectDetails: ProjectDetailsDto = {
+                name: projectName,
+                description: projectDescription,
+                priority: priority.toLowerCase(),
+                detail_depth: detailDepth.toLowerCase(),
+            };
+
+            const result = await projectDecompositionService.generateTasks({
+                projectDetails,
+                userId,
+            });
+
+            sessionStorage.setItem(
+                "decompositionResult",
+                JSON.stringify(result)
+            );
+
+            navigate("/dashboard/generated-tasks");
+        } catch (err) {
+            console.error("Error generating tasks:", err);
+            setError("Failed to generate tasks. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <div className="add-project-container">
+            <h1 className="add-project-title">Add New Project</h1>
+
+            <div className="add-project-content">
+                <StepIndicator
+                    steps={[
+                        { number: 1, label: "Project Details" },
+                        { number: 2, label: "Generated Tasks" },
+                    ]}
+                    currentStep={1}
                 />
-              </div>
-              
-              <div className="form-option">
-                <label>Details</label>
-                <select 
-                  className="form-control select-input"
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
-                >
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
-                </select>
-              </div>
+
+                <div className="project-details-form">
+                    <h2 className="form-section-title">Project Details</h2>
+
+                    {error && <div className="error-message">{error}</div>}
+
+                    <div className="form-group">
+                        <label htmlFor="projectName">Project Name</label>
+                        <input
+                            type="text"
+                            id="projectName"
+                            className="form-control"
+                            value={projectName}
+                            onChange={(e) => setProjectName(e.target.value)}
+                            placeholder="Enter project name"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="projectDescription">
+                            Project Description
+                        </label>
+                        <textarea
+                            id="projectDescription"
+                            className="form-control"
+                            rows={5}
+                            value={projectDescription}
+                            onChange={(e) =>
+                                setProjectDescription(e.target.value)
+                            }
+                            placeholder="Describe your project..."
+                        />
+                    </div>
+
+                    <div className="form-options">
+                        <div className="form-option">
+                            <label>Priority</label>
+                            <select
+                                className="form-control select-input"
+                                value={priority}
+                                onChange={(e) =>
+                                    setPriority(e.target.value as PriorityLevel)
+                                }
+                            >
+                                <option value={PriorityLevel.HIGH}>High</option>
+                                <option value={PriorityLevel.MEDIUM}>
+                                    Medium
+                                </option>
+                                <option value={PriorityLevel.LOW}>Low</option>
+                            </select>
+                        </div>
+
+                        <div className="form-option">
+                            <label>Detail Level</label>
+                            <select
+                                className="form-control select-input"
+                                value={detailDepth}
+                                onChange={(e) =>
+                                    setDetailDepth(
+                                        e.target.value as DetailDepth
+                                    )
+                                }
+                            >
+                                <option value={DetailDepth.MINIMAL}>
+                                    Minimal
+                                </option>
+                                <option value={DetailDepth.NORMAL}>
+                                    Normal
+                                </option>
+                                <option value={DetailDepth.DETAILED}>
+                                    Detailed
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="form-actions">
+                        <button
+                            className="generate-tasks-btn"
+                            onClick={handleGenerateTasks}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? "Generating..." : "Generate Tasks"}
+                        </button>
+                    </div>
+                </div>
             </div>
-            
-            <div className="form-actions">
-              <button 
-                className="generate-tasks-btn"
-                onClick={handleGenerateTasks}
-              >
-                Generate Tasks
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="generated-tasks">
-            <h2 className="form-section-title">Generated Tasks</h2>
-            <p>Tasks will appear here after generation.</p>
-            
-            <div className="form-actions">
-              <button 
-                className="back-btn"
-                onClick={() => setCurrentStep(1)}
-              >
-                Back to Details
-              </button>
-              <button className="save-project-btn">
-                Save Project
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default AddProject;
