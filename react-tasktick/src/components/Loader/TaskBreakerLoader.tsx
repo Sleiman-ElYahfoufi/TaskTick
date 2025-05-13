@@ -6,7 +6,16 @@ interface TaskBreakerLoaderProps {
     isGenerating: boolean;
 }
 
-
+const messages = [
+    "Analyzing project scope...",
+    "Decomposing tasks...",
+    "Estimating time requirements...",
+    "Prioritizing workload...",
+    "Generating task dependencies...",
+    "Optimizing task sequence...",
+    "Calculating resource allocation...",
+    "Finalizing task breakdown...",
+];
 
 const TaskBreakerLoader: React.FC = () => {
     
