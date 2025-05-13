@@ -31,3 +31,25 @@
   color: #2563EB;
 }
 
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.progress-bar-wrapper {
+  height: 8px;
+  background-color: #E5E7EB;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #60A5FA;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
