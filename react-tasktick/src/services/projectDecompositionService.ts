@@ -34,13 +34,19 @@ class ProjectDecompositionService {
     async generateTasks(data: GenerateTasksDto): Promise<DecompositionResult> {
         const requestData = { ...data };
 
-     
+        if (requestData.projectDetails && requestData.projectDetails.priority) {
+            requestData.projectDetails.priority = requestData.projectDetails.priority.toLowerCase();
+        }
+
+        if (requestData.projectDetails && requestData.projectDetails.detail_depth) {
+            requestData.projectDetails.detail_depth = requestData.projectDetails.detail_depth.toLowerCase();
+        }
 
         const response = await api.post<DecompositionResult>('/project-decomposition/generate', requestData);
         return response.data;
     }
 
-   
+    
 }
 
 export default new ProjectDecompositionService(); 
