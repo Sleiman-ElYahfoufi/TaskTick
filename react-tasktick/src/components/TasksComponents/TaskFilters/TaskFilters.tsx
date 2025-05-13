@@ -30,7 +30,46 @@ const TaskFilters: React.FC<TaskFiltersProps> = ({
 }) => {
   return (
     <div className="task-filters">
+      <div className="search-bar">
+        <input 
+          type="text" 
+          placeholder="Search for Tasks..." 
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
+      </div>
       
+      <div className="filter-dropdowns">
+        <select 
+          value={projectFilter}
+          onChange={(e) => onProjectFilterChange(e.target.value)}
+          className="filter-dropdown"
+        >
+          {projectOptions.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+        
+        <select 
+          value={statusFilter}
+          onChange={(e) => onStatusFilterChange(e.target.value)}
+          className="filter-dropdown"
+        >
+          {statusOptions.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+        
+        <select 
+          value={dueDateFilter}
+          onChange={(e) => onDueDateFilterChange(e.target.value)}
+          className="filter-dropdown"
+        >
+          {dueDateOptions.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };
