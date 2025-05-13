@@ -25,3 +25,32 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+api.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError) => {
+        if (error.response?.status === 401) {
+            const config = error.config;
+            const isAuthEndpoint =
+                config?.url?.includes('/auth/login') ||
+                config?.url?.includes('/users');
+
+            if (!isAuthEndpoint) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userData');
+                window.location.href = '/auth';
+            }
+        }
+
+        if (isDevelopment && error.response) {
+            const errorMessage = error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data
+                ? error.response.data.message
+                : error.message;
+
+            console.error(`API Error (${error.response.status}):`, errorMessage);
+        }
+
+        return Promise.reject(error);
+    }
+);
+
+export default api; 
