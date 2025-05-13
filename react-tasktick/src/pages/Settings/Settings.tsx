@@ -152,7 +152,19 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="settings-form-group settings-tech-stack-group">
-              
+              <label>Tech Stack</label>
+              <p className="settings-tech-stack-description">Select the technologies you work with most frequently</p>
+              <div className="settings-technology-grid">
+                {techOptions.map((tech, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`settings-tech-option ${technologies.includes(tech) ? 'selected' : ''}`}
+                    onClick={() => handleTechnologyToggle(tech)}
+                  >
+                    {tech}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
