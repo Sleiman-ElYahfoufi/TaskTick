@@ -101,9 +101,58 @@ const Tasks: React.FC = () => {
     console.log('Edit task:', taskId);
   };
 
+  const columns: GridColDef[] = [
+    { 
+      field: 'name', 
+      headerName: 'TASK NAME', 
+      flex: 2, 
+      minWidth: 180,
+      editable: true 
+    },
+    { 
+      field: 'project', 
+      headerName: 'PROJECT', 
+      flex: 1.5, 
+      minWidth: 150,
+      editable: true,
+      renderCell: renderProjectCell 
+    },
+    { 
+      field: 'estimatedTime', 
+      headerName: 'ETC', 
+      flex: 1, 
+      minWidth: 100,
+      editable: true 
+    },
+    { 
+      field: 'dueDate', 
+      headerName: 'DUE DATE', 
+      flex: 1, 
+      minWidth: 110,
+      editable: true 
+    },
+    { 
+      field: 'status', 
+      headerName: 'STATUS', 
+      flex: 1, 
+      minWidth: 120,
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: ['In Progress', 'Completed', 'Not Started'],
+      renderCell: renderStatusCell
+    },
+    { 
+      field: 'actions', 
+      headerName: 'ACTIONS', 
+      flex: 1, 
+      minWidth: 100,
+      renderCell: renderActionsCell(handleDeleteTask, handleEditTask)
+    },
+  ];
 
   return (
     <div className="tasks-page">
+     
     </div>
   );
 };
