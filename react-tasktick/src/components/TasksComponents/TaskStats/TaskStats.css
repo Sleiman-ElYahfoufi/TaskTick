@@ -47,3 +47,9 @@
   color: #EF4444;
 }
 
+@media (max-width: 768px) {
+  .task-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
