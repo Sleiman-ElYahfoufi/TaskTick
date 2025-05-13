@@ -57,7 +57,13 @@ class ProjectDecompositionService {
             requestData.projectDetails.detail_depth = requestData.projectDetails.detail_depth.toLowerCase();
         }
 
-        
+        if (requestData.tasks && Array.isArray(requestData.tasks)) {
+            requestData.tasks.forEach((task: any) => {
+                if (task.priority) {
+                    task.priority = task.priority.toLowerCase();
+                }
+            });
+        }
 
         const response = await api.post<DecompositionResult>('/project-decomposition/save', requestData);
         return response.data;
