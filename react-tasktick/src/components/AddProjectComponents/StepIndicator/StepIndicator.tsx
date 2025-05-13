@@ -14,7 +14,11 @@ interface StepIndicatorProps {
 const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep }) => {
   return (
     <div className="step-indicator">
-     
+      {steps.map((step, index) => {
+        const isActive = step.number === currentStep;
+        const isCompleted = step.number < currentStep;
+        
+      
     </div>
   );
 };
