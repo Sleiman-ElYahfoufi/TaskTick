@@ -99,3 +99,10 @@ textarea.form-control {
   padding-right: 36px;
 }
 
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+}
+
