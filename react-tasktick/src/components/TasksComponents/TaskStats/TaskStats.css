@@ -35,3 +35,15 @@
   margin-top: 2px;
 }
 
+.stat-card.active .stat-number {
+  color: #2563EB;
+}
+
+.stat-card.completed .stat-number {
+  color: #10B981;
+}
+
+.stat-card.due-today .stat-number {
+  color: #EF4444;
+}
+
