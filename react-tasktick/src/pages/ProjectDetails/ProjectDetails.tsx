@@ -42,15 +42,49 @@ const ProjectDetails: React.FC = () => {
     }
   });
   
- 
+  const [tasks, setTasks] = useState<Task[]>([
+    { id: 'task-1', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    { id: 'task-2', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    { id: 'task-3', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    { id: 'task-4', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    { id: 'task-5', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    { id: 'task-6', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'Completed' },
+    { id: 'task-7', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 50, status: 'In Progress' },
+    { id: 'task-8', name: 'Initial UI/UX Analysis', estimatedTime: '3/4 hrs', dueDate: 'May 8th', priority: 'High', progress: 75, status: 'In Progress' },
+  ]);
   
- 
+  const handleAddTask = () => {
+    const newEmptyTask: Task = {
+      id: `task-${Date.now()}`,
+      name: 'New Task',
+      estimatedTime: '0/1 hrs',
+      dueDate: 'Not set',
+      priority: 'Medium',
+      progress: 0,
+      status: 'Not Started'
+    };
+    
+    setTasks([...tasks, newEmptyTask]);
+  };
   
- 
+  const handleStartTimer = (taskId: string) => {
+    console.log('Start timer for task:', taskId);
+  };
   
- 
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
   
- 
+  const handleEditTask = (taskId: string) => {
+    console.log('Edit task:', taskId);
+  };
+  
+  const handleTaskUpdate = (updatedTask: Task) => {
+    setTasks(tasks.map(task => 
+      task.id === updatedTask.id ? updatedTask : task
+    ));
+  };
+
   
   
   return (
