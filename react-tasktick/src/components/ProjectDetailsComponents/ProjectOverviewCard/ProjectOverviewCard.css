@@ -69,3 +69,11 @@
   margin-bottom: 12px;
 }
 
+.project-overview-card.compact .project-overview-stats {
+  gap: 24px;
+}
+
+.project-overview-card.compact .project-overview-stat-label {
+  font-size: 12px;
+}
+
