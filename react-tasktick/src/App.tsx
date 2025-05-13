@@ -4,6 +4,7 @@ import "./App.css";
 import Auth from "./pages/Auth/Auth";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Tasks from "./pages/Tasks/Tasks";
+import Settings from "./pages/Settings/Settings";
 import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
 import GeneratedTasks from "./pages/GeneratedTasks/GeneratedTasks";
 import AddProject from "./pages/AddProject/AddProject";
@@ -31,7 +32,7 @@ function App() {
                         element={<ProjectDetails />}
                     />
                     <Route path="tasks" element={<Tasks />} />
-                 
+                    <Route path="settings" element={<Settings />} />
                 </Route>
             </Routes>
         </Router>
