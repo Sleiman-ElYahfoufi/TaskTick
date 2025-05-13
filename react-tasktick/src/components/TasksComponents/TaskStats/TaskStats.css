@@ -1,0 +1,8 @@
+.task-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
