@@ -82,3 +82,22 @@
   font-weight: 500;
 }
 
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.sessions-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sessions-count {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1E40AF;
+}
+
