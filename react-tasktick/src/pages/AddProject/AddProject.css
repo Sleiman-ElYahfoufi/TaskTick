@@ -144,3 +144,20 @@ textarea.form-control {
   min-height: 300px;
 }
 
+@media (max-width: 640px) {
+  .form-options {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .generate-tasks-btn,
+  .save-project-btn,
+  .back-btn {
+    width: 100%;
+  }
+}
