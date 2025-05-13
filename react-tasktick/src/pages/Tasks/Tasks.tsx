@@ -186,7 +186,13 @@ const Tasks: React.FC = () => {
         
       </div>
       
-      
+      <TasksTable 
+        tasks={filteredTasks}
+        columns={columns}
+        onStartTimer={handleStartTimer}
+        onDeleteTask={handleDeleteTask}
+        onEditTask={handleEditTask}
+      />
     </div>
   );
 };
