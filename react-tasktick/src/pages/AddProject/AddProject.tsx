@@ -102,7 +102,20 @@ const AddProject: React.FC = () => {
           </div>
         ) : (
           <div className="generated-tasks">
+            <h2 className="form-section-title">Generated Tasks</h2>
+            <p>Tasks will appear here after generation.</p>
             
+            <div className="form-actions">
+              <button 
+                className="back-btn"
+                onClick={() => setCurrentStep(1)}
+              >
+                Back to Details
+              </button>
+              <button className="save-project-btn">
+                Save Project
+              </button>
+            </div>
           </div>
         )}
       </div>
