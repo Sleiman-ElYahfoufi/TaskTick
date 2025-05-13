@@ -16,3 +16,20 @@
   overflow: hidden;
 }
 
+.profile-settings-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.profile-settings-header h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.25rem;
+}
+
+.profile-settings-header p {
+  color: var(--placeholder);
+  font-size: 0.875rem;
+}
+
