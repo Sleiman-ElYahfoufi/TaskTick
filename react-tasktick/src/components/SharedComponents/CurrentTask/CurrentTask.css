@@ -101,3 +101,27 @@
   color: #1E40AF;
 }
 
+.total-time {
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+}
+
+.timer-display {
+  background-color: #01398E;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+
