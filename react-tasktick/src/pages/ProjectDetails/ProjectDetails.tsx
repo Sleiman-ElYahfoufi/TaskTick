@@ -11,9 +11,28 @@ import TasksTable, {
 } from '../../components/SharedComponents/TasksTable/TasksTable'; 
 import './ProjectDetails.css';
 
-
+interface Task {
+  id: string;
+  name: string;
+  estimatedTime: string;
+  dueDate: string;
+  priority: 'High' | 'Medium' | 'Low';
+  progress: number;
+  status: 'Not Started' | 'In Progress' | 'Completed';
+}
 
 const ProjectDetails: React.FC = () => {
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
   
   return (
     <div className="project-details-page">
