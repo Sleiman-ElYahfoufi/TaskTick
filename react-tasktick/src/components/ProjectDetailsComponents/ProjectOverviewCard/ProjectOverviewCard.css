@@ -60,3 +60,12 @@
   font-weight: 600;
 }
 
+.project-overview-card.compact {
+  padding: 16px;
+}
+
+.project-overview-card.compact .project-overview-project-name {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
