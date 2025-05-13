@@ -60,3 +60,43 @@ const handleAuthError = (error: any) => {
         : error.message || 'Authentication failed';
 };
 
+export const login = createAsyncThunk(
+    'auth/login',
+    async (credentials: LoginCredentials, { rejectWithValue }) => {
+        try {
+            const response = await api.post<AuthResponse>(
+                '/auth/login',
+                credentials
+            );
+
+            const { user, access_token } = response.data;
+            saveTokenToStorage(access_token);
+            saveUserToStorage(user);
+
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(handleAuthError(error));
+        }
+    }
+);
+
+export const register = createAsyncThunk(
+    'auth/register',
+    async (credentials: RegisterCredentials, { rejectWithValue }) => {
+        try {
+            const response = await api.post<AuthResponse>(
+                '/users',
+                credentials
+            );
+
+            const { user, access_token } = response.data;
+            saveTokenToStorage(access_token);
+            saveUserToStorage(user);
+
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(handleAuthError(error));
+        }
+    }
+);
+
