@@ -27,7 +27,21 @@ const AddProject: React.FC = () => {
   
   return (
     <div className="add-project-container">
+      <h1 className="add-project-title">Add New Project</h1>
       
+      <div className="add-project-content">
+        <StepIndicator 
+          steps={[
+            { number: 1, label: 'Project Details' },
+            { number: 2, label: 'Generated Tasks' }
+          ]}
+          currentStep={currentStep}
+        />
+        
+      
+              
+             
+      </div>
     </div>
   );
 };
