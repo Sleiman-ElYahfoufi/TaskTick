@@ -85,7 +85,82 @@ const ProjectDetails: React.FC = () => {
     ));
   };
 
-  
+  const columns: GridColDef[] = [
+    { 
+      field: 'name', 
+      headerName: 'TASK NAME', 
+      flex: 2, 
+      minWidth: 180,
+      editable: true 
+    },
+    { 
+      field: 'estimatedTime', 
+      headerName: 'ETC', 
+      flex: 1, 
+      minWidth: 80,
+      align: 'center',
+      headerAlign: 'center',
+      editable: true
+    },
+    { 
+      field: 'dueDate', 
+      headerName: 'DUE DATE', 
+      flex: 1, 
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      editable: true
+    },
+    { 
+      field: 'priority', 
+      headerName: 'PRIORITY', 
+      flex: 1, 
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: ['High', 'Medium', 'Low'],
+      renderCell: renderPriorityCell
+    },
+    { 
+      field: 'progress', 
+      headerName: 'PROGRESS', 
+      flex: 1.5, 
+      minWidth: 120,
+      align: 'center',
+      headerAlign: 'center',
+      editable: true,
+      type: 'number',
+      renderCell: renderProgressCell
+    },
+    { 
+      field: 'status', 
+      headerName: 'TIMER', 
+      flex: 1, 
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <button 
+          className={`timer-button ${params.row.status === 'Completed' ? 'completed' : ''}`}
+          onClick={() => params.row.status !== 'Completed' && handleStartTimer(params.row.id)}
+          disabled={params.row.status === 'Completed'}
+        >
+          {params.row.status === 'Completed' ? 'Completed' : 'Start'}
+        </button>
+      )
+    },
+    { 
+      field: 'actions', 
+      headerName: 'ACTIONS', 
+      flex: 1, 
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: renderActionsCell(handleDeleteTask, handleEditTask)
+    },
+  ];
   
   return (
     <div className="project-details-page">
