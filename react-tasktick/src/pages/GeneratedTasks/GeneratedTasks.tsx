@@ -12,7 +12,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
 import StepIndicator from '../../components/AddProjectComponents/StepIndicator/StepIndicator';
-import './GeneratedTasksPage.css';
+import './GeneratedTasks.css';
 
 interface Task {
   id: string;
@@ -22,7 +22,7 @@ interface Task {
   priority: 'High' | 'Medium' | 'Low';
 }
 
-const GeneratedTasksPage: React.FC = () => {
+const GeneratedTasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([
     { id: uuidv4(), name: 'Initial UI/UX Analysis', estimatedTime: 4, dueDate: 'May 8th', priority: 'High' },
     { id: uuidv4(), name: 'Wireframe Creation', estimatedTime: 8, dueDate: 'May 9th', priority: 'High' },
@@ -197,4 +197,4 @@ const GeneratedTasksPage: React.FC = () => {
   );
 };
 
-export default GeneratedTasksPage;
+export default GeneratedTasks;
