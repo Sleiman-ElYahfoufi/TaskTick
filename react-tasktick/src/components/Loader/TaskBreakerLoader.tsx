@@ -62,7 +62,140 @@ const TaskBreakerLoader: React.FC<TaskBreakerLoaderProps> = ({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    
+                    <div className="loader-content">
+                        <div className="robot-container">
+                            <motion.div
+                                className="robot"
+                                animate={{
+                                    y: [0, -10, 0],
+                                    rotate: [0, 5, -5, 0],
+                                }}
+                                transition={{
+                                    repeat: Infinity,
+                                    duration: 3,
+                                    ease: "easeInOut",
+                                }}
+                            >
+                                <div className="robot-head">
+                                    <div className="robot-eyes">
+                                        <motion.div
+                                            className="robot-eye"
+                                            animate={{ scale: [1, 1.2, 1] }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 2,
+                                                repeatType: "reverse",
+                                            }}
+                                        />
+                                        <motion.div
+                                            className="robot-eye"
+                                            animate={{ scale: [1, 1.2, 1] }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 2,
+                                                repeatType: "reverse",
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="robot-antenna" />
+                                </div>
+                                <div className="robot-body">
+                                    <motion.div
+                                        className="robot-screen"
+                                        animate={{
+                                            backgroundColor: [
+                                                "var(--primary)",
+                                                "var(--ai-precision)",
+                                                "var(--primary)",
+                                            ],
+                                        }}
+                                        transition={{
+                                            repeat: Infinity,
+                                            duration: 3,
+                                        }}
+                                    >
+                                        <motion.div
+                                            className="robot-screen-line"
+                                            animate={{
+                                                width: [
+                                                    "0%",
+                                                    "80%",
+                                                    "30%",
+                                                    "100%",
+                                                    "0%",
+                                                ],
+                                            }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 3,
+                                            }}
+                                        />
+                                        <motion.div
+                                            className="robot-screen-line"
+                                            animate={{
+                                                width: [
+                                                    "0%",
+                                                    "100%",
+                                                    "50%",
+                                                    "80%",
+                                                    "0%",
+                                                ],
+                                            }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 3,
+                                                delay: 0.3,
+                                            }}
+                                        />
+                                        <motion.div
+                                            className="robot-screen-line"
+                                            animate={{
+                                                width: [
+                                                    "0%",
+                                                    "40%",
+                                                    "90%",
+                                                    "20%",
+                                                    "0%",
+                                                ],
+                                            }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 3,
+                                                delay: 0.6,
+                                            }}
+                                        />
+                                    </motion.div>
+                                    <div className="robot-arms">
+                                        <motion.div
+                                            className="robot-arm left"
+                                            animate={{
+                                                rotate: [0, 15, 0, -15, 0],
+                                            }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 5,
+                                            }}
+                                        />
+                                        <motion.div
+                                            className="robot-arm right"
+                                            animate={{
+                                                rotate: [0, -15, 0, 15, 0],
+                                            }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                duration: 5,
+                                                delay: 0.5,
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                     
+
+                        <div className="loader-title">TaskBreaker AI</div>
+                    </div>
                 </motion.div>
             )}
         </AnimatePresence>
