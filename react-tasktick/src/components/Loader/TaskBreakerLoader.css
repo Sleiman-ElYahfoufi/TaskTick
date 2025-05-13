@@ -83,3 +83,46 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.robot-screen {
+    width: 60px;
+    height: 40px;
+    background-color: var(--ai-precision);
+    border-radius: 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.robot-screen-line {
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
+}
+
+.robot-arms {
+    display: flex;
+    justify-content: space-between;
+    width: 120px;
+    position: absolute;
+    top: 60px;
+}
+
+.robot-arm {
+    width: 10px;
+    height: 50px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+
+.robot-arm.left {
+    transform-origin: top left;
+    margin-left: -10px;
+}
+
+.robot-arm.right {
+    transform-origin: top right;
+    margin-right: -10px;
+}
+
