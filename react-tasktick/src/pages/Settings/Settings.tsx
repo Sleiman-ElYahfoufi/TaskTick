@@ -55,7 +55,19 @@ const Settings: React.FC = () => {
 
         
           
+            <h3>Personal Information</h3>
             
+            <div className="settings-form-row">
+              <div className="settings-left-column">
+                <div className="settings-form-group">
+                  <label>Username</label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="settings-form-input"
+                  />
+                </div>
                 
                
 
