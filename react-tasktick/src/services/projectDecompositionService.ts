@@ -17,6 +17,10 @@ export interface GeneratedTaskDto {
     progress?: number;
 }
 
+export interface GenerateTasksDto {
+    projectDetails: ProjectDetailsDto;
+    userId: number;
+}
 
 
 class ProjectDecompositionService {
