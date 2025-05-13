@@ -151,6 +151,15 @@ const authSlice = createSlice({
             state.error = null;
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(login.pending, setPending);
+        builder.addCase(login.fulfilled, setSuccess);
+        builder.addCase(login.rejected, setFailed);
+
+        builder.addCase(register.pending, setPending);
+        builder.addCase(register.fulfilled, setSuccess);
+        builder.addCase(register.rejected, setFailed);
+    },
 });
 
 export const { logout, clearError } = authSlice.actions;
