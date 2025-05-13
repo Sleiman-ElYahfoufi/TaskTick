@@ -145,3 +145,15 @@
   transition: background-color 0.2s;
 }
 
+.control-button:hover {
+  background-color: #E5E7EB;
+}
+
+.control-button.stop {
+  color: #EF4444;
+}
+
+.control-button.stop:hover {
+  background-color: #FEE2E2;
+}
+
