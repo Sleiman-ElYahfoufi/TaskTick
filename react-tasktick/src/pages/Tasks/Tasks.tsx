@@ -152,6 +152,18 @@ const Tasks: React.FC = () => {
 
   return (
     <div className="tasks-page">
+      <h1 className="page-title">Tasks</h1>
+      
+      <TaskFilters
+        searchTerm={searchTerm}
+        projectFilter={projectFilter}
+        statusFilter={statusFilter}
+        dueDateFilter={dueDateFilter}
+        onSearchChange={setSearchTerm}
+        onProjectFilterChange={setProjectFilter}
+        onStatusFilterChange={setStatusFilter}
+        onDueDateFilterChange={setDueDateFilter}
+      />
      
     </div>
   );
