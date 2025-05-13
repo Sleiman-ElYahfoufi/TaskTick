@@ -186,3 +186,13 @@
   font-size: 0.875rem;
 }
 
+.settings-experience-years {
+  font-size: 0.75rem;
+  color: var(--placeholder);
+  display: block;
+}
+
+.settings-experience-option input[type="radio"]:checked ~ .settings-experience-card {
+  border-color: var(--primary);
+}
+
