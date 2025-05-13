@@ -31,7 +31,16 @@ export interface DecompositionResult {
 }
 
 class ProjectDecompositionService {
+    async generateTasks(data: GenerateTasksDto): Promise<DecompositionResult> {
+        const requestData = { ...data };
 
+     
+
+        const response = await api.post<DecompositionResult>('/project-decomposition/generate', requestData);
+        return response.data;
+    }
+
+   
 }
 
 export default new ProjectDecompositionService(); 
