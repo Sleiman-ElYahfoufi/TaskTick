@@ -54,3 +54,29 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-options {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.form-option {
+  flex: 1;
+}
+
+.form-option label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
