@@ -144,3 +144,8 @@
   }
 }
 
+@media (max-width: 480px) {
+  .timer-button span {
+    display: none;
+  }
+}
