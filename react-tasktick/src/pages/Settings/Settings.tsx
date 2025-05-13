@@ -122,13 +122,38 @@ const Settings: React.FC = () => {
                     <option value="Backend Developer">Backend Developer</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="settings-right-column">
+                <div className="settings-form-group settings-experience-group">
+                  <label>Experience level</label>
+                  <div className="settings-experience-options">
+                    {experienceLevels.map((level) => (
+                      <label key={level.label} className="settings-experience-option">
+                        <input
+                          type="radio"
+                          name="experience"
+                          value={level.label}
+                          checked={experience === level.label}
+                          onChange={(e) => setExperience(e.target.value)}
+                        />
+                        <div className="settings-experience-card">
+                          <div className="settings-radio-circle"></div>
+                          <div className="settings-experience-text">
+                            <span className="settings-experience-label">{level.label}</span>
+                            <span className="settings-experience-years">{level.years}</span>
+                          </div>
+                        </div>
+                      </label>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="settings-form-group settings-tech-stack-group">
-             
+              
+              </div>
             </div>
           </div>
 
