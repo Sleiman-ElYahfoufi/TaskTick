@@ -144,3 +144,18 @@
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .generated-tasks-project-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .generated-tasks-accuracy-badge {
+    margin-top: 16px;
+  }
+  
+  .generated-tasks-stats {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
