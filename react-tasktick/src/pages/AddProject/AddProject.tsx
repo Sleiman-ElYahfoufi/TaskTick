@@ -15,8 +15,14 @@ const AddProject: React.FC = () => {
       return;
     }
     
+    setCurrentStep(2);
     
-    
+    console.log('Generating tasks for:', {
+      projectName,
+      projectDescription,
+      deadline,
+      priority
+    });
   };
   
   return (
