@@ -67,13 +67,15 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
                 <span className="info-value">{estimatedTime}</span>
               </div>
               
-              
+              <div className="progress-info">
+                <span className="info-label">Progress</span>
+                <span className="info-value">{progress}% of estimated time</span>
+              </div>
             </div>
           </div>
         </div>
         
-       
-          
+        <div className="timer-container">
          
         </div>
       </div>
