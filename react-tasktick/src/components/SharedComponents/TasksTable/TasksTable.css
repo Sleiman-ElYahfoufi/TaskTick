@@ -115,3 +115,32 @@
   color: #2563EB;
 }
 
+@media (max-width: 768px) {
+  .MuiDataGrid-root .MuiDataGrid-cell {
+    padding: 8px !important;
+  }
+  
+  .MuiDataGrid-root .MuiDataGrid-columnHeader {
+    padding: 8px !important;
+  }
+  
+  .priority-badge {
+    padding: 2px 8px;
+    min-width: 40px;
+    font-size: 10px;
+  }
+  
+  .timer-button {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
+  .action-buttons {
+    gap: 2px;
+  }
+  
+  .action-button {
+    padding: 2px;
+  }
+}
+
