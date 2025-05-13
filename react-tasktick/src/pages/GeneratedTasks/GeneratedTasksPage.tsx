@@ -110,9 +110,42 @@ const GeneratedTasksPage: React.FC = () => {
       <h1 className="page-title">Generated Tasks</h1>
       
       <div className="generated-tasks-content">
-       
+        <div className="top-controls">
+          <StepIndicator 
+            steps={[
+              { number: 1, label: 'Project Details' },
+              { number: 2, label: 'Generated Tasks' }
+            ]}
+            currentStep={2}
+          />
+          
+          <button className="add-task-btn" onClick={handleAddTask}>
+            Add Task
+          </button>
+        </div>
         
-      
+        <div className="generated-tasks-project-summary">
+          <div className="generated-tasks-project-info">
+            <h2 className="generated-tasks-project-name">E-commerce Site Estimate</h2>
+            
+            <div className="generated-tasks-stats">
+              <div className="generated-tasks-stat">
+                <span className="generated-tasks-stat-label">Tasks Generated</span>
+                <span className="generated-tasks-stat-value">{tasks.length} tasks</span>
+              </div>
+              
+              <div className="generated-tasks-stat">
+                <span className="generated-tasks-stat-label">Total Estimated Time</span>
+                <span className="generated-tasks-stat-value">{totalEstimatedTime} hours</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="generated-tasks-accuracy-badge">
+            <span>97% Accurate</span>
+          </div>
+        </div>
+        
         <div className="tasks-table">
           <DataGrid
             rows={tasks}
