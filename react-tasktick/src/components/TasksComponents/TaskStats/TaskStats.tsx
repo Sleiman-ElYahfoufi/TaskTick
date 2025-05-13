@@ -21,16 +21,7 @@ const TaskStats: React.FC<TaskStatsProps> = ({
         <div className="stat-label">Active Tasks</div>
       </div>
       
-      <div className="stat-card completed">
-        <div className="stat-number">{completedTasks}</div>
-        <div className="stat-label">Tasks Completed</div>
-        <div className="stat-sublabel">{completedThisMonth}</div>
-      </div>
       
-      <div className="stat-card due-today">
-        <div className="stat-number">{dueToday}</div>
-        <div className="stat-label">Due Today</div>
-      </div>
     </div>
   );
 };
