@@ -22,6 +22,25 @@ interface Task {
 }
 
 const ProjectDetails: React.FC = () => {
+  const { projectId } = useParams<{ projectId: string }>();
+  const navigate = useNavigate();
+  
+  const [project, setProject] = useState({
+    id: projectId || '1',
+    name: 'E-commerce Site Estimate',
+    accuracy: 97,
+    totalTasks: 14,
+    timeSpent: 23,
+    totalEstimatedTime: 43,
+    currentTask: {
+      id: 'task-1',
+      name: 'Initial UI/UX Analysis',
+      category: 'E-commerce',
+      estimatedTime: '3/4 hrs',
+      progress: 65,
+      elapsedTime: '00:47:23'
+    }
+  });
   
  
   
