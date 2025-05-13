@@ -107,7 +107,59 @@ const GeneratedTasksPage: React.FC = () => {
 
   return (
     <div className="generated-tasks-container">
-     
+      <h1 className="page-title">Generated Tasks</h1>
+      
+      <div className="generated-tasks-content">
+       
+        
+      
+        <div className="tasks-table">
+          <DataGrid
+            rows={tasks}
+            columns={columns}
+            autoHeight
+            disableRowSelectionOnClick
+            processRowUpdate={processRowUpdate}
+            pageSizeOptions={[10, 25, 50]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10 }
+              }
+            }}
+            sx={{
+              '& .MuiDataGrid-cell:focus': {
+                outline: 'none',
+              },
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: '#f9fafb',
+              },
+              border: 'none',
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: '#f9fafb',
+                borderBottom: '1px solid #e5e7eb',
+              },
+              '& .MuiDataGrid-columnHeader': {
+                padding: '16px',
+              },
+              '& .MuiDataGrid-columnHeaderTitle': {
+                fontWeight: '600',
+                color: '#6b7280',
+                fontSize: '0.875rem',
+              },
+              '& .MuiDataGrid-cell': {
+                padding: '16px',
+                borderBottom: '1px solid #e5e7eb',
+              },
+            }}
+          />
+        </div>
+        
+        <div className="actions-footer">
+          <button className="create-project-btn">
+            Create Project
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
