@@ -49,7 +49,15 @@ class ProjectDecompositionService {
     async saveTasks(data: DecompositionResult): Promise<DecompositionResult> {
         const requestData = JSON.parse(JSON.stringify(data));
 
-      
+        if (requestData.projectDetails && requestData.projectDetails.priority) {
+            requestData.projectDetails.priority = requestData.projectDetails.priority.toLowerCase();
+        }
+
+        if (requestData.projectDetails && requestData.projectDetails.detail_depth) {
+            requestData.projectDetails.detail_depth = requestData.projectDetails.detail_depth.toLowerCase();
+        }
+
+        
 
         const response = await api.post<DecompositionResult>('/project-decomposition/save', requestData);
         return response.data;
