@@ -54,3 +54,8 @@
   outline: none;
 }
 
+.filter-dropdown:focus {
+  border-color: #01398E;
+  box-shadow: 0 0 0 2px rgba(1, 57, 142, 0.1);
+}
+
