@@ -4,6 +4,7 @@ import "./App.css";
 import Auth from "./pages/Auth/Auth";
 import Onboarding from "./pages/Onboarding/Onboarding";
 
+import AddProject from "./pages/AddProject/AddProject";
 import Projects from "./pages/Projects/Projects";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
@@ -18,7 +19,8 @@ function App() {
                 <Route path="/dashboard" element={<DashboardLayout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="projects" element={<Projects />} />
-                  
+                    <Route path="add-project" element={<AddProject />} />
+                   
                 </Route>
             </Routes>
         </Router>
