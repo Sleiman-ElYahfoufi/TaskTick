@@ -8,3 +8,25 @@
   width: 100%;
 }
 
+.search-bar {
+  flex: 1;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-bar input:focus {
+  border-color: #01398E;
+  box-shadow: 0 0 0 2px rgba(1, 57, 142, 0.1);
+}
+
