@@ -32,11 +32,14 @@ const ProjectOverviewCard: React.FC<ProjectOverviewCardProps> = ({
               <span className="project-overview-stat-value">{completedTasks}/{totalTasks} tasks</span>
             </div>
             
-           
+            <div className="project-stat">
+              <span className="project-overview-stat-label">Time Taken</span>
+              <span className="project-overview-stat-value">{timeSpent}/{totalEstimatedTime} hr</span>
+            </div>
           </div>
         </div>
         
-      
+        
       </div>
     </div>
   );
