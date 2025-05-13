@@ -11,6 +11,16 @@ import TaskFilters from '../../components/TasksComponents/TaskFilters/TaskFilter
 import TaskStats from '../../components/TasksComponents/TaskStats/TaskStats'; 
 import './Tasks.css';
 
+interface Task {
+  id: string;
+  name: string;
+  project: string;
+  estimatedTime: string;
+  dueDate: string;
+  priority: 'High' | 'Medium' | 'Low';
+  progress: number;
+  status: 'In Progress' | 'Completed' | 'Not Started';
+}
 
 const Tasks: React.FC = () => {
 
