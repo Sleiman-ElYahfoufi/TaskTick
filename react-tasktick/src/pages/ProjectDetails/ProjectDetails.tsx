@@ -198,7 +198,14 @@ const ProjectDetails: React.FC = () => {
           </button>
         </div>
         
-      
+        <TasksTable 
+          tasks={tasks}
+          columns={columns}
+          onStartTimer={handleStartTimer}
+          onDeleteTask={handleDeleteTask}
+          onEditTask={handleEditTask}
+          onTaskUpdate={handleTaskUpdate}
+        />
       </div>
     </div>
   );
