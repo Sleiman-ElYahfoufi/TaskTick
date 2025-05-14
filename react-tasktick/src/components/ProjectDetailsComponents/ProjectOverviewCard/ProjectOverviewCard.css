@@ -1,98 +1,86 @@
 .project-overview-card {
-  background-color: #EFF6FF;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #e6f0ff; /* Light blue background */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
 }
 
 .project-overview-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.project-overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .project-overview-project-name {
-  font-size: 20px;
-  font-weight: 600;
-  color: #01398E;
-  margin: 0 0 16px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a56db;
+    margin: 0;
 }
 
 .project-overview-stats {
-  display: flex;
-  gap: 32px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
 }
 
 .project-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.project-stat-label {
-  font-size: 14px;
-  color: #4B5563;
-}
-
-.project-stat-value {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .project-overview-stat-label {
-  font-size: 14px;
-  color: #4B5563;
+    font-size: 1rem;
+    color: #000000;
+    font-weight: 600;
 }
 
 .project-overview-stat-value {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.project-overview-accuracy-badge {
-  background-color: #D1FAE5;
-  color: #047857;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 14px;
-  font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a56db;
 }
 
 .project-overview-card.compact {
-  padding: 16px;
+    padding: 16px;
 }
 
 .project-overview-card.compact .project-overview-project-name {
-  font-size: 16px;
-  margin-bottom: 12px;
+    font-size: 1.25rem;
 }
 
 .project-overview-card.compact .project-overview-stats {
-  gap: 24px;
+    margin-top: 12px;
 }
 
-.project-overview-card.compact .project-overview-stat-label {
-  font-size: 12px;
+/* Responsive styles */
+@media (max-width: 768px) {
+    .project-overview-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
 }
 
-.project-overview-card.compact .project-overview-stat-value {
-  font-size: 14px;
-}
+@media (max-width: 480px) {
+    .project-overview-card {
+        padding: 16px;
+    }
 
-.project-overview-card.compact .project-overview-accuracy-badge {
-  padding: 4px 10px;
-  font-size: 12px;
-}
-
-@media (max-width: 640px) {
-  .project-overview-content {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .project-overview-right {
-    align-self: flex-start;
-  }
+    .project-overview-project-name {
+        font-size: 1.25rem;
+    }
 }
