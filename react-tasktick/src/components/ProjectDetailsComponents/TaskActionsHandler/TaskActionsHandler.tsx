@@ -34,11 +34,20 @@ export const useTaskActionsHandler = ({
         dispatch(addTask({ projectId, task: newTask }));
     }, [projectId, dispatch]);
 
-   
+    const handleDeleteTask = useCallback(
+        (taskId: string | number) => {
+            if (!projectId) return;
+            dispatch(deleteTask({ projectId, taskId }));
+        },
+        [projectId, dispatch]
+    );
+
+
 
     return {
         handleAddTask,
-       
+        handleDeleteTask,
+ 
     };
 };
 
