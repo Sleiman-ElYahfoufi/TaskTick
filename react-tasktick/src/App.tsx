@@ -25,14 +25,11 @@ function App() {
                     <Route path="/dashboard" element={<DashboardLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="projects" element={<Projects />} />
+                        <Route path="projects/:projectId" element={<ProjectDetails />} />
                         <Route path="add-project" element={<AddProject />} />
                         <Route
                             path="generated-tasks"
                             element={<GeneratedTasks />}
-                        />
-                        <Route
-                            path="project-details"
-                            element={<ProjectDetails />}
                         />
                         <Route path="tasks" element={<Tasks />} />
                         <Route path="settings" element={<Settings />} />
