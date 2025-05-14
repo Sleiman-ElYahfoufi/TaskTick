@@ -28,6 +28,17 @@ export const fetchProjects = createAsyncThunk<ProjectsResponse | Project[], numb
     }
 );
 
+export const fetchProjectById = createAsyncThunk(
+    'projects/fetchProjectById',
+    async (projectId: string | number, { rejectWithValue }) => {
+        try {
+            const project = await projectsService.getProjectById(projectId);
+            return project;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to fetch project');
+        }
+    }
+);
 
 
 
@@ -35,8 +46,10 @@ export const fetchProjects = createAsyncThunk<ProjectsResponse | Project[], numb
 
 
 
-
-
+export const selectAllProjects = (state: RootState) => state.projects.projects;
+export const selectSelectedProject = (state: RootState) => state.projects.selectedProject;
+export const selectProjectsLoading = (state: RootState) => state.projects.isLoading;
+export const selectProjectsError = (state: RootState) => state.projects.error;
 
 
 
