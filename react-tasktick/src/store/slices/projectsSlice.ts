@@ -64,14 +64,32 @@ export const updateProject = createAsyncThunk(
     }
 );
 
+export const deleteProject = createAsyncThunk(
+    'projects/deleteProject',
+    async (projectId: string | number, { rejectWithValue }) => {
+        try {
+            await projectsService.deleteProject(projectId);
+            return projectId;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to delete project');
+        }
+    }
+);
 
 export const selectAllProjects = (state: RootState) => state.projects.projects;
 export const selectSelectedProject = (state: RootState) => state.projects.selectedProject;
 export const selectProjectsLoading = (state: RootState) => state.projects.isLoading;
 export const selectProjectsError = (state: RootState) => state.projects.error;
 
+const setPending = (state: ProjectsState) => {
+    state.isLoading = true;
+    state.error = null;
+};
 
-
+const setFailed = (state: ProjectsState, action: PayloadAction<any>) => {
+    state.isLoading = false;
+    state.error = action.payload as string;
+};
 
 const projectsSlice = createSlice({
     name: 'projects',
