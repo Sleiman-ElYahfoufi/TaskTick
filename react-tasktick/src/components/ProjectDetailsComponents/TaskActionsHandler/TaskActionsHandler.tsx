@@ -42,12 +42,14 @@ export const useTaskActionsHandler = ({
         [projectId, dispatch]
     );
 
-
+    const handleStartTimer = useCallback((taskId: string | number) => {
+        console.log("Start timer for task:", taskId);
+    }, []);
 
     return {
         handleAddTask,
         handleDeleteTask,
- 
+        handleStartTimer,
     };
 };
 
