@@ -1,20 +1,4 @@
 services:
-  # Frontend service
-  frontend:
-    image: ${DOCKER_USERNAME}/react-tasktick:latest
-    ports:
-      - "8080:80"
-    depends_on:
-      - backend
-    restart: unless-stopped
-    # volumes:
-    #   - ./react-tasktick:/app:ro
-    #   - /app/node_modules
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 100M
-
 
   # Backend service (NestJS with TypeORM)
   backend:
