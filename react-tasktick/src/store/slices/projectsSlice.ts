@@ -40,7 +40,17 @@ export const fetchProjectById = createAsyncThunk(
     }
 );
 
-
+export const addProject = createAsyncThunk(
+    'projects/addProject',
+    async (project: Omit<Project, 'id'>, { rejectWithValue }) => {
+        try {
+            const newProject = await projectsService.createProject(project);
+            return newProject;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to add project');
+        }
+    }
+);
 
 
 
