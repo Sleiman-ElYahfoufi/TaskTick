@@ -24,4 +24,21 @@ export const processDateValue = (dateValue: any): string | null => {
 };
 
 
+export const formatDateForDisplay = (dateValue: any): string => {
+    if (!dateValue || dateValue === "Not set") return "Not set";
+
+    try {
+        const date =
+            typeof dateValue === "string" ? new Date(dateValue) : dateValue;
+        if (isNaN(date.getTime())) return String(dateValue);
+
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    } catch (error) {
+        return String(dateValue);
+    }
+};
 
