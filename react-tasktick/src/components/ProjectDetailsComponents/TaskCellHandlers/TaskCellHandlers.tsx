@@ -84,11 +84,45 @@ export const useTaskCellHandlers = ({ projectId }: TaskCellHandlersProps) => {
         [projectId, dispatch]
     );
 
+    const handleTaskUpdate = useCallback(
+        (updatedTask: any) => {
+            if (!projectId) return;
 
+            const taskId = updatedTask.id;
+
+            const { id, category, elapsedTime, ...taskFieldsToUpdate } =
+                updatedTask;
+
+            if (taskFieldsToUpdate.dueDate) {
+                const processedDate = processDateValue(
+                    taskFieldsToUpdate.dueDate
+                );
+                if (processedDate !== null) {
+                    taskFieldsToUpdate.dueDate = processedDate;
+                }
+            }
+
+            dispatch(
+                optimisticUpdateTask({
+                    id,
+                    ...taskFieldsToUpdate,
+                })
+            );
+
+            dispatch(
+                updateTask({
+                    projectId,
+                    taskId,
+                    taskData: taskFieldsToUpdate,
+                })
+            );
+        },
+        [projectId, dispatch]
+    );
 
     return {
         handleCellValueChange,
-        
+        handleTaskUpdate,
     };
 };
 
