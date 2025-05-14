@@ -8,6 +8,38 @@ interface TaskActionsHandlerProps {
 }
 
 export const useTaskActionsHandler = ({
-});
+    projectId,
+}: TaskActionsHandlerProps) => {
+    const dispatch = useAppDispatch();
+
+    const handleAddTask = useCallback(() => {
+        if (!projectId) return;
+
+        const today = new Date();
+        const nextWeek = new Date(today);
+        nextWeek.setDate(today.getDate() + 7);
+        const formattedDate = nextWeek.toISOString().split("T")[0];
+
+        const newTask: Partial<ProjectTask> = {
+            name: "New Task",
+            description: "Add task description here",
+            estimated_time: 1,
+            estimatedTime: "1 hrs",
+            dueDate: formattedDate,
+            priority: "Medium",
+            progress: 0,
+            status: "Not Started",
+        };
+
+        dispatch(addTask({ projectId, task: newTask }));
+    }, [projectId, dispatch]);
+
+   
+
+    return {
+        handleAddTask,
+       
+    };
+};
 
 export default useTaskActionsHandler;
