@@ -250,7 +250,85 @@ class ProjectsService {
         }
     }
 
-   
+    async deleteProject(projectId: string | number): Promise<void> {
+        try {
+            await api.delete(`/projects/${projectId}`);
+        } catch (error) {
+            console.error(`Error deleting project ${projectId}:`, error);
+            throw error;
+        }
+    }
+
+    async updateProjectTask(projectId: string | number, taskId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
+        try {
+            const {
+                name,
+                description,
+                estimated_time,
+                estimatedTime,
+                dueDate,
+                priority,
+                progress,
+                status
+            } = taskData;
+
+            const updateData: any = { project_id: Number(projectId) };
+
+            if (name !== undefined) updateData.name = name;
+            if (description !== undefined) updateData.description = description;
+
+            if (estimated_time !== undefined) {
+                const numValue = Number(estimated_time) || 0;
+                console.log(`Parsed estimated_time to number: ${numValue}`);
+                updateData.estimated_time = numValue;
+            } else if (estimatedTime !== undefined) {
+                let numValue = 0;
+                if (typeof estimatedTime === 'string') {
+                    const match = estimatedTime.match(/^(\d+(?:\.\d+)?)/);
+                    if (match && match[1]) {
+                        numValue = Number(match[1]) || 0;
+                    }
+                } else if (typeof estimatedTime === 'number') {
+                    numValue = estimatedTime;
+                }
+                console.log(`Extracted numeric value from estimatedTime: ${numValue}`);
+                updateData.estimated_time = numValue;
+            }
+
+            if (progress !== undefined) updateData.progress = progress;
+
+            if (dueDate !== undefined) {
+                if (dueDate && dueDate.trim() !== '') {
+                    try {
+                        const dateObj = new Date(dueDate);
+                        if (!isNaN(dateObj.getTime())) {
+                            updateData.dueDate = dateObj.toISOString();
+                        }
+                    } catch (e) {
+                        console.warn(`Invalid date format for dueDate: ${dueDate}`);
+                    }
+                }
+            }
+
+            if (status !== undefined) {
+                updateData.status = this.mapStatusToBackend(status);
+            }
+
+            if (priority !== undefined) {
+                updateData.priority = this.mapPriorityToBackend(priority);
+            }
+
+            console.log('Updating task with data:', updateData);
+
+            const response = await api.patch<ProjectTask>(`/tasks/${taskId}`, updateData);
+            return this.mapTaskData(response.data);
+        } catch (error) {
+            console.error(`Error updating task ${taskId}:`, error);
+            throw error;
+        }
+    }
+
+    
 
     private mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
