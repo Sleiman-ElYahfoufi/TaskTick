@@ -40,7 +40,15 @@ export interface ProjectTask {
     hours_spent?: number;
 }
 
+export interface ProjectsResponse {
+    projects: Project[];
+    total: number;
+}
 
+export interface ProjectTasksResponse {
+    tasks: ProjectTask[];
+    total: number;
+}
 
 class ProjectsService {
    
