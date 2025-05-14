@@ -55,3 +55,6 @@ export const processEstimatedTime = (
     return numericValue;
 };
 
+export const getEstimatedTimeDisplay = (hours: number): string => {
+    return `${hours} hrs`;
+};
