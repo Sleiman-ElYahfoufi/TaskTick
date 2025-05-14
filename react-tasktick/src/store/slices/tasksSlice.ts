@@ -74,6 +74,34 @@ export const deleteTask = createAsyncThunk(
 );
 
 
+export const updateTaskCell = createAsyncThunk(
+    'tasks/updateTaskCell',
+    async ({
+        projectId,
+        taskId,
+        field,
+        value
+    }: {
+        projectId: string | number;
+        taskId: string | number;
+        field: string;
+        value: any;
+    }, { rejectWithValue }) => {
+        try {
+          
+            const taskData = { [field]: value } as Partial<ProjectTask>;
+
+            const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
+            return { taskId, updatedTask };
+        } catch (error: any) {
+            return rejectWithValue({
+                taskId,
+                field,
+                error: error.message || `Failed to update ${field}`
+            });
+        }
+    }
+);
 
 export const selectAllTasks = (state: RootState) => state.tasks.tasks;
 export const selectCurrentTask = (state: RootState) => state.tasks.currentTask;
