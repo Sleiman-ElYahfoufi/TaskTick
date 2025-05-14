@@ -188,7 +188,108 @@ const tasksSlice = createSlice({
             state.loadingTaskIds = state.loadingTaskIds.filter(id => id !== action.payload);
         }
     },
-    extraReducers: (builder) => {},
+    extraReducers: (builder) => {
+        builder.addCase(fetchTasks.pending, setPending);
+        builder.addCase(fetchTasks.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.tasks = action.payload;
+
+            const inProgressTask = action.payload.find(task =>
+                task.status === 'In Progress' || task.status === 'in_progress' || task.status === 'in progress');
+
+            state.currentTask = inProgressTask || (action.payload.length > 0 ? action.payload[0] : null);
+        });
+        builder.addCase(fetchTasks.rejected, setFailed);
+
+        builder.addCase(addTask.pending, setPending);
+        builder.addCase(addTask.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.tasks.unshift(action.payload);
+
+            state.currentTask = action.payload;
+        });
+        builder.addCase(addTask.rejected, setFailed);
+
+        builder.addCase(updateTask.pending, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            if (!state.loadingTaskIds.includes(taskId)) {
+                state.loadingTaskIds.push(taskId);
+            }
+        });
+        builder.addCase(updateTask.fulfilled, (state, action) => {
+            const taskId = String(action.payload.id);
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== taskId);
+
+            const index = state.tasks.findIndex(task => String(task.id) === taskId);
+            if (index !== -1) {
+                state.tasks[index] = action.payload;
+            }
+
+            if (state.currentTask && String(state.currentTask.id) === taskId) {
+                state.currentTask = action.payload;
+            }
+        });
+        builder.addCase(updateTask.rejected, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+            state.error = action.payload as string || 'Failed to update task';
+        });
+
+        builder.addCase(deleteTask.pending, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            if (!state.loadingTaskIds.includes(taskId)) {
+                state.loadingTaskIds.push(taskId);
+            }
+        });
+        builder.addCase(deleteTask.fulfilled, (state, action) => {
+            const taskId = action.payload;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+            state.tasks = state.tasks.filter(task => String(task.id) !== String(taskId));
+
+            if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
+                state.currentTask = state.tasks.length > 0 ? state.tasks[0] : null;
+            }
+        });
+        builder.addCase(deleteTask.rejected, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+            state.error = action.payload as string || 'Failed to delete task';
+        });
+
+        builder.addCase(updateTaskCell.pending, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            if (!state.loadingTaskIds.includes(taskId)) {
+                state.loadingTaskIds.push(taskId);
+            }
+        });
+
+        builder.addCase(updateTaskCell.fulfilled, (state, action) => {
+            const { taskId, updatedTask } = action.payload;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+
+            const index = state.tasks.findIndex(task => String(task.id) === String(taskId));
+            if (index !== -1) {
+                state.tasks[index] = updatedTask;
+
+                if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
+                    state.currentTask = updatedTask;
+                }
+            }
+        });
+
+        builder.addCase(updateTaskCell.rejected, (state, action) => {
+            const payload = action.payload as { taskId: string | number; field: string; error: string } ||
+                { taskId: action.meta.arg.taskId, field: action.meta.arg.field, error: 'Unknown error' };
+
+            const { taskId, field, error } = payload;
+
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+
+            state.cellUpdateErrors[`${taskId}_${field}`] = error;
+
+            state.error = `Failed to update ${field}: ${error}`;
+        });
+    },
 });
 
 export const {
