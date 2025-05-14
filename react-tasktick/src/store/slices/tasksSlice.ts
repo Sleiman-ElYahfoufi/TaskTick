@@ -113,7 +113,15 @@ export const selectIsTaskLoading = (taskId: string | number) => (state: RootStat
 export const selectCellUpdateErrors = (state: RootState) => state.tasks.cellUpdateErrors;
 
 
+const setPending = (state: TasksState) => {
+    state.isLoading = true;
+    state.error = null;
+};
 
+const setFailed = (state: TasksState, action: PayloadAction<any>) => {
+    state.isLoading = false;
+    state.error = action.payload as string;
+};
 
 
 const tasksSlice = createSlice({
