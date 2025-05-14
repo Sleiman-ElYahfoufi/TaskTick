@@ -149,14 +149,11 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                             return;
                         }
 
-                        // Otherwise use what the user typed
                         processCellUpdate({ id, field, value: inputValue });
                     } else {
-                        // If we can't get the direct input element, use the original value
                         processCellUpdate({ id, field, value: originalValue });
                     }
                 } else {
-                    // For other fields, use the standard API
                     const value = apiRef.current.getCellValue(id, field);
                     processCellUpdate({ id, field, value });
                 }
@@ -189,8 +186,6 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
         (params: GridPreProcessEditCellProps) => {
             const { props } = params;
 
-            // For validation only check the value itself
-            // Progress must be between 0-100%
             if (
                 typeof props.value === "number" &&
                 (props.value < 0 || props.value > 100)
@@ -203,16 +198,13 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
         []
     );
 
-    // Make specified columns editable
     const makeColumnsEditable = useCallback(
         (cols: GridColDef[]) => {
             return cols.map((col) => {
-                // Skip columns that should not be editable
                 if (!editableFields.includes(col.field)) {
                     return col;
                 }
 
-                // Add editable property and preProcessEditCellProps for validation
                 return {
                     ...col,
                     editable: true,
@@ -223,22 +215,18 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
         [editableFields, preProcessEditCellProps]
     );
 
-    // Create a new columns array with editable columns
     const enhancedColumns = useMemo(() => {
         return makeColumnsEditable(columns);
     }, [columns, makeColumnsEditable]);
 
-    // Responsive column adjustments
     const responsiveColumns = useMemo(() => {
         const isMobile = window.innerWidth < 768;
 
         return enhancedColumns.map((col) => ({
             ...col,
-            // Adjust minimum width for mobile screens
             minWidth: isMobile
                 ? Math.min(col.minWidth ?? 80, 80)
                 : col.minWidth,
-            // Adjust flex values for better mobile distribution
             flex: isMobile ? (col.field === "name" ? 1.5 : 1) : col.flex,
         }));
     }, [enhancedColumns]);
