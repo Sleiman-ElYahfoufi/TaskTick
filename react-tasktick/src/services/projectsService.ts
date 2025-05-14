@@ -51,7 +51,31 @@ export interface ProjectTasksResponse {
 }
 
 class ProjectsService {
-   
+    async getUserProjects(userId: number): Promise<ProjectsResponse> {
+        try {
+            const response = await api.get<Project[] | ProjectsResponse>(`/projects?userId=${userId}`);
+
+            if (Array.isArray(response.data)) {
+                const projects = response.data.map(project => this.mapProjectData(project));
+                return { projects, total: projects.length };
+            }
+
+            if (response.data && 'projects' in response.data && Array.isArray(response.data.projects)) {
+                const projects = response.data.projects.map(project => this.mapProjectData(project));
+                return {
+                    projects,
+                    total: response.data.total || projects.length
+                };
+            }
+
+            console.warn('API response format is not as expected:', response.data);
+            return { projects: [], total: 0 };
+        } catch (error) {
+            console.error('Error fetching user projects:', error);
+            return { projects: [], total: 0 };
+        }
+    }
+
     private mapProjectData(project: Project): Project {
         const tasksCompleted = project.tasksCompleted || 0;
         const totalTasks = project.totalTasks || 10; // Default value
@@ -121,8 +145,9 @@ class ProjectsService {
         };
     }
 
-   
-  
+    
+
+    
 
     private mapTaskData(task: ProjectTask): ProjectTask {
         const estimatedHours = task.estimated_time !== undefined ? String(task.estimated_time) : '0';
@@ -178,13 +203,13 @@ class ProjectsService {
 
     
 
-   
+    
+
+    
 
    
 
-  
-
-  
+    
 
     private mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
