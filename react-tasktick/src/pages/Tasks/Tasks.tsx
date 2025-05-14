@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { GridColDef } from "@mui/x-data-grid";
 import TasksTable, {
-    renderPriorityCell,
     renderActionsCell,
     renderStatusCell,
     renderProjectCell,
