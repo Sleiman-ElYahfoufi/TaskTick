@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import {
     updateTaskCell,
@@ -18,10 +18,25 @@ interface TaskCellHandlersProps {
 
 export const useTaskCellHandlers = ({ projectId }: TaskCellHandlersProps) => {
     const dispatch = useAppDispatch();
+    const processingUpdatesRef = useRef<{ [key: string]: boolean }>({});
 
     const handleCellValueChange = useCallback(
         (taskId: string | number, field: string, value: any) => {
             if (!projectId) return;
+
+            const updateKey = `${taskId}_${field}`;
+
+            if (processingUpdatesRef.current[updateKey]) {
+                return;
+            }
+
+            processingUpdatesRef.current[updateKey] = true;
+
+            const finishUpdate = () => {
+                setTimeout(() => {
+                    processingUpdatesRef.current[updateKey] = false;
+                }, 300); 
+            };
 
             if (field === "dueDate") {
                 const processedDate = processDateValue(value);
@@ -34,6 +49,7 @@ export const useTaskCellHandlers = ({ projectId }: TaskCellHandlersProps) => {
                             value: processedDate,
                         })
                     );
+
                     dispatch(
                         updateTaskCell({
                             projectId,
@@ -41,24 +57,17 @@ export const useTaskCellHandlers = ({ projectId }: TaskCellHandlersProps) => {
                             field,
                             value: processedDate,
                         })
-                    );
+                    ).finally(finishUpdate);
+                } else {
+                    finishUpdate();
                 }
                 return;
             }
 
             if (field === "estimatedTime") {
                 const numericValue = processEstimatedTime(value);
-
-                dispatch(
-                    updateTaskCell({
-                        projectId,
-                        taskId,
-                        field: "estimated_time",
-                        value: numericValue,
-                    })
-                );
-
                 const displayValue = getEstimatedTimeDisplay(numericValue);
+
                 dispatch(
                     optimisticUpdateCell({
                         taskId,
@@ -75,11 +84,22 @@ export const useTaskCellHandlers = ({ projectId }: TaskCellHandlersProps) => {
                     })
                 );
 
+                dispatch(
+                    updateTaskCell({
+                        projectId,
+                        taskId,
+                        field: "estimated_time",
+                        value: numericValue,
+                    })
+                ).finally(finishUpdate);
+
                 return;
             }
 
             dispatch(optimisticUpdateCell({ taskId, field, value }));
-            dispatch(updateTaskCell({ projectId, taskId, field, value }));
+            dispatch(
+                updateTaskCell({ projectId, taskId, field, value })
+            ).finally(finishUpdate);
         },
         [projectId, dispatch]
     );
@@ -100,6 +120,15 @@ export const useTaskCellHandlers = ({ projectId }: TaskCellHandlersProps) => {
                 if (processedDate !== null) {
                     taskFieldsToUpdate.dueDate = processedDate;
                 }
+            }
+
+            if (taskFieldsToUpdate.estimatedTime) {
+                const numericValue = processEstimatedTime(
+                    taskFieldsToUpdate.estimatedTime
+                );
+                taskFieldsToUpdate.estimated_time = numericValue;
+                taskFieldsToUpdate.estimatedTime =
+                    getEstimatedTimeDisplay(numericValue);
             }
 
             dispatch(
