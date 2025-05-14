@@ -11,6 +11,7 @@ import AddProject from "./pages/AddProject/AddProject";
 import Projects from "./pages/Projects/Projects";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
     return (
@@ -18,21 +19,21 @@ function App() {
             <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/onboarding" element={<Onboarding />} />
-                <Route path="/dashboard" element={<DashboardLayout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="projects" element={<Projects />} />
-                    <Route path="add-project" element={<AddProject />} />
-                    <Route
-                        path="generated-tasks"
-                        element={<GeneratedTasks />}
-                    />
-                    <Route
-                        path="project-details"
-                        element={<ProjectDetails />}
-                    />
-                    <Route path="tasks" element={<Tasks />} />
-                    <Route path="settings" element={<Settings />} />
+
+                <Route element={<ProtectedRoute />}>
+                    <Route path="/onboarding" element={<Onboarding />} />
+                    <Route path="/dashboard" element={<DashboardLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="projects" element={<Projects />} />
+                        <Route path="projects/:projectId" element={<ProjectDetails />} />
+                        <Route path="add-project" element={<AddProject />} />
+                        <Route
+                            path="generated-tasks"
+                            element={<GeneratedTasks />}
+                        />
+                        <Route path="tasks" element={<Tasks />} />
+                        <Route path="settings" element={<Settings />} />
+                    </Route>
                 </Route>
             </Routes>
         </Router>

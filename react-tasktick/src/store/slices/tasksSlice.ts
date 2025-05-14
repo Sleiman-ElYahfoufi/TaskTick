@@ -1,0 +1,306 @@
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import projectsService, { ProjectTask } from '../../services/projectsService';
+import { RootState } from '../index';
+
+interface TasksState {
+    tasks: ProjectTask[];
+    currentTask: ProjectTask | null;
+    isLoading: boolean;
+    loadingTaskIds: (string | number)[]; 
+    error: string | null;
+    cellUpdateErrors: Record<string, string>; 
+}
+
+const initialState: TasksState = {
+    tasks: [],
+    currentTask: null,
+    isLoading: false,
+    loadingTaskIds: [],
+    error: null,
+    cellUpdateErrors: {}
+};
+
+
+export const fetchTasks = createAsyncThunk(
+    'tasks/fetchTasks',
+    async (projectId: string | number, { rejectWithValue }) => {
+        try {
+            const tasks = await projectsService.getProjectTasks(projectId);
+            return tasks;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to fetch tasks');
+        }
+    }
+);
+
+export const addTask = createAsyncThunk(
+    'tasks/addTask',
+    async ({ projectId, task }: { projectId: string | number, task: Partial<ProjectTask> }, { rejectWithValue }) => {
+        try {
+            const newTask = await projectsService.addProjectTask(projectId, task);
+            return newTask;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to add task');
+        }
+    }
+);
+
+export const updateTask = createAsyncThunk(
+    'tasks/updateTask',
+    async ({ projectId, taskId, taskData }: {
+        projectId: string | number,
+        taskId: string | number,
+        taskData: Partial<ProjectTask>
+    }, { rejectWithValue }) => {
+        try {
+            const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
+            return updatedTask;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to update task');
+        }
+    }
+);
+
+export const deleteTask = createAsyncThunk(
+    'tasks/deleteTask',
+    async ({taskId }: { taskId: string | number }, { rejectWithValue }) => {
+        try {
+            await projectsService.deleteProjectTask(taskId);
+            return taskId;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to delete task');
+        }
+    }
+);
+
+
+export const updateTaskCell = createAsyncThunk(
+    'tasks/updateTaskCell',
+    async ({
+        projectId,
+        taskId,
+        field,
+        value
+    }: {
+        projectId: string | number;
+        taskId: string | number;
+        field: string;
+        value: any;
+    }, { rejectWithValue }) => {
+        try {
+          
+            const taskData = { [field]: value } as Partial<ProjectTask>;
+
+            const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
+            return { taskId, updatedTask };
+        } catch (error: any) {
+            return rejectWithValue({
+                taskId,
+                field,
+                error: error.message || `Failed to update ${field}`
+            });
+        }
+    }
+);
+
+export const selectAllTasks = (state: RootState) => state.tasks.tasks;
+export const selectCurrentTask = (state: RootState) => state.tasks.currentTask;
+export const selectTasksLoading = (state: RootState) => state.tasks.isLoading;
+export const selectTasksError = (state: RootState) => state.tasks.error;
+export const selectLoadingTaskIds = (state: RootState) => state.tasks.loadingTaskIds;
+export const selectIsTaskLoading = (taskId: string | number) => (state: RootState) =>
+    state.tasks.loadingTaskIds.includes(taskId);
+export const selectCellUpdateErrors = (state: RootState) => state.tasks.cellUpdateErrors;
+
+
+const setPending = (state: TasksState) => {
+    state.isLoading = true;
+    state.error = null;
+};
+
+const setFailed = (state: TasksState, action: PayloadAction<any>) => {
+    state.isLoading = false;
+    state.error = action.payload as string;
+};
+
+
+const tasksSlice = createSlice({
+    name: 'tasks',
+    initialState,
+    reducers: {
+        selectTask: (state, action: PayloadAction<string | number>) => {
+            const taskId = action.payload;
+            state.currentTask = state.tasks.find(task => String(task.id) === String(taskId)) || null;
+        },
+        clearTasksError: (state) => {
+            state.error = null;
+        },
+        clearTasks: (state) => {
+            state.tasks = [];
+            state.currentTask = null;
+        },
+        
+        optimisticUpdateTask: (state, action: PayloadAction<Partial<ProjectTask> & { id: string | number }>) => {
+            const { id, ...updatedFields } = action.payload;
+            const index = state.tasks.findIndex(task => String(task.id) === String(id));
+
+            if (index !== -1) {
+                state.tasks[index] = { ...state.tasks[index], ...updatedFields };
+
+                if (state.currentTask && String(state.currentTask.id) === String(id)) {
+                    state.currentTask = { ...state.currentTask, ...updatedFields };
+                }
+            }
+        },
+
+        optimisticUpdateCell: (state, action: PayloadAction<{ taskId: string | number; field: string; value: any }>) => {
+            const { taskId, field, value } = action.payload;
+            const index = state.tasks.findIndex(task => String(task.id) === String(taskId));
+
+            if (index !== -1) {
+                if (state.cellUpdateErrors[`${taskId}_${field}`]) {
+                    delete state.cellUpdateErrors[`${taskId}_${field}`];
+                }
+
+                state.tasks[index] = {
+                    ...state.tasks[index],
+                    [field]: value
+                };
+
+                if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
+                    state.currentTask = {
+                        ...state.currentTask,
+                        [field]: value
+                    };
+                }
+            }
+        },
+        clearCellUpdateError: (state, action: PayloadAction<{ taskId: string | number; field: string }>) => {
+            const { taskId, field } = action.payload;
+            delete state.cellUpdateErrors[`${taskId}_${field}`];
+        },
+        startTaskLoading: (state, action: PayloadAction<string | number>) => {
+            if (!state.loadingTaskIds.includes(action.payload)) {
+                state.loadingTaskIds.push(action.payload);
+            }
+        },
+        stopTaskLoading: (state, action: PayloadAction<string | number>) => {
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => id !== action.payload);
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchTasks.pending, setPending);
+        builder.addCase(fetchTasks.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.tasks = action.payload;
+
+            const inProgressTask = action.payload.find(task =>
+                task.status === 'In Progress' || task.status === 'in_progress' || task.status === 'in progress');
+
+            state.currentTask = inProgressTask || (action.payload.length > 0 ? action.payload[0] : null);
+        });
+        builder.addCase(fetchTasks.rejected, setFailed);
+
+        builder.addCase(addTask.pending, setPending);
+        builder.addCase(addTask.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.tasks.unshift(action.payload);
+
+            state.currentTask = action.payload;
+        });
+        builder.addCase(addTask.rejected, setFailed);
+
+        builder.addCase(updateTask.pending, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            if (!state.loadingTaskIds.includes(taskId)) {
+                state.loadingTaskIds.push(taskId);
+            }
+        });
+        builder.addCase(updateTask.fulfilled, (state, action) => {
+            const taskId = String(action.payload.id);
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== taskId);
+
+            const index = state.tasks.findIndex(task => String(task.id) === taskId);
+            if (index !== -1) {
+                state.tasks[index] = action.payload;
+            }
+
+            if (state.currentTask && String(state.currentTask.id) === taskId) {
+                state.currentTask = action.payload;
+            }
+        });
+        builder.addCase(updateTask.rejected, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+            state.error = action.payload as string || 'Failed to update task';
+        });
+
+        builder.addCase(deleteTask.pending, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            if (!state.loadingTaskIds.includes(taskId)) {
+                state.loadingTaskIds.push(taskId);
+            }
+        });
+        builder.addCase(deleteTask.fulfilled, (state, action) => {
+            const taskId = action.payload;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+            state.tasks = state.tasks.filter(task => String(task.id) !== String(taskId));
+
+            if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
+                state.currentTask = state.tasks.length > 0 ? state.tasks[0] : null;
+            }
+        });
+        builder.addCase(deleteTask.rejected, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+            state.error = action.payload as string || 'Failed to delete task';
+        });
+
+        builder.addCase(updateTaskCell.pending, (state, action) => {
+            const taskId = action.meta.arg.taskId;
+            if (!state.loadingTaskIds.includes(taskId)) {
+                state.loadingTaskIds.push(taskId);
+            }
+        });
+
+        builder.addCase(updateTaskCell.fulfilled, (state, action) => {
+            const { taskId, updatedTask } = action.payload;
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+
+            const index = state.tasks.findIndex(task => String(task.id) === String(taskId));
+            if (index !== -1) {
+                state.tasks[index] = updatedTask;
+
+                if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
+                    state.currentTask = updatedTask;
+                }
+            }
+        });
+
+        builder.addCase(updateTaskCell.rejected, (state, action) => {
+            const payload = action.payload as { taskId: string | number; field: string; error: string } ||
+                { taskId: action.meta.arg.taskId, field: action.meta.arg.field, error: 'Unknown error' };
+
+            const { taskId, field, error } = payload;
+
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => String(id) !== String(taskId));
+
+            state.cellUpdateErrors[`${taskId}_${field}`] = error;
+
+            state.error = `Failed to update ${field}: ${error}`;
+        });
+    },
+});
+
+export const {
+    selectTask,
+    clearTasksError,
+    clearTasks,
+    optimisticUpdateTask,
+    optimisticUpdateCell,
+    clearCellUpdateError,
+    startTaskLoading,
+    stopTaskLoading
+} = tasksSlice.actions;
+
+export default tasksSlice.reducer; 

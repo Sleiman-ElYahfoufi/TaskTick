@@ -3,14 +3,18 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '../auth/auth.service';
+import { AuthGuard } from '../auth/auth.guard';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('users')
+@UseGuards(AuthGuard)  
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService
   ) {}
 
+  @Public()  
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {

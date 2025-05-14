@@ -1,180 +1,312 @@
-import React, { useState, useEffect } from 'react';
-import ProjectCard, { ProjectStatus } from '../../components/ProjectsComponents/ProjectCard/ProjectCard';
-import ProjectFilters from '../../components/ProjectsComponents/ProjectFilters/ProjectFilters';
-import './Projects.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import ProjectCard, {
+    ProjectStatus,
+} from "../../components/ProjectsComponents/ProjectCard/ProjectCard";
+import ProjectFilters from "../../components/ProjectsComponents/ProjectFilters/ProjectFilters";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { fetchProjects } from "../../store/slices/projectsSlice";
+import "./Projects.css";
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  status: ProjectStatus;
-  estimatedHours: string;
-  tasksCompleted: number;
-  totalTasks: number;
-  lastUpdatedDate: string;
-  lastUpdatedTime: string;
+import CircularProgress from "@mui/material/CircularProgress";
+
+interface ProjectData {
+    id: number | string;
+    name?: string;
+    title?: string;
+    description?: string;
+    status: string;
+    estimated_time?: number;
+    created_at?: string;
+    updated_at?: string;
+    tasks?: any[]; 
 }
 
 const Projects: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [sortBy, setSortBy] = useState('Last Updated');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const mockProjects: Project[] = [
-      {
-        id: '1',
-        title: 'E-commerce Platform Redesign',
-        description: 'Redesign the UI/UX of our e-commerce platform with focus on mobile experience',
-        status: 'in-progress',
-        estimatedHours: '230-245',
-        tasksCompleted: 28,
-        totalTasks: 45,
-        lastUpdatedDate: 'Today',
-        lastUpdatedTime: '9:15 AM'
-      },
-      {
-        id: '2',
-        title: 'Mobile App Development',
-        description: 'Create a new mobile application with React Native for both iOS and Android platforms',
-        status: 'planning',
-        estimatedHours: '320-350',
-        tasksCompleted: 5,
-        totalTasks: 60,
-        lastUpdatedDate: 'Yesterday',
-        lastUpdatedTime: '2:30 PM'
-      },
-      {
-        id: '3',
-        title: 'Backend API Integration',
-        description: 'Integrate payment gateways and shipping APIs into our existing backend infrastructure',
-        status: 'delayed',
-        estimatedHours: '150-180',
-        tasksCompleted: 12,
-        totalTasks: 35,
-        lastUpdatedDate: 'Today',
-        lastUpdatedTime: '11:20 AM'
-      },
-      {
-        id: '4',
-        title: 'Marketing Website Refresh',
-        description: 'Update design and content of our marketing website to align with new brand guidelines',
-        status: 'completed',
-        estimatedHours: '180-200',
-        tasksCompleted: 42,
-        totalTasks: 42,
-        lastUpdatedDate: 'May 8',
-        lastUpdatedTime: '4:45 PM'
-      }
-    ];
+    const { user } = useSelector((state: RootState) => state.auth);
+    const { projects, isLoading, error } = useSelector(
+        (state: RootState) => state.projects
+    );
 
-    setProjects(mockProjects);
-    setFilteredProjects(mockProjects);
-  }, []);
+    const [filteredProjects, setFilteredProjects] = useState<ProjectData[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [activeFilter, setActiveFilter] = useState("All");
+    const [sortBy, setSortBy] = useState("Last Updated");
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    applyFilters(term, activeFilter, sortBy);
-  };
+    useEffect(() => {
+        // Only fetch projects if user is authenticated
+        if (user?.id) {
+            // @ts-ignore: Dispatch type inference issue
+            dispatch(fetchProjects(parseInt(user.id)));
+        }
+    }, [dispatch, user]);
 
-  const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter);
-    applyFilters(searchTerm, filter, sortBy);
-  };
+    // Update filtered projects whenever projects array changes
+    useEffect(() => {
+        if (projects && projects.length > 0) {
+            applyFilters(searchTerm, activeFilter, sortBy);
+        } else {
+            setFilteredProjects([]);
+        }
+    }, [projects]);
 
-  const handleSortChange = (sort: string) => {
-    setSortBy(sort);
-    applyFilters(searchTerm, activeFilter, sort);
-  };
+    const handleSearch = (term: string) => {
+        setSearchTerm(term);
+        applyFilters(term, activeFilter, sortBy);
+    };
 
-  const applyFilters = (search: string, filter: string, sort: string) => {
-    let result = [...projects];
+    const handleFilterChange = (filter: string) => {
+        setActiveFilter(filter);
+        applyFilters(searchTerm, filter, sortBy);
+    };
 
-    if (search) {
-      result = result.filter(
-        project => 
-          project.title.toLowerCase().includes(search.toLowerCase()) ||
-          project.description.toLowerCase().includes(search.toLowerCase())
-      );
+    const handleSortChange = (sort: string) => {
+        setSortBy(sort);
+        applyFilters(searchTerm, activeFilter, sort);
+    };
+
+    const applyFilters = (search: string, filter: string, sort: string) => {
+        let result = [...projects];
+
+        if (search) {
+            result = result.filter((project) => {
+                const title = project.title || project.name || "";
+                const description = project.description || "";
+                return (
+                    title.toLowerCase().includes(search.toLowerCase()) ||
+                    description.toLowerCase().includes(search.toLowerCase())
+                );
+            });
+        }
+
+        if (filter !== "All") {
+            const statusMap: { [key: string]: string } = {
+                Active: "in_progress",
+                Completed: "completed",
+                Planning: "planning",
+                Delayed: "delayed",
+            };
+
+            if (statusMap[filter]) {
+                result = result.filter(
+                    (project) => project.status === statusMap[filter]
+                );
+            }
+        }
+
+        // Apply sorting
+        switch (sort) {
+            case "Name A-Z":
+                result.sort((a, b) => {
+                    const titleA = a.title || a.name || "";
+                    const titleB = b.title || b.name || "";
+                    return titleA.localeCompare(titleB);
+                });
+                break;
+            case "Name Z-A":
+                result.sort((a, b) => {
+                    const titleA = a.title || a.name || "";
+                    const titleB = b.title || b.name || "";
+                    return titleB.localeCompare(titleA);
+                });
+                break;
+            case "Oldest First":
+                result.sort((a, b) => {
+                    const dateA = a.created_at
+                        ? new Date(a.created_at).getTime()
+                        : 0;
+                    const dateB = b.created_at
+                        ? new Date(b.created_at).getTime()
+                        : 0;
+                    return dateA - dateB;
+                });
+                break;
+            case "Newest First":
+                result.sort((a, b) => {
+                    const dateA = a.created_at
+                        ? new Date(a.created_at).getTime()
+                        : 0;
+                    const dateB = b.created_at
+                        ? new Date(b.created_at).getTime()
+                        : 0;
+                    return dateB - dateA;
+                });
+                break;
+            case "Last Updated":
+                result.sort((a, b) => {
+                    const dateA = a.updated_at
+                        ? new Date(a.updated_at).getTime()
+                        : 0;
+                    const dateB = b.updated_at
+                        ? new Date(b.updated_at).getTime()
+                        : 0;
+                    return dateB - dateA;
+                });
+                break;
+            default:
+                // Keep original order
+                break;
+        }
+
+        setFilteredProjects(result);
+    };
+
+    const handleNewProject = () => {
+        navigate("/projects/new");
+    };
+
+    const handleViewProjectDetails = (projectId: string) => {
+        navigate(`/dashboard/projects/${projectId}`);
+    };
+
+    // Helper function to map backend status to UI status
+    const mapStatusToUI = (status: string): ProjectStatus => {
+        const statusMap: { [key: string]: ProjectStatus } = {
+            planning: "planning",
+            in_progress: "in-progress",
+            delayed: "delayed",
+            completed: "completed",
+        };
+        return statusMap[status] || "planning";
+    };
+
+    if (isLoading) {
+        return (
+            <div className="loading-container">
+                <CircularProgress />
+                <p>Loading projects...</p>
+            </div>
+        );
     }
 
-    if (filter !== 'All') {
-      const statusMap: { [key: string]: ProjectStatus } = {
-        'Active': 'in-progress',
-        'Completed': 'completed',
-        'Planning': 'planning'
-      };
-      
-      if (statusMap[filter]) {
-        result = result.filter(project => project.status === statusMap[filter]);
-      }
+    if (error) {
+        return (
+            <div className="error-container">
+                <p>Error loading projects: {error}</p>
+                <button
+                    className="retry-button"
+                    onClick={() => {
+                        if (user?.id) {
+                            // @ts-ignore: Dispatch type inference issue
+                            dispatch(fetchProjects(parseInt(user.id)));
+                        }
+                    }}
+                >
+                    Retry
+                </button>
+            </div>
+        );
     }
 
-    // Apply sorting
-    switch (sort) {
-      case 'Name A-Z':
-        result.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'Name Z-A':
-        result.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case 'Oldest First':
-        result.sort((a, b) => a.id.localeCompare(b.id));
-        break;
-      case 'Newest First':
-        result.sort((a, b) => b.id.localeCompare(a.id));
-        break;
-      default: 
-        result = [...result]; 
-    }
-
-    setFilteredProjects(result);
-  };
-
-  const handleNewProject = () => {
-    console.log('Create new project clicked');
-    alert('Create new project functionality would go here');
-  };
-
-  return (
-    <div className="projects-page">
-
-      <ProjectFilters
-        onSearch={handleSearch}
-        onFilterChange={handleFilterChange} 
-        onSortChange={handleSortChange}
-        onNewProject={handleNewProject}
-      />
-
-      <div className="projects-list">
-        {filteredProjects.length > 0 ? (
-          filteredProjects.map(project => (
-            <ProjectCard
-              key={project.id}
-              {...project}
+    return (
+        <div className="projects-page">
+            <ProjectFilters
+                onSearch={handleSearch}
+                onFilterChange={handleFilterChange}
+                onSortChange={handleSortChange}
+                onNewProject={handleNewProject}
             />
-          ))
-        ) : (
-          <div className="no-projects">
-            <p>No projects match your filters.</p>
-            <button 
-              className="reset-filters-btn"
-              onClick={() => {
-                setSearchTerm('');
-                setActiveFilter('All');
-                setSortBy('Last Updated');
-                setFilteredProjects(projects);
-              }}
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+
+            <div className="projects-list">
+                {filteredProjects.length > 0 ? (
+                    filteredProjects.map((project) => (
+                        <ProjectCard
+                            key={project.id}
+                            id={String(project.id)}
+                            title={
+                                project.title ||
+                                project.name ||
+                                "Unnamed Project"
+                            }
+                            description={project.description || ""}
+                            status={mapStatusToUI(project.status)}
+                            estimatedHours={
+                                project.estimated_time
+                                    ? project.estimated_time.toString()
+                                    : "0"
+                            }
+                            tasksCompleted={
+                                project.tasks?.filter(
+                                    (t) => t.status === "completed"
+                                ).length || 0
+                            }
+                            totalTasks={project.tasks?.length || 0}
+                            lastUpdatedDate={formatDateForDisplay(
+                                project.updated_at
+                            )}
+                            lastUpdatedTime={formatTimeForDisplay(
+                                project.updated_at
+                            )}
+                            onViewDetails={handleViewProjectDetails}
+                        />
+                    ))
+                ) : (
+                    <div className="no-projects">
+                        {projects.length > 0 ? (
+                            <>
+                                <p>No projects match your filters.</p>
+                                <button
+                                    className="reset-filters-btn"
+                                    onClick={() => {
+                                        setSearchTerm("");
+                                        setActiveFilter("All");
+                                        setSortBy("Last Updated");
+                                        setFilteredProjects(projects);
+                                    }}
+                                >
+                                    Reset Filters
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <p>You don't have any projects yet.</p>
+                                <button
+                                    className="create-project-btn"
+                                    onClick={handleNewProject}
+                                >
+                                    Create Your First Project
+                                </button>
+                            </>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const formatDateForDisplay = (dateString?: string): string => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    const now = new Date();
+
+    if (date.toDateString() === now.toDateString()) {
+        return "Today";
+    }
+
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (date.toDateString() === yesterday.toDateString()) {
+        return "Yesterday";
+    }
+
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+};
+
+const formatTimeForDisplay = (dateString?: string): string => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+    });
 };
 
 export default Projects;

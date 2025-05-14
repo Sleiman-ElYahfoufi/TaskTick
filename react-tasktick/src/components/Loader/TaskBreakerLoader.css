@@ -1,0 +1,174 @@
+.task-breaker-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--ai-precision));
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.loader-content {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    color: white;
+}
+
+.robot-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 2rem;
+}
+
+.robot {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.robot-head {
+    width: 60px;
+    height: 40px;
+    background-color: var(--accent);
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.robot-antenna {
+    position: absolute;
+    top: -10px;
+    width: 5px;
+    height: 15px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+
+.robot-eyes {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 8px 0;
+}
+
+.robot-eye {
+    width: 12px;
+    height: 12px;
+    background-color: var(--ai-precision);
+    border-radius: 50%;
+}
+
+.robot-body {
+    width: 80px;
+    height: 100px;
+    background-color: var(--accent);
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.robot-screen {
+    width: 60px;
+    height: 40px;
+    background-color: var(--ai-precision);
+    border-radius: 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.robot-screen-line {
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
+}
+
+.robot-arms {
+    display: flex;
+    justify-content: space-between;
+    width: 120px;
+    position: absolute;
+    top: 60px;
+}
+
+.robot-arm {
+    width: 10px;
+    height: 50px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+
+.robot-arm.left {
+    transform-origin: top left;
+    margin-left: -10px;
+}
+
+.robot-arm.right {
+    transform-origin: top right;
+    margin-right: -10px;
+}
+
+.message-container {
+    position: relative;
+    height: 50px;
+    margin-bottom: 2rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.message {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: white;
+}
+
+.progress-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+
+.progress-text {
+    text-align: right;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.loader-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    margin-top: 1rem;
+}
