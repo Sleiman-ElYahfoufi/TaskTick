@@ -63,9 +63,9 @@ export const updateTask = createAsyncThunk(
 
 export const deleteTask = createAsyncThunk(
     'tasks/deleteTask',
-    async ({ projectId, taskId }: { projectId: string | number, taskId: string | number }, { rejectWithValue }) => {
+    async ({taskId }: { taskId: string | number }, { rejectWithValue }) => {
         try {
-            await projectsService.deleteProjectTask(projectId, taskId);
+            await projectsService.deleteProjectTask(taskId);
             return taskId;
         } catch (error: any) {
             return rejectWithValue(error.message || 'Failed to delete task');
