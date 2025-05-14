@@ -51,7 +51,6 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     onStartTimer,
     onDeleteTask,
     onTaskUpdate,
-    onCellValueChange,
     loadingTaskIds = [],
     hideFooter = false,
     className = "",
@@ -61,38 +60,9 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     const [cellModesModel, setCellModesModel] = useState<GridCellModesModel>(
         {}
     );
-    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editingId, _] = useState<string | null>(null);
 
-    const processCellUpdate = useCallback(
-        (params: any) => {
-            const { id, field, value } = params;
-            console.debug(
-                "[TasksTable] Process cell update:",
-                id,
-                "Field:",
-                field,
-                "Value:",
-                value
-            );
-
-            const processedValue =
-                value instanceof Date
-                    ? value.toISOString().split("T")[0]
-                    : value;
-
-            if (onCellValueChange) {
-                onCellValueChange(id, field, processedValue);
-            }
-
-            setEditingId(String(id));
-            setTimeout(() => {
-                setEditingId(null);
-            }, 200);
-
-            return processedValue;
-        },
-        [onCellValueChange]
-    );
+    
 
     const handleCellClick = useCallback(
         (params: GridCellParams) => {
@@ -110,7 +80,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     );
 
     const processRowUpdate = useCallback(
-        (newRow: GridRowModel, oldRow: GridRowModel) => {
+        (newRow: GridRowModel, _: GridRowModel) => {
             console.debug(
                 "[TasksTable] Process row update:",
                 newRow.id,
