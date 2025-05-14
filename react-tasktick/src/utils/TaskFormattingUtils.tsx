@@ -42,3 +42,16 @@ export const formatDateForDisplay = (dateValue: any): string => {
     }
 };
 
+export const processEstimatedTime = (
+    value: any,
+    originalValue: number | undefined = undefined
+): number => {
+    let numericValue = Number(value);
+
+    if ((!numericValue || isNaN(numericValue)) && originalValue) {
+        numericValue = originalValue;
+    }
+
+    return numericValue;
+};
+
