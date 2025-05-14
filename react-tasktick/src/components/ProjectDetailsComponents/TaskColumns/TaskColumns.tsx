@@ -1,17 +1,19 @@
 import { useMemo } from "react";
 import {
     GridColDef,
-    GridCellParams,
     GridValueGetterParams,
     GridValueFormatterParams,
     GridRenderCellParams,
 } from "@mui/x-data-grid";
 import {
-    renderStatusCell,
     renderActionsCell,
-    renderProgressCell,
+    renderTimerCell,
+} from "../../../components/SharedComponents/TasksTable/TableCellRenderers";
+import {
     editableProgressColumn,
-} from "../../../components/SharedComponents/TasksTable/TasksTable";
+    editablePriorityColumn,
+    editableStatusColumn,
+} from "../../../components/SharedComponents/TasksTable/TableColumnDefinitions";
 import { formatDateForDisplay } from "../../../utils/TaskFormattingUtils";
 
 interface TaskColumnsProps {
@@ -119,42 +121,9 @@ export const useTaskColumns = ({
                     </div>
                 ),
             },
-            {
-                field: "priority",
-                headerName: "PRIORITY",
-                flex: 0.8,
-                minWidth: 100,
-                align: "center",
-                headerAlign: "center",
-                editable: true,
-                type: "singleSelect",
-                valueOptions: ["High", "Medium", "Low"],
-                renderCell: (params: GridRenderCellParams) => {
-                    const priority = params.value as string;
-                    return (
-                        <div
-                            className={`priority-badge ${
-                                priority ? priority.toLowerCase() : "medium"
-                            }`}
-                        >
-                            {priority || "Medium"}
-                        </div>
-                    );
-                },
-            },
+            editablePriorityColumn(["High", "Medium", "Low"]),
             editableProgressColumn(),
-            {
-                field: "status",
-                headerName: "STATUS",
-                flex: 0.8,
-                minWidth: 100,
-                align: "center",
-                headerAlign: "center",
-                editable: true,
-                type: "singleSelect",
-                valueOptions: ["Not Started", "In Progress", "Completed"],
-                renderCell: renderStatusCell,
-            },
+            editableStatusColumn(),
             {
                 field: "timer",
                 headerName: "TIMER",
@@ -162,22 +131,7 @@ export const useTaskColumns = ({
                 minWidth: 80,
                 align: "center",
                 headerAlign: "center",
-                renderCell: (params: GridCellParams) => (
-                    <button
-                        className={`timer-button ${
-                            params.row.status === "Completed" ? "completed" : ""
-                        }`}
-                        onClick={() =>
-                            params.row.status !== "Completed" &&
-                            handleStartTimer(String(params.row.id))
-                        }
-                        disabled={params.row.status === "Completed"}
-                    >
-                        {params.row.status === "Completed"
-                            ? "Completed"
-                            : "Start"}
-                    </button>
-                ),
+                renderCell: renderTimerCell(handleStartTimer),
             },
             {
                 field: "actions",
