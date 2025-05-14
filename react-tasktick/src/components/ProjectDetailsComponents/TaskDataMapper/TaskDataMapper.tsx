@@ -23,10 +23,38 @@ interface TaskDataMapperProps {
 }
 
 export const useTaskDataMapper = ({ projectTasks }: TaskDataMapperProps) => {
-   
+    const tasks: UITask[] = useMemo(
+        () =>
+            projectTasks.map((task) => {
+                const uiTask: UITask = {
+                    id: String(task.id),
+                    name: task.name,
+                    description: task.description,
+                    estimated_time: task.estimated_time,
+                    estimatedTime: task.estimatedTime || "0 hrs",
+                    dueDate: task.dueDate || "Not set",
+                    priority: task.priority || "Medium",
+                    progress: task.progress || 0,
+                    status: task.status || "Not Started",
+                    project_id: task.project_id,
+                    created_at: task.created_at,
+                    updated_at: task.updated_at,
+                    category: task.description
+                        ? task.description.split(" ")[0]
+                        : "General",
+                    elapsedTime: "00:00:00",
+                    hours_spent: task.hours_spent,
+                };
+                return uiTask;
+            }),
+        [projectTasks]
+    );
+
+
 
     return {
-      
+        tasks,
+       
     };
 };
 
