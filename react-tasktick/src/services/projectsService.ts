@@ -328,7 +328,60 @@ class ProjectsService {
         }
     }
 
-    
+    async addProjectTask(projectId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
+        try {
+            const {
+                name,
+                description,
+                estimated_time,
+                dueDate,
+                priority,
+                progress,
+                status
+            } = taskData;
+
+            const task: any = {
+                project_id: Number(projectId),
+                name: name || 'New Task', 
+                estimated_time: estimated_time || 1 
+            };
+
+            if (description !== undefined) task.description = description;
+            if (progress !== undefined) task.progress = progress;
+
+            if (dueDate !== undefined && dueDate && dueDate.trim() !== '') {
+                try {
+                    const dateObj = new Date(dueDate);
+                    if (!isNaN(dateObj.getTime())) {
+                        task.dueDate = dateObj.toISOString();
+                    }
+                } catch (e) {
+                    console.warn(`Invalid date format for dueDate: ${dueDate}`);
+                }
+            }
+
+            task.status = this.mapStatusToBackend(status);
+            task.priority = this.mapPriorityToBackend(priority);
+
+            console.log('Creating task with data:', task);
+
+            const response = await api.post<ProjectTask>('/tasks', task);
+            return this.mapTaskData(response.data);
+        } catch (error) {
+            console.error(`Error adding task to project ${projectId}:`, error);
+            throw error;
+        }
+    }
+
+    async deleteProjectTask(projectId: string | number, taskId: string | number): Promise<string | number> {
+        try {
+            await api.delete(`/tasks/${taskId}`);
+            return taskId;
+        } catch (error) {
+            console.error(`Error deleting task ${taskId}:`, error);
+            throw error;
+        }
+    }
 
     private mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
