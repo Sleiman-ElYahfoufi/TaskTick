@@ -6,6 +6,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRole, ExperienceLevel } from './entities/user.entity';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthGuard } from '../auth/auth.guard';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -42,6 +44,12 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        JwtModule.register({
+          secret: 'test-secret',
+          signOptions: { expiresIn: '1h' },
+        }),
+      ],
       controllers: [UsersController],
       providers: [
         {
@@ -61,7 +69,10 @@ describe('UsersController', () => {
           }
         }
       ]
-    }).compile();
+    })
+    .overrideGuard(AuthGuard)
+    .useValue({ canActivate: jest.fn(() => true) })
+    .compile();
 
     controller = module.get<UsersController>(UsersController);
     service = module.get<UsersService>(UsersService);
