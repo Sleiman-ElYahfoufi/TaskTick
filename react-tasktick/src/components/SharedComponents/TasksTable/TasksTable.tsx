@@ -1,20 +1,27 @@
-import React, { useCallback, memo, useEffect, useMemo } from "react";
+import { useCallback, memo, useMemo, useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRenderCellParams,
     GridRowModel,
     useGridApiRef,
-    GridCellEditStopReasons,
-    GridCellEditStopParams,
     GridPreProcessEditCellProps,
     GridCellModesModel,
     GridCellParams,
-    GridValidRowModel,
-    MuiEvent,
-    GridEventListener,
 } from "@mui/x-data-grid";
 import "./TasksTable.css";
+import {
+    renderPriorityCell,
+    renderProgressCell,
+    renderStatusCell,
+    renderTimerCell,
+    renderProjectCell,
+    renderActionsCell,
+} from "./TableCellRenderers";
+import {
+    editablePriorityColumn,
+    editableProgressColumn,
+    editableStatusColumn,
+} from "./TableColumnDefinitions";
 
 export interface BaseTask {
     id: string | number;
@@ -51,8 +58,10 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     editableFields = [],
 }: TasksTableProps<T>) {
     const apiRef = useGridApiRef();
-    const [cellModesModel, setCellModesModel] =
-        React.useState<GridCellModesModel>({});
+    const [cellModesModel, setCellModesModel] = useState<GridCellModesModel>(
+        {}
+    );
+    const [editingId, setEditingId] = useState<string | null>(null);
 
     const processCellUpdate = useCallback(
         (params: any) => {
@@ -66,100 +75,38 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                 value
             );
 
+            const processedValue =
+                value instanceof Date
+                    ? value.toISOString().split("T")[0]
+                    : value;
+
             if (onCellValueChange) {
-                onCellValueChange(id, field, value);
+                onCellValueChange(id, field, processedValue);
             }
-            return value;
+
+            setEditingId(String(id));
+            setTimeout(() => {
+                setEditingId(null);
+            }, 200);
+
+            return processedValue;
         },
         [onCellValueChange]
     );
 
-    useEffect(() => {
-        console.debug(
-            "[TasksTable] Rendering with tasks length:",
-            tasks.length
-        );
-        return () => {
-            console.debug("[TasksTable] Unmounting");
-        };
-    }, [tasks.length]);
-
-    useEffect(() => {
-        console.debug("[TasksTable] loadingTaskIds changed:", loadingTaskIds);
-    }, [loadingTaskIds]);
-
-    const handleCellEditStart = useCallback((params: GridCellParams) => {
-        console.debug(
-            "[TasksTable] Cell edit start:",
-            params.id,
-            "Field:",
-            params.field
-        );
-    }, []);
-
-    const handleCellEditStop: GridEventListener<"cellEditStop"> = useCallback(
-        (params, event) => {
-            console.debug(
-                "[TasksTable] Cell edit stop:",
-                params.id,
-                "Field:",
-                params.field,
-                "Reason:",
-                params.reason
-            );
-
+    const handleCellClick = useCallback(
+        (params: GridCellParams) => {
             if (
-                params.reason === "enterKeyDown" ||
-                params.reason === "tabKeyDown" ||
-                params.reason === "cellFocusOut"
+                editableFields.includes(params.field) &&
+                editingId !== String(params.id)
             ) {
-                const id = params.id;
-                const field = params.field;
-
-                const originalValue = apiRef.current.getCellValue(id, field);
-                console.debug(
-                    `Original value for ${field}: "${originalValue}"`
-                );
-
-                if (field === "estimatedTime") {
-                    const cellElement = document.querySelector(
-                        `.MuiDataGrid-cell--editing input`
-                    );
-
-                    if (cellElement instanceof HTMLInputElement) {
-                        const inputValue = cellElement.value;
-                        console.debug(
-                            `Input value for ${field}: "${inputValue}"`
-                        );
-
-                        if (
-                            (inputValue === "" || inputValue === "0") &&
-                            originalValue &&
-                            originalValue !== "0" &&
-                            originalValue !== 0
-                        ) {
-                            console.debug(
-                                `Using original value: "${originalValue}"`
-                            );
-                            processCellUpdate({
-                                id,
-                                field,
-                                value: originalValue,
-                            });
-                            return;
-                        }
-
-                        processCellUpdate({ id, field, value: inputValue });
-                    } else {
-                        processCellUpdate({ id, field, value: originalValue });
-                    }
-                } else {
-                    const value = apiRef.current.getCellValue(id, field);
-                    processCellUpdate({ id, field, value });
-                }
+                apiRef.current.startCellEditMode({
+                    id: params.id,
+                    field: params.field,
+                });
             }
         },
-        [apiRef, processCellUpdate]
+        [apiRef, editableFields, editingId]
     );
 
     const processRowUpdate = useCallback(
@@ -182,22 +129,6 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
         console.error("[TasksTable] Error updating task:", error);
     }, []);
 
-    const preProcessEditCellProps = useCallback(
-        (params: GridPreProcessEditCellProps) => {
-            const { props } = params;
-
-            if (
-                typeof props.value === "number" &&
-                (props.value < 0 || props.value > 100)
-            ) {
-                return { ...props, error: "Progress must be between 0-100%" };
-            }
-
-            return props;
-        },
-        []
-    );
-
     const makeColumnsEditable = useCallback(
         (cols: GridColDef[]) => {
             return cols.map((col) => {
@@ -205,19 +136,72 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                     return col;
                 }
 
+                if (col.field === "progress") {
+                    return {
+                        ...col,
+                        editable: true,
+                        type: "number",
+                        preProcessEditCellProps: (
+                            params: GridPreProcessEditCellProps
+                        ) => {
+                            const { props } = params;
+                            if (typeof props.value === "string") {
+                                const numValue = Number(props.value);
+                                if (!isNaN(numValue)) {
+                                    return { ...props, value: numValue };
+                                }
+                            }
+                            const hasError =
+                                typeof props.value === "number" &&
+                                (props.value < 0 || props.value > 100);
+                            return { ...props, error: hasError };
+                        },
+                    };
+                }
+
+                if (col.field === "priority") {
+                    return {
+                        ...col,
+                        editable: true,
+                        type: "singleSelect",
+                        valueOptions: ["Low", "Medium", "High"],
+                    };
+                }
+
+                if (col.field === "status") {
+                    return {
+                        ...col,
+                        editable: true,
+                        type: "singleSelect",
+                        valueOptions: [
+                            "Not Started",
+                            "In Progress",
+                            "Completed",
+                        ],
+                    };
+                }
+
+                if (col.field === "dueDate") {
+                    return {
+                        ...col,
+                        editable: true,
+                        type: "date",
+                    };
+                }
+
                 return {
                     ...col,
                     editable: true,
-                    preProcessEditCellProps,
                 };
             });
         },
-        [editableFields, preProcessEditCellProps]
+        [editableFields]
     );
 
-    const enhancedColumns = useMemo(() => {
-        return makeColumnsEditable(columns);
-    }, [columns, makeColumnsEditable]);
+    const enhancedColumns = useMemo(
+        () => makeColumnsEditable(columns),
+        [columns, makeColumnsEditable]
+    );
 
     const responsiveColumns = useMemo(() => {
         const isMobile = window.innerWidth < 768;
@@ -239,10 +223,11 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                     rows={tasks}
                     columns={responsiveColumns}
                     editMode="cell"
+                    onCellClick={handleCellClick}
+                    processRowUpdate={processRowUpdate}
+                    onProcessRowUpdateError={handleProcessRowUpdateError}
                     cellModesModel={cellModesModel}
                     onCellModesModelChange={setCellModesModel}
-                    onCellEditStart={handleCellEditStart}
-                    onCellEditStop={handleCellEditStop}
                     autoHeight
                     getRowHeight={() => "auto"}
                     disableRowSelectionOnClick
@@ -250,11 +235,6 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                     disableColumnMenu
                     hideFooterPagination={hideFooter}
                     hideFooter={hideFooter || tasks.length <= 10}
-                    processRowUpdate={processRowUpdate}
-                    onProcessRowUpdateError={handleProcessRowUpdateError}
-                    isCellEditable={(params) =>
-                        editableFields.includes(params.field)
-                    }
                     getRowId={(row) => row.id}
                     loading={false}
                     initialState={{
@@ -270,6 +250,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                             backgroundColor: "rgba(0,0,0,0.04)",
                             padding: "16px",
                             boxShadow: "inset 0 0 0 2px #1976d2",
+                            zIndex: 10,
                         },
                         "& .MuiDataGrid-cell:focus": {
                             outline: "none",
@@ -317,6 +298,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                             borderBottom: "1px solid #e5e7eb",
                             whiteSpace: "normal",
                             lineHeight: "normal",
+                            transition: "none",
                         },
                         "& .MuiDataGrid-cell.MuiDataGrid-cell--editable.error":
                             {
@@ -329,163 +311,16 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     );
 });
 
-export const renderPriorityCell = (params: GridRenderCellParams) => (
-    <div className={`priority-badge ${params.value?.toString().toLowerCase()}`}>
-        {params.value}
-    </div>
-);
-
-export const renderProgressCell = (params: GridRenderCellParams) => (
-    <div className="progress-bar-container">
-        <div className="task-progress-bar-wrapper">
-            <div
-                className="task-progress-bar"
-                style={{ width: `${params.value}%` }}
-            ></div>
-        </div>
-        <div className="task-progress-text-container">
-            <span className="task-progress-text">{params.value}%</span>
-        </div>
-    </div>
-);
-
-export const editablePriorityColumn = (
-    options: string[] = ["Low", "Medium", "High", "Critical"]
-): GridColDef => ({
-    field: "priority",
-    headerName: "PRIORITY",
-    width: 100,
-    minWidth: 70,
-    flex: 0.8,
-    editable: true,
-    renderCell: renderPriorityCell,
-    type: "singleSelect",
-    valueOptions: options,
-    sortComparator: (v1, v2) => {
-        const priorityOrder: { [key: string]: number } = {
-            low: 1,
-            medium: 2,
-            high: 3,
-        };
-
-        const val1 = typeof v1 === "string" ? v1.toLowerCase() : "";
-        const val2 = typeof v2 === "string" ? v2.toLowerCase() : "";
-
-        const order1 = priorityOrder[val1] || 0;
-        const order2 = priorityOrder[val2] || 0;
-
-        return order1 - order2;
-    },
-});
-
-export const editableProgressColumn = (): GridColDef => ({
-    field: "progress",
-    headerName: "PROGRESS",
-    width: 130,
-    minWidth: 90,
-    flex: 1,
-    editable: true,
-    type: "number",
-    renderCell: renderProgressCell,
-    sortComparator: (v1, v2) => {
-        const num1 = typeof v1 === "number" ? v1 : 0;
-        const num2 = typeof v2 === "number" ? v2 : 0;
-        return num1 - num2;
-    },
-    preProcessEditCellProps: (params) => {
-        const hasError = params.props.value < 0 || params.props.value > 100;
-        return { ...params.props, error: hasError };
-    },
-});
-
-export const editableStatusColumn = (
-    options: string[] = ["Not Started", "In Progress", "Completed"]
-): GridColDef => ({
-    field: "status",
-    headerName: "STATUS",
-    width: 150,
-    minWidth: 80,
-    editable: true,
-    renderCell: renderStatusCell,
-    type: "singleSelect",
-    valueOptions: options,
-    sortComparator: (v1, v2) => {
-        const statusOrder: { [key: string]: number } = {
-            "not started": 1,
-            "in progress": 2,
-            completed: 3,
-        };
-
-        const val1 = typeof v1 === "string" ? v1.toLowerCase() : "";
-        const val2 = typeof v2 === "string" ? v2.toLowerCase() : "";
-
-        const order1 = statusOrder[val1] || 0;
-        const order2 = statusOrder[val2] || 0;
-
-        return order1 - order2;
-    },
-});
-
-export const renderTimerCell =
-    (onStartTimer: (id: string | number) => void) =>
-    (params: GridRenderCellParams) =>
-        (
-            <button
-                className={`timer-button ${
-                    params.row.status === "Completed" ? "completed" : ""
-                }`}
-                onClick={() =>
-                    params.row.status !== "Completed" &&
-                    onStartTimer(params.row.id)
-                }
-                disabled={params.row.status === "Completed"}
-            >
-                {params.row.status === "Completed" ? "Completed" : "Start"}
-            </button>
-        );
-
-export const renderStatusCell = (params: GridRenderCellParams) => (
-    <div
-        className={`status-badge ${params.value
-            ?.toString()
-            .toLowerCase()
-            .replace(/\s+/g, "-")}`}
-    >
-        {params.value}
-    </div>
-);
-
-export const renderProjectCell = (params: GridRenderCellParams) => (
-    <div className="project-badge">{params.value}</div>
-);
-
-export const renderActionsCell =
-    (
-        onDelete?: (id: string | number) => void,
-        onEdit?: (id: string | number) => void
-    ) =>
-    (params: GridRenderCellParams) =>
-        (
-            <div className="actions-cell">
-                {onEdit && (
-                    <button
-                        className="edit-button"
-                        onClick={() => onEdit(params.row.id)}
-                        aria-label="Edit task"
-                    >
-                        <span>Edit</span>
-                    </button>
-                )}
-                {onDelete && (
-                    <button
-                        className="delete-button"
-                        onClick={() => onDelete(params.row.id)}
-                        aria-label="Delete task"
-                    >
-                        <span>Delete</span>
-                    </button>
-                )}
-            </div>
-        );
+export {
+    renderPriorityCell,
+    renderProgressCell,
+    renderStatusCell,
+    renderTimerCell,
+    renderProjectCell,
+    renderActionsCell,
+    editablePriorityColumn,
+    editableProgressColumn,
+    editableStatusColumn,
+};
 
 export default TasksTable;
