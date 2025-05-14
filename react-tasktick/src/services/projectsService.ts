@@ -230,8 +230,17 @@ class ProjectsService {
         return task;
     }
 
-   
+    async createProject(project: Omit<Project, 'id'>): Promise<Project> {
+        try {
+            const response = await api.post<Project>('/projects', project);
+            return this.mapProjectData(response.data);
+        } catch (error) {
+            console.error('Error creating project:', error);
+            throw error;
+        }
+    }
 
+   
     private mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
 
