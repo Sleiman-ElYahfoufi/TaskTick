@@ -23,7 +23,6 @@ export const processDateValue = (dateValue: any): string | null => {
     }
 };
 
-
 export const formatDateForDisplay = (dateValue: any): string => {
     if (!dateValue || dateValue === "Not set") return "Not set";
 
@@ -46,13 +45,30 @@ export const processEstimatedTime = (
     value: any,
     originalValue: number | undefined = undefined
 ): number => {
-    let numericValue = Number(value);
-
-    if ((!numericValue || isNaN(numericValue)) && originalValue) {
-        numericValue = originalValue;
+    // If value is already a number, return it directly
+    if (typeof value === "number" && !isNaN(value)) {
+        return value;
     }
 
-    return numericValue;
+    // Handle the case where value is a string
+    if (typeof value === "string") {
+        // Remove any non-numeric characters except for decimal point
+        // This will handle strings like "5 hrs", "5hrs", etc.
+        const numStr = value.replace(/[^\d.]/g, "");
+        const numericValue = parseFloat(numStr);
+
+        if (!isNaN(numericValue)) {
+            return numericValue;
+        }
+    }
+
+    // If we couldn't extract a valid number and have an original value, use that
+    if (originalValue !== undefined) {
+        return originalValue;
+    }
+
+    // Default to 0 if all else fails
+    return 0;
 };
 
 export const getEstimatedTimeDisplay = (hours: number): string => {
