@@ -37,7 +37,7 @@ export const useTaskActionsHandler = ({
     const handleDeleteTask = useCallback(
         (taskId: string | number) => {
             if (!projectId) return;
-            dispatch(deleteTask({ projectId, taskId }));
+            dispatch(deleteTask({taskId }));
         },
         [projectId, dispatch]
     );
