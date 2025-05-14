@@ -33,9 +33,17 @@ export const fetchTasks = createAsyncThunk(
     }
 );
 
-
-
-
+export const addTask = createAsyncThunk(
+    'tasks/addTask',
+    async ({ projectId, task }: { projectId: string | number, task: Partial<ProjectTask> }, { rejectWithValue }) => {
+        try {
+            const newTask = await projectsService.addProjectTask(projectId, task);
+            return newTask;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to add task');
+        }
+    }
+);
 
 
 
@@ -47,7 +55,6 @@ export const selectLoadingTaskIds = (state: RootState) => state.tasks.loadingTas
 export const selectIsTaskLoading = (taskId: string | number) => (state: RootState) =>
     state.tasks.loadingTaskIds.includes(taskId);
 export const selectCellUpdateErrors = (state: RootState) => state.tasks.cellUpdateErrors;
-
 
 
 
@@ -115,7 +122,9 @@ const tasksSlice = createSlice({
         stopTaskLoading: (state, action: PayloadAction<string | number>) => {
             state.loadingTaskIds = state.loadingTaskIds.filter(id => id !== action.payload);
         }
-    
+    },
+    extraReducers: (builder) => {
+      
     },
 });
 
