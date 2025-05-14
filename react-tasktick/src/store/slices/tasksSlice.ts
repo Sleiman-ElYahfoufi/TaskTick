@@ -21,6 +21,23 @@ const initialState: TasksState = {
 };
 
 
+export const fetchTasks = createAsyncThunk(
+    'tasks/fetchTasks',
+    async (projectId: string | number, { rejectWithValue }) => {
+        try {
+            const tasks = await projectsService.getProjectTasks(projectId);
+            return tasks;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to fetch tasks');
+        }
+    }
+);
+
+
+
+
+
+
 
 export const selectAllTasks = (state: RootState) => state.tasks.tasks;
 export const selectCurrentTask = (state: RootState) => state.tasks.currentTask;
@@ -33,6 +50,74 @@ export const selectCellUpdateErrors = (state: RootState) => state.tasks.cellUpda
 
 
 
+
+
+const tasksSlice = createSlice({
+    name: 'tasks',
+    initialState,
+    reducers: {
+        selectTask: (state, action: PayloadAction<string | number>) => {
+            const taskId = action.payload;
+            state.currentTask = state.tasks.find(task => String(task.id) === String(taskId)) || null;
+        },
+        clearTasksError: (state) => {
+            state.error = null;
+        },
+        clearTasks: (state) => {
+            state.tasks = [];
+            state.currentTask = null;
+        },
+        
+        optimisticUpdateTask: (state, action: PayloadAction<Partial<ProjectTask> & { id: string | number }>) => {
+            const { id, ...updatedFields } = action.payload;
+            const index = state.tasks.findIndex(task => String(task.id) === String(id));
+
+            if (index !== -1) {
+                state.tasks[index] = { ...state.tasks[index], ...updatedFields };
+
+                if (state.currentTask && String(state.currentTask.id) === String(id)) {
+                    state.currentTask = { ...state.currentTask, ...updatedFields };
+                }
+            }
+        },
+
+        optimisticUpdateCell: (state, action: PayloadAction<{ taskId: string | number; field: string; value: any }>) => {
+            const { taskId, field, value } = action.payload;
+            const index = state.tasks.findIndex(task => String(task.id) === String(taskId));
+
+            if (index !== -1) {
+                if (state.cellUpdateErrors[`${taskId}_${field}`]) {
+                    delete state.cellUpdateErrors[`${taskId}_${field}`];
+                }
+
+                state.tasks[index] = {
+                    ...state.tasks[index],
+                    [field]: value
+                };
+
+                if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
+                    state.currentTask = {
+                        ...state.currentTask,
+                        [field]: value
+                    };
+                }
+            }
+        },
+        clearCellUpdateError: (state, action: PayloadAction<{ taskId: string | number; field: string }>) => {
+            const { taskId, field } = action.payload;
+            delete state.cellUpdateErrors[`${taskId}_${field}`];
+        },
+        startTaskLoading: (state, action: PayloadAction<string | number>) => {
+            if (!state.loadingTaskIds.includes(action.payload)) {
+                state.loadingTaskIds.push(action.payload);
+            }
+        },
+        stopTaskLoading: (state, action: PayloadAction<string | number>) => {
+            state.loadingTaskIds = state.loadingTaskIds.filter(id => id !== action.payload);
+        }
+    
+    },
+});
 
 export const {
     selectTask,
