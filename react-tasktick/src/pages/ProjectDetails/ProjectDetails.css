@@ -1,91 +1,299 @@
 .project-details-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-  font-family: "Inter", sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: "Inter", sans-serif;
 }
 
 .project-details-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
 .project-details-header h1 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
 }
 
 .back-button {
-  background-color: transparent;
-  color: #01398E;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .back-button:hover {
-  background-color: #F3F4F6;
+    background-color: #e5e7eb;
 }
 
 .back-button::before {
-  content: "←";
-  margin-right: 8px;
+    content: "←";
+    margin-right: 8px;
 }
 
 .project-details-content {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .tasks-header {
-  display: flex;
-  justify-content: space-between;
-    align-items: end;
-  margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .tasks-header h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
 }
 
 .add-task-button {
-  background-color: #01398E;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .add-task-button:hover {
-  background-color: #002a6b;
+    background-color: #0047c3;
+}
+
+.timer-button {
+    background-color: #f3f4f6;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.timer-button:hover:not(:disabled) {
+    background-color: #e5e7eb;
+}
+
+.timer-button.completed {
+    background-color: #d1fae5;
+    color: #047857;
+    cursor: default;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    width: 100%;
+}
+
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.retry-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.retry-button:hover {
+    background-color: #0069d9;
+}
+
+.no-current-task {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-tasks-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    width: 100%;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.no-tasks-message p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.custom-progress-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.custom-progress-bar {
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.custom-progress-fill {
+    height: 100%;
+    background-color: #60a5fa;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.custom-progress-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #111827;
+    min-width: 36px;
+    text-align: right;
+}
+
+/* Delete task button */
+.delete-task-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: #ef4444;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.delete-task-btn:hover {
+    background-color: #fee2e2;
 }
 
 @media (max-width: 768px) {
-  .tasks-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  
-  .add-task-button {
-    width: 100%;
-  }
+    .tasks-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .add-task-button {
+        width: 100%;
+    }
+}
+
+/* Cell errors section */
+.cell-errors {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff4f4;
+    border: 1px solid #ffcdd2;
+    border-radius: 4px;
+}
+
+.cell-errors h4 {
+    color: #d32f2f;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.cell-errors ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.cell-errors li {
+    color: #d32f2f;
+    margin-bottom: 5px;
+}
+
+/* Improved loading indicator for tasks */
+.loading-row {
+    transition: opacity 0.2s ease;
+}
+
+/* Editing indicator */
+.editable-cell-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 8px 0;
+    border-color: transparent #2196f3 transparent transparent;
+    z-index: 1;
+}
+
+/* Description cell with tooltip */
+.description-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    cursor: default;
 }
