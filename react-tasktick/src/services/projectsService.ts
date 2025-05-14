@@ -368,7 +368,7 @@ class ProjectsService {
         }
     }
 
-    async deleteProjectTask(projectId: string | number, taskId: string | number): Promise<string | number> {
+    async deleteProjectTask(taskId: string | number): Promise<string | number> {
         try {
             await api.delete(`/tasks/${taskId}`);
             return taskId;
