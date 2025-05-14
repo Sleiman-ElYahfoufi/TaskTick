@@ -78,7 +78,7 @@ class ProjectsService {
 
     private mapProjectData(project: Project): Project {
         const tasksCompleted = project.tasksCompleted || 0;
-        const totalTasks = project.totalTasks || 10; // Default value
+        const totalTasks = project.totalTasks || 10; 
 
         let estimatedHours = '';
         if (project.estimated_time !== undefined) {
@@ -184,7 +184,6 @@ class ProjectsService {
         const estimatedHours = task.estimated_time !== undefined ? String(task.estimated_time) : '0';
         task.estimatedTime = `${estimatedHours} hrs`;
 
-        // Format status to be more user-friendly
         if (task.status) {
             switch (task.status.toLowerCase()) {
                 case 'todo':
@@ -202,27 +201,23 @@ class ProjectsService {
                     task.status = 'Completed';
                     break;
                 default:
-                    // Keep the status as is if it doesn't match our standard statuses
                     break;
             }
         } else {
             task.status = 'Not Started';
         }
 
-        // Format priority to be more user-friendly
         if (task.priority) {
             const priorityMap: { [key: string]: string } = {
                 'low': 'Low',
                 'medium': 'Medium',
-                'high': 'High',
-                'critical': 'Critical'
+                'high': 'High'
             };
             task.priority = priorityMap[task.priority.toLowerCase()] || 'Medium';
         } else {
             task.priority = 'Medium';
         }
 
-        // Set default progress if not provided
         if (task.progress === undefined) {
             task.progress = 0;
         }
