@@ -45,6 +45,22 @@ export const addTask = createAsyncThunk(
     }
 );
 
+export const updateTask = createAsyncThunk(
+    'tasks/updateTask',
+    async ({ projectId, taskId, taskData }: {
+        projectId: string | number,
+        taskId: string | number,
+        taskData: Partial<ProjectTask>
+    }, { rejectWithValue }) => {
+        try {
+            const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
+            return updatedTask;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to update task');
+        }
+    }
+);
+
 
 
 export const selectAllTasks = (state: RootState) => state.tasks.tasks;
@@ -55,6 +71,7 @@ export const selectLoadingTaskIds = (state: RootState) => state.tasks.loadingTas
 export const selectIsTaskLoading = (taskId: string | number) => (state: RootState) =>
     state.tasks.loadingTaskIds.includes(taskId);
 export const selectCellUpdateErrors = (state: RootState) => state.tasks.cellUpdateErrors;
+
 
 
 
@@ -124,7 +141,6 @@ const tasksSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-      
     },
 });
 
