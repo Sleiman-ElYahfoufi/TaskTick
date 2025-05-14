@@ -61,6 +61,18 @@ export const updateTask = createAsyncThunk(
     }
 );
 
+export const deleteTask = createAsyncThunk(
+    'tasks/deleteTask',
+    async ({ projectId, taskId }: { projectId: string | number, taskId: string | number }, { rejectWithValue }) => {
+        try {
+            await projectsService.deleteProjectTask(projectId, taskId);
+            return taskId;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to delete task');
+        }
+    }
+);
+
 
 
 export const selectAllTasks = (state: RootState) => state.tasks.tasks;
@@ -140,8 +152,7 @@ const tasksSlice = createSlice({
             state.loadingTaskIds = state.loadingTaskIds.filter(id => id !== action.payload);
         }
     },
-    extraReducers: (builder) => {
-    },
+    extraReducers: (builder) => {},
 });
 
 export const {
