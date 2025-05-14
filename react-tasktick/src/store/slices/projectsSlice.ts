@@ -52,15 +52,23 @@ export const addProject = createAsyncThunk(
     }
 );
 
-
-
+export const updateProject = createAsyncThunk(
+    'projects/updateProject',
+    async ({ projectId, projectData }: { projectId: string | number, projectData: Partial<Project> }, { rejectWithValue }) => {
+        try {
+            const updatedProject = await projectsService.updateProject(projectId, projectData);
+            return updatedProject;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to update project');
+        }
+    }
+);
 
 
 export const selectAllProjects = (state: RootState) => state.projects.projects;
 export const selectSelectedProject = (state: RootState) => state.projects.selectedProject;
 export const selectProjectsLoading = (state: RootState) => state.projects.isLoading;
 export const selectProjectsError = (state: RootState) => state.projects.error;
-
 
 
 
