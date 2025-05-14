@@ -145,9 +145,40 @@ class ProjectsService {
         };
     }
 
-    
+    async getProjectById(projectId: string | number): Promise<Project> {
+        try {
+            const response = await api.get<Project>(`/projects/${projectId}`);
+            return this.mapProjectData(response.data);
+        } catch (error) {
+            console.error(`Error fetching project ${projectId}:`, error);
+            throw error;
+        }
+    }
 
-    
+    async getProjectTasks(projectId: string | number): Promise<ProjectTask[]> {
+        try {
+            const project = await this.getProjectById(projectId);
+
+            if (project && project.tasks && Array.isArray(project.tasks)) {
+                return project.tasks.map(task => this.mapTaskData(task));
+            }
+
+            const response = await api.get<ProjectTask[] | ProjectTasksResponse>(`/tasks?projectId=${projectId}`);
+
+            if (Array.isArray(response.data)) {
+                return response.data.map(task => this.mapTaskData(task));
+            }
+
+            if (response.data && 'tasks' in response.data && Array.isArray(response.data.tasks)) {
+                return response.data.tasks.map(task => this.mapTaskData(task));
+            }
+
+            return [];
+        } catch (error) {
+            console.error(`Error fetching tasks for project ${projectId}:`, error);
+            return [];
+        }
+    }
 
     private mapTaskData(task: ProjectTask): ProjectTask {
         const estimatedHours = task.estimated_time !== undefined ? String(task.estimated_time) : '0';
@@ -200,16 +231,6 @@ class ProjectsService {
     }
 
    
-
-    
-
-    
-
-    
-
-   
-
-    
 
     private mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
