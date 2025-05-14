@@ -240,7 +240,18 @@ class ProjectsService {
         }
     }
 
+    async updateProject(projectId: string | number, project: Partial<Project>): Promise<Project> {
+        try {
+            const response = await api.put<Project>(`/projects/${projectId}`, project);
+            return this.mapProjectData(response.data);
+        } catch (error) {
+            console.error(`Error updating project ${projectId}:`, error);
+            throw error;
+        }
+    }
+
    
+
     private mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
 
