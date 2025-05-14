@@ -50,11 +50,22 @@ export const useTaskDataMapper = ({ projectTasks }: TaskDataMapperProps) => {
         [projectTasks]
     );
 
+    const currentTask = useMemo(() => {
+        const inProgressTask = tasks.find(
+            (task) =>
+                task.status === "In Progress" ||
+                task.status === "in_progress" ||
+                task.status === "in progress"
+        );
 
+        if (inProgressTask) return inProgressTask;
+
+        return tasks.length > 0 ? tasks[0] : null;
+    }, [tasks]);
 
     return {
         tasks,
-       
+        currentTask
     };
 };
 
