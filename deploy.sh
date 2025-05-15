@@ -1,13 +1,6 @@
 #!/bin/bash
 set -e
 
-# Load environment variables
-if [ -f .env ]; then
-  set -a
-  source .env
-  set +a
-fi
-
 echo "🧹 Cleaning up existing containers..."
 docker compose down
 
@@ -24,7 +17,7 @@ echo "🔍 Checking MySQL readiness..."
 max_retries=10
 retries=0
 while [ $retries -lt $max_retries ]; do
-  if docker exec tasktick-database mysqladmin ping -h localhost -u"root" -p"${DB_PASSWORD}" --silent 2>/dev/null; then
+  if docker exec tasktick-database mysqladmin ping -h localhost -u"root" -p"$(cat ./secrets/db_password)" --silent 2>/dev/null; then
     echo "✅ MySQL is ready!"
     break
   fi

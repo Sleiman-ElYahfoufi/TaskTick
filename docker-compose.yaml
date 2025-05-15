@@ -1,52 +1,50 @@
 services:
-
-  # Backend service (NestJS with TypeORM)
-  backend:
-    image: ${DOCKER_USERNAME}/nest-tasktick:latest
-    container_name: tasktick-backend  
-    env_file:
-      - .env 
-    ports:
-      - "3000:3000"
-    depends_on:
-      - database
-    environment:
-      - NODE_ENV=production 
-      - DB_HOST=database
-      - DB_PORT=3306
-      - DB_USERNAME=${DB_USER:-root}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_DATABASE=${DB_NAME:-tasktick}
-    # volumes:
-    #   - ./nest-tasktick:/app
-    #   - /app/node_modules
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-         cpus: '0.5'
-         memory: 140M  
-
-  # MySQL service
   database:
     image: mysql:8.0-oracle
-    container_name: tasktick-database 
-    env_file:
-      - .env  
+    container_name: tasktick-database
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME:-tasktick}
-      - MYSQL_ROOT_HOST=%  
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_password
+      - MYSQL_DATABASE_FILE=/run/secrets/db_name
+      - MYSQL_ROOT_HOST=%
     volumes:
       - mysql-data:/var/lib/mysql
       - ./my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+      - ./secrets/db_password:/run/secrets/db_password:ro
+      - ./secrets/db_name:/run/secrets/db_name:ro
     restart: unless-stopped
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     deploy:
       resources:
         limits:
           memory: 400M
+
+  backend:
+    image: sleiyah/nest-tasktick:latest
+    container_name: tasktick-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=database
+      - DB_PORT=3306
+    volumes:
+      - ./secrets/db_user:/run/secrets/db_user:ro
+      - ./secrets/db_password:/run/secrets/db_password:ro
+      - ./secrets/db_name:/run/secrets/db_name:ro
+    restart: unless-stopped
+    command: >
+      sh -c "export DB_USERNAME=$$(cat /run/secrets/db_user) &&
+             export DB_PASSWORD=$$(cat /run/secrets/db_password) &&
+             export DB_DATABASE=$$(cat /run/secrets/db_name) &&
+             npm run start:prod"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 140M
 volumes:
   mysql-data:
