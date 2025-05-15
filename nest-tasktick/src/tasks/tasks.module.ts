@@ -4,6 +4,7 @@ import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { Task } from './entities/task.entity';
 import { ProjectsModule } from '../projects/projects.module';
+import { TaskOwnerGuard } from './guards/task-owner.guard';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { ProjectsModule } from '../projects/projects.module';
     ProjectsModule
   ],
   controllers: [TasksController],
-  providers: [TasksService],
+  providers: [TasksService, TaskOwnerGuard],
   exports: [TasksService]
 })
 export class TasksModule {}

@@ -4,6 +4,7 @@ import { ProjectsService } from './projects.service';
 import { ProjectsController } from './projects.controller';
 import { Project } from './entities/project.entity';
 import { UsersModule } from '../users/users.module';
+import { ProjectOwnerGuard } from './guards/project-owner.guard';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { UsersModule } from '../users/users.module';
     UsersModule
   ],
   controllers: [ProjectsController],
-  providers: [ProjectsService],
+  providers: [ProjectsService, ProjectOwnerGuard],
   exports: [ProjectsService]
 })
 export class ProjectsModule {}
