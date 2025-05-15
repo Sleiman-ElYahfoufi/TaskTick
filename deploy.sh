@@ -29,20 +29,37 @@ while [ $retries -lt $max_retries ]; do
   sleep 5
 done
 
-echo "🚀 Starting application services..."
-docker compose up -d  backend
+if [ $retries -eq $max_retries ]; then
+  echo "❌ MySQL failed to become ready. Check logs:"
+  docker logs tasktick-database
+  exit 1
+fi
+
+echo "🚀 Starting application container..."
+docker compose up -d backend
 
 if [ "$1" == "--with-migrations" ]; then
   echo "🔄 Running database migrations..."
-  sudo docker exec tasktick-backend /app/start.sh migration:run
+  docker exec tasktick-backend /app/start.sh migration:run
+  
+  if [ $? -ne 0 ]; then
+    echo "❌ Migrations failed!"
+    exit 1
+  fi
 fi
 
 if [ "$1" == "--with-seed" ] || [ "$2" == "--with-seed" ]; then
   echo "🌱 Running database seeders..."
-  sudo docker exec  tasktick-backend /app/start.sh seed  
+  docker exec tasktick-backend /app/start.sh seed
+  
+  if [ $? -ne 0 ]; then
+    echo "❌ Seeding failed!"
+    exit 1
+  fi
 fi
 
-
+echo "🚀 Starting NestJS application in production mode..."
+docker exec -d tasktick-backend /app/start.sh start:prod
 
 echo "✅ Deployment complete!"
 echo "📊 Resource usage:"

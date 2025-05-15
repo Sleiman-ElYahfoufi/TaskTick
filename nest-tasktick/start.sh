@@ -5,6 +5,8 @@ echo "→ Running command: $1"
 
 if [ "$1" = "start:dev" ]; then
     exec npm run start:dev
+elif [ "$1" = "start:prod" ]; then
+    exec npm run start:prod
 elif [ "$1" = "migration:run" ]; then
     exec npm run migration:run
 elif [ "$1" = "seed" ]; then
