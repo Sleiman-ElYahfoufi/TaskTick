@@ -38,13 +38,15 @@ jobs:
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_KEY }}
                   script: |
-                      mkdir -p /home/${{ secrets.EC2_USER }}/secrets
+                      sudo mkdir -p /home/${{ secrets.EC2_USER }}/secrets
                       
-                      echo "${{ secrets.DB_PASSWORD }}" > /home/${{ secrets.EC2_USER }}/secrets/db_password
-                      echo "${{ secrets.DB_USER }}" > /home/${{ secrets.EC2_USER }}/secrets/db_user
-                      echo "${{ secrets.DB_NAME }}" > /home/${{ secrets.EC2_USER }}/secrets/db_name
+                      sudo bash -c 'echo "${{ secrets.DB_PASSWORD }}" > /home/${{ secrets.EC2_USER }}/secrets/db_password'
+                      sudo bash -c 'echo "${{ secrets.DB_USER }}" > /home/${{ secrets.EC2_USER }}/secrets/db_user'
+                      sudo bash -c 'echo "${{ secrets.DB_NAME }}" > /home/${{ secrets.EC2_USER }}/secrets/db_name'
                       
-                      chmod 400 /home/${{ secrets.EC2_USER }}/secrets/*
+                      sudo chmod 600 /home/${{ secrets.EC2_USER }}/secrets/*
+                      
+                      sudo chown -R ${{ secrets.EC2_USER }}:${{ secrets.EC2_USER }} /home/${{ secrets.EC2_USER }}/secrets
 
             - name: Run deployment with migrations and seeds
               uses: appleboy/ssh-action@v0.1.10
