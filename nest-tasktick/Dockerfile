@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "echo 'Container started. Use exec to run commands.'"]
+CMD ["/app/start.sh"]

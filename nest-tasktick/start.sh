@@ -1,18 +1,11 @@
 #!/bin/sh
 set -e
 
-echo "→ Running command: $1"
+echo "🔄 Running database migrations..."
+npm run migration:run
 
-if [ "$1" = "start:dev" ]; then
-    exec npm run start:dev
-elif [ "$1" = "start:prod" ]; then
-    exec npm run start:prod
-elif [ "$1" = "migration:run" ]; then
-    exec npm run migration:run
-elif [ "$1" = "seed" ]; then
-    exec npm run seed
-elif [ "$1" = "shell" ]; then
-    exec sh
-else
-    exec "$@"
-fi
+echo "🌱 Running database seeders..."
+npm run seed
+
+echo "🚀 Starting application in production mode..."
+exec npm run start:prod

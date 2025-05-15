@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
@@ -10,11 +11,11 @@ docker compose down
 echo "🗑️ Removing unused Docker resources..."
 docker system prune -af --volumes
 
-echo "🚀 Starting essential services..."
+echo "🚀 Starting database..."
 docker compose up -d database
 
 echo "⏳ Waiting for MySQL to be ready..."
-sleep 10
+sleep 15  # Increased wait time for MySQL initialization
 
 echo "🔍 Checking MySQL readiness..."
 max_retries=10
@@ -35,31 +36,13 @@ if [ $retries -eq $max_retries ]; then
   exit 1
 fi
 
-echo "🚀 Starting application container..."
+echo "🚀 Starting application (migrations and seeding will run automatically)..."
 docker compose up -d backend
 
-if [ "$1" == "--with-migrations" ]; then
-  echo "🔄 Running database migrations..."
-  docker exec tasktick-backend /app/start.sh migration:run
-  
-  if [ $? -ne 0 ]; then
-    echo "❌ Migrations failed!"
-    exit 1
-  fi
-fi
+sleep 10
 
-if [ "$1" == "--with-seed" ] || [ "$2" == "--with-seed" ]; then
-  echo "🌱 Running database seeders..."
-  docker exec tasktick-backend /app/start.sh seed
-  
-  if [ $? -ne 0 ]; then
-    echo "❌ Seeding failed!"
-    exit 1
-  fi
-fi
-
-echo "🚀 Starting NestJS application in production mode..."
-docker exec -d tasktick-backend /app/start.sh start:prod
+echo "📋 Backend startup logs:"
+docker logs tasktick-backend --tail 20
 
 echo "✅ Deployment complete!"
 echo "📊 Resource usage:"
