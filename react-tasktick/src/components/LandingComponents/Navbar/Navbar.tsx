@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import TaskTickLogo from "../../../assets/Sleiman_ElYahfoufi_TaskTick.png";
 
 const Navbar: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleGetStarted = () => {
+        navigate("/auth");
+    };
+
     return (
         <nav className="navbar">
             <div className="navbar-container">
@@ -44,7 +51,10 @@ const Navbar: React.FC = () => {
                         </div>
 
                         <div className="nav-actions">
-                            <button className="get-started-btn">
+                            <button
+                                className="get-started-btn"
+                                onClick={handleGetStarted}
+                            >
                                 Get Started
                             </button>
                         </div>
