@@ -1,8 +1,11 @@
 #!/bin/bash
 set -e
 
+# Load environment variables
 if [ -f .env ]; then
-  export $(grep -v '^#' .env | xargs)
+  set -a
+  source .env
+  set +a
 fi
 
 echo "🧹 Cleaning up existing containers..."
@@ -15,7 +18,7 @@ echo "🚀 Starting database..."
 docker compose up -d database
 
 echo "⏳ Waiting for MySQL to be ready..."
-sleep 15  # Increased wait time for MySQL initialization
+sleep 15
 
 echo "🔍 Checking MySQL readiness..."
 max_retries=10
@@ -25,24 +28,24 @@ while [ $retries -lt $max_retries ]; do
     echo "✅ MySQL is ready!"
     break
   fi
-  echo "⌛ MySQL not ready yet, waiting (attempt $((retries+1))/$max_retries)..."
+  echo "⌛ MySQL not ready yet, waiting..."
   retries=$((retries+1))
   sleep 5
 done
 
-if [ $retries -eq $max_retries ]; then
-  echo "❌ MySQL failed to become ready. Check logs:"
-  docker logs tasktick-database
-  exit 1
+echo "🚀 Starting backend container..."
+docker compose up -d backend
+sleep 5
+
+if [[ "$1" == "--with-migrations" || "$2" == "--with-migrations" ]]; then
+  echo "🔄 Running migrations..."
+  docker exec tasktick-backend npm run migration:run
 fi
 
-echo "🚀 Starting application (migrations and seeding will run automatically)..."
-docker compose up -d backend
-
-sleep 10
-
-echo "📋 Backend startup logs:"
-docker logs tasktick-backend --tail 20
+if [[ "$1" == "--with-seed" || "$2" == "--with-seed" ]]; then
+  echo "🌱 Running seeders..."
+  docker exec tasktick-backend npm run seed
+fi
 
 echo "✅ Deployment complete!"
 echo "📊 Resource usage:"
