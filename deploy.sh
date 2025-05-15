@@ -5,7 +5,7 @@ if [ -f .env ]; then
 fi
 
 echo "🧹 Cleaning up existing containers..."
-docker-compose down
+docker compose down
 
 echo "🗑️ Removing unused Docker resources..."
 docker system prune -af --volumes
