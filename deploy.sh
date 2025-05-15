@@ -21,12 +21,12 @@ docker-compose up -d  backend
 
 if [ "$1" == "--with-migrations" ]; then
   echo "🔄 Running database migrations..."
-  sudo docker exec -it tasktick-backend-1 /app/start.sh migration:run
+  sudo docker exec -it tasktick-backend /app/start.sh migration:run
 fi
 
 if [ "$1" == "--with-seed" ] || [ "$2" == "--with-seed" ]; then
   echo "🌱 Running database seeders..."
-  sudo docker exec -it tasktick-backend-1 /app/start.sh seed  
+  sudo docker exec -it tasktick-backend /app/start.sh seed  
 fi
 
 
