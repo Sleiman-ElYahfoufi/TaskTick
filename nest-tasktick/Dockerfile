@@ -6,10 +6,12 @@ COPY package.json package-lock.json* ./
 
 RUN npm install && npm install -g @nestjs/cli
 
-COPY start.sh ./
-RUN chmod +x ./start.sh
+
 
 COPY . .
+
+COPY start.sh ./
+RUN chmod +x ./start.sh
 
 EXPOSE 3000
 

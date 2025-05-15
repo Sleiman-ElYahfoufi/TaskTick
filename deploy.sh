@@ -11,13 +11,13 @@ echo "🗑️ Removing unused Docker resources..."
 docker system prune -af --volumes
 
 echo "🚀 Starting essential services..."
-docker-compose up -d database
+docker compose up -d database
 
 echo "⏳ Waiting for MySQL to be ready..."
 sleep 10
 
 echo "🚀 Starting application services..."
-docker-compose up -d  backend
+docker compose up -d  backend
 
 if [ "$1" == "--with-migrations" ]; then
   echo "🔄 Running database migrations..."
