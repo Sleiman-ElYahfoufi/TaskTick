@@ -17,6 +17,7 @@ interface ProjectCardProps {
     totalTasks: number;
     lastUpdatedDate: string;
     lastUpdatedTime: string;
+    deadline?: string | null;
     onViewDetails?: (id: string) => void;
 }
 
@@ -30,6 +31,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     totalTasks,
     lastUpdatedDate,
     lastUpdatedTime,
+    deadline,
     onViewDetails,
 }) => {
     const statusConfig = {
@@ -45,6 +47,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         if (onViewDetails) {
             onViewDetails(id);
         }
+    };
+
+    const formatDeadline = (deadlineStr?: string) => {
+        if (!deadlineStr) return "";
+        const date = new Date(deadlineStr);
+        return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        });
     };
 
     return (
@@ -67,7 +79,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                                         : "Est. Time"}
                                 </span>
                                 <span className="metric-value">
-                                    {estimatedHours} hours
+                                    {estimatedHours}
                                 </span>
                             </div>
 
@@ -77,6 +89,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                                     {tasksCompleted}/{totalTasks}
                                 </span>
                             </div>
+
+                            {deadline && (
+                                <div className="metric">
+                                    <span className="metric-label">
+                                        Deadline
+                                    </span>
+                                    <span className="metric-value">
+                                        {formatDeadline(deadline)}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
 

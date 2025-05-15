@@ -10,6 +10,7 @@ export interface Project {
     estimatedHours?: string;
     estimated_time?: number;
     tasksCompleted?: number;
+    completedTasks?: number;
     totalTasks?: number;
     lastUpdatedDate?: string;
     lastUpdatedTime?: string;
@@ -56,16 +57,12 @@ class ProjectsService {
             const response = await api.get<Project[] | ProjectsResponse>(`/projects?userId=${userId}`);
 
             if (Array.isArray(response.data)) {
-                const projects = response.data.map(project => this.mapProjectData(project));
+                const projects = response.data;
                 return { projects, total: projects.length };
             }
 
             if (response.data && 'projects' in response.data && Array.isArray(response.data.projects)) {
-                const projects = response.data.projects.map(project => this.mapProjectData(project));
-                return {
-                    projects,
-                    total: response.data.total || projects.length
-                };
+                return response.data;
             }
 
             console.warn('API response format is not as expected:', response.data);
@@ -77,15 +74,22 @@ class ProjectsService {
     }
 
     private mapProjectData(project: Project): Project {
-        const tasksCompleted = project.tasksCompleted || 0;
-        const totalTasks = project.totalTasks || 10; 
+        const completedTasks = project.completedTasks !== undefined ? project.completedTasks :
+            project.tasks?.filter(t =>
+                t.status?.toLowerCase() === "completed" ||
+                t.status?.toLowerCase() === "done"
+            ).length || 0;
+
+        const totalTasks = project.totalTasks !== undefined ? project.totalTasks :
+            project.tasks?.length || 0;
 
         let estimatedHours = '';
         if (project.estimated_time !== undefined) {
-            if (project.estimated_time > 1000000) {
+            if (project.estimated_time > 1000) {
                 estimatedHours = '1000+';
             } else {
-                estimatedHours = project.estimated_time.toString();
+                // Treat estimated_time as hours directly, not minutes
+                estimatedHours = `${project.estimated_time}h`;
             }
         }
 
@@ -130,7 +134,7 @@ class ProjectsService {
             description: project.description || '',
             status,
             estimatedHours,
-            tasksCompleted,
+            tasksCompleted: completedTasks,
             totalTasks,
             lastUpdatedDate,
             lastUpdatedTime,
@@ -337,8 +341,8 @@ class ProjectsService {
 
             const task: any = {
                 project_id: Number(projectId),
-                name: name || 'New Task', 
-                estimated_time: estimated_time || 1 
+                name: name || 'New Task',
+                estimated_time: estimated_time || 1
             };
 
             if (description !== undefined) task.description = description;
@@ -400,6 +404,11 @@ class ProjectsService {
         };
 
         return priorityMap[priority] || 'medium';
+    }
+
+    // Add a public method that can be used by the redux store
+    formatProject(project: Project): Project {
+        return this.mapProjectData(project);
     }
 }
 

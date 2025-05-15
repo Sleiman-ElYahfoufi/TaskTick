@@ -23,7 +23,11 @@ export class TasksService {
       this.updateStatusBasedOnProgress(task);
     }
 
-    return this.tasksRepository.save(task);
+    const savedTask = await this.tasksRepository.save(task);
+
+    await this.projectsService.updateProjectStatus(task.project_id);
+
+    return savedTask;
   }
 
   async findAll(): Promise<Task[]> {
@@ -53,6 +57,7 @@ export class TasksService {
 
   async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
     const task = await this.findOne(id);
+    const projectId = task.project_id;
 
     if (updateTaskDto.project_id) {
       await this.projectsService.findOne(updateTaskDto.project_id);
@@ -64,14 +69,25 @@ export class TasksService {
       this.updateStatusBasedOnProgress(updatedTask);
     }
 
-    return this.tasksRepository.save(updatedTask);
+    const savedTask = await this.tasksRepository.save(updatedTask);
+
+    // Update project status after task update
+    await this.projectsService.updateProjectStatus(updateTaskDto.project_id || projectId);
+
+    return savedTask;
   }
 
   async remove(id: number): Promise<void> {
+    const task = await this.findOne(id);
+    const projectId = task.project_id;
+
     const result = await this.tasksRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
+
+    // Update project status after task deletion
+    await this.projectsService.updateProjectStatus(projectId);
   }
 
   private updateStatusBasedOnProgress(task: Task): void {

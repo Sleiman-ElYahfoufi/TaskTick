@@ -18,9 +18,13 @@ interface ProjectData {
     description?: string;
     status: string;
     estimated_time?: number;
+    estimatedHours?: string;
     created_at?: string;
     updated_at?: string;
-    tasks?: any[]; 
+    tasks?: any[];
+    totalTasks?: number;
+    completedTasks?: number;
+    deadline?: string | null;
 }
 
 const Projects: React.FC = () => {
@@ -213,37 +217,28 @@ const Projects: React.FC = () => {
 
             <div className="projects-list">
                 {filteredProjects.length > 0 ? (
-                    filteredProjects.map((project) => (
-                        <ProjectCard
-                            key={project.id}
-                            id={String(project.id)}
-                            title={
-                                project.title ||
-                                project.name ||
-                                "Unnamed Project"
-                            }
-                            description={project.description || ""}
-                            status={mapStatusToUI(project.status)}
-                            estimatedHours={
-                                project.estimated_time
-                                    ? project.estimated_time.toString()
-                                    : "0"
-                            }
-                            tasksCompleted={
-                                project.tasks?.filter(
-                                    (t) => t.status === "completed"
-                                ).length || 0
-                            }
-                            totalTasks={project.tasks?.length || 0}
-                            lastUpdatedDate={formatDateForDisplay(
-                                project.updated_at
-                            )}
-                            lastUpdatedTime={formatTimeForDisplay(
-                                project.updated_at
-                            )}
-                            onViewDetails={handleViewProjectDetails}
-                        />
-                    ))
+                    filteredProjects.map((project) => {
+                        return (
+                            <ProjectCard
+                                key={project.id}
+                                id={String(project.id)}
+                                title={project.name || "Unnamed Project"}
+                                description={project.description || ""}
+                                status={mapStatusToUI(project.status)}
+                                estimatedHours={`${project.estimated_time}h`}
+                                tasksCompleted={project.completedTasks || 0}
+                                totalTasks={project.totalTasks || 0}
+                                deadline={project.deadline}
+                                lastUpdatedDate={formatDateForDisplay(
+                                    project.updated_at
+                                )}
+                                lastUpdatedTime={formatTimeForDisplay(
+                                    project.updated_at
+                                )}
+                                onViewDetails={handleViewProjectDetails}
+                            />
+                        );
+                    })
                 ) : (
                     <div className="no-projects">
                         {projects.length > 0 ? (
