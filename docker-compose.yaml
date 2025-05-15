@@ -4,7 +4,8 @@ services:
   backend:
     image: ${DOCKER_USERNAME}/nest-tasktick:latest
     container_name: tasktick-backend  
-
+    env_file:
+      - .env 
     ports:
       - "3000:3000"
     depends_on:
@@ -28,15 +29,16 @@ services:
 
   # MySQL service
   database:
-    image: mysql:8.0-debian
+    image: mysql:8.0-oracle
     container_name: tasktick-database 
+    env_file:
+      - .env  
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME:-tasktick}
-      - MYSQL_ROOT_HOST=%
-      - MYSQL_ROOT_LOG_ACCESS=all
+      - MYSQL_ROOT_HOST=%  
     volumes:
       - mysql-data:/var/lib/mysql
       - ./my.cnf:/etc/mysql/conf.d/custom.cnf:ro
