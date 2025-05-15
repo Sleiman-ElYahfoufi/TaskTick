@@ -24,7 +24,7 @@ services:
       resources:
         limits:
          cpus: '0.5'
-         memory: 150M  
+         memory: 140M  
 
   # MySQL service
   database:
@@ -37,11 +37,12 @@ services:
       - MYSQL_DATABASE=${DB_NAME:-tasktick}
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/custom.cnf:ro
     restart: unless-stopped
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     deploy:
       resources:
         limits:
-          memory: 350M
+          memory: 400M
 volumes:
   mysql-data:
