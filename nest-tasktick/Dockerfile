@@ -4,15 +4,14 @@ WORKDIR /app
 
 COPY package.json package-lock.json* ./
 
-RUN npm install && npm install -g @nestjs/cli
-
-
+RUN npm install
 
 COPY . .
 
-COPY start.sh ./
 RUN chmod +x ./start.sh
+
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:prod"]
