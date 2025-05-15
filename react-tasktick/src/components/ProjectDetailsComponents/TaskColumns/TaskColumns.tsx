@@ -12,7 +12,7 @@ import {
 import {
     editableProgressColumn,
     editablePriorityColumn,
-    editableStatusColumn,
+    statusColumn,
 } from "../../../components/SharedComponents/TasksTable/TableColumnDefinitions";
 import { formatDateForDisplay } from "../../../utils/TaskFormattingUtils";
 
@@ -123,7 +123,7 @@ export const useTaskColumns = ({
             },
             editablePriorityColumn(["High", "Medium", "Low"]),
             editableProgressColumn(),
-            editableStatusColumn(),
+            statusColumn(),
             {
                 field: "timer",
                 headerName: "TIMER",

@@ -20,7 +20,6 @@ import {
 import {
     editablePriorityColumn,
     editableProgressColumn,
-    editableStatusColumn,
 } from "./TableColumnDefinitions";
 
 export interface BaseTask {
@@ -290,7 +289,6 @@ export {
     renderActionsCell,
     editablePriorityColumn,
     editableProgressColumn,
-    editableStatusColumn,
 };
 
 export default TasksTable;

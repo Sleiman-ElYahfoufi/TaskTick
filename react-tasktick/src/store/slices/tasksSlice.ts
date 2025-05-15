@@ -6,9 +6,9 @@ interface TasksState {
     tasks: ProjectTask[];
     currentTask: ProjectTask | null;
     isLoading: boolean;
-    loadingTaskIds: (string | number)[]; 
+    loadingTaskIds: (string | number)[];
     error: string | null;
-    cellUpdateErrors: Record<string, string>; 
+    cellUpdateErrors: Record<string, string>;
 }
 
 const initialState: TasksState = {
@@ -35,12 +35,26 @@ export const fetchTasks = createAsyncThunk(
 
 export const addTask = createAsyncThunk(
     'tasks/addTask',
-    async ({ projectId, task }: { projectId: string | number, task: Partial<ProjectTask> }, { rejectWithValue }) => {
+    async ({ projectId, task }: { projectId: string | number, task: Partial<ProjectTask> }, { dispatch }) => {
+        const tempId = `temp-${Date.now()}`;
+
         try {
+            const optimisticTask = {
+                ...task,
+                id: tempId,
+                name: task.name || 'New Task',
+            } as ProjectTask;
+
+            dispatch(addTaskOptimistic(optimisticTask));
+
             const newTask = await projectsService.addProjectTask(projectId, task);
+
+            dispatch(replaceOptimisticTask({ tempId, newTask }));
+
             return newTask;
         } catch (error: any) {
-            return rejectWithValue(error.message || 'Failed to add task');
+            dispatch(removeOptimisticTask(tempId));
+            throw error;
         }
     }
 );
@@ -63,7 +77,7 @@ export const updateTask = createAsyncThunk(
 
 export const deleteTask = createAsyncThunk(
     'tasks/deleteTask',
-    async ({taskId }: { taskId: string | number }, { rejectWithValue }) => {
+    async ({ taskId }: { taskId: string | number }, { rejectWithValue }) => {
         try {
             await projectsService.deleteProjectTask(taskId);
             return taskId;
@@ -88,7 +102,7 @@ export const updateTaskCell = createAsyncThunk(
         value: any;
     }, { rejectWithValue }) => {
         try {
-          
+
             const taskData = { [field]: value } as Partial<ProjectTask>;
 
             const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
@@ -139,7 +153,24 @@ const tasksSlice = createSlice({
             state.tasks = [];
             state.currentTask = null;
         },
-        
+
+        addTaskOptimistic: (state, action: PayloadAction<ProjectTask>) => {
+            state.tasks.unshift(action.payload);
+        },
+
+        replaceOptimisticTask: (state, action: PayloadAction<{ tempId: string, newTask: ProjectTask }>) => {
+            const { tempId, newTask } = action.payload;
+            const index = state.tasks.findIndex(task => String(task.id) === String(tempId));
+            if (index !== -1) {
+                state.tasks[index] = newTask;
+            }
+        },
+
+        removeOptimisticTask: (state, action: PayloadAction<string>) => {
+            const tempId = action.payload;
+            state.tasks = state.tasks.filter(task => String(task.id) !== String(tempId));
+        },
+
         optimisticUpdateTask: (state, action: PayloadAction<Partial<ProjectTask> & { id: string | number }>) => {
             const { id, ...updatedFields } = action.payload;
             const index = state.tasks.findIndex(task => String(task.id) === String(id));
@@ -201,14 +232,9 @@ const tasksSlice = createSlice({
         });
         builder.addCase(fetchTasks.rejected, setFailed);
 
-        builder.addCase(addTask.pending, setPending);
-        builder.addCase(addTask.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.tasks.unshift(action.payload);
-
-            state.currentTask = action.payload;
+        builder.addCase(addTask.rejected, (state, action) => {
+            state.error = action.payload as string || 'Failed to add task';
         });
-        builder.addCase(addTask.rejected, setFailed);
 
         builder.addCase(updateTask.pending, (state, action) => {
             const taskId = action.meta.arg.taskId;
@@ -296,6 +322,9 @@ export const {
     selectTask,
     clearTasksError,
     clearTasks,
+    addTaskOptimistic,
+    replaceOptimisticTask,
+    removeOptimisticTask,
     optimisticUpdateTask,
     optimisticUpdateCell,
     clearCellUpdateError,

@@ -20,7 +20,6 @@ import CurrentTask from "../../components/SharedComponents/CurrentTask/CurrentTa
 import TasksTable from "../../components/SharedComponents/TasksTable/TasksTable";
 import "./ProjectDetails.css";
 
-// Import custom hooks and utilities
 import useTaskActionsHandler from "../../components/ProjectDetailsComponents/TaskActionsHandler/TaskActionsHandler";
 import useTaskCellHandlers from "../../components/ProjectDetailsComponents/TaskCellHandlers/TaskCellHandlers";
 import useTaskColumns from "../../components/ProjectDetailsComponents/TaskColumns/TaskColumns";
@@ -32,7 +31,6 @@ const ProjectDetails: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    // Get project and tasks from Redux state
     const project = useAppSelector(selectSelectedProject);
     const projectTasks = useAppSelector(selectAllTasks);
     const isProjectLoading = useAppSelector(selectProjectsLoading);
@@ -42,11 +40,9 @@ const ProjectDetails: React.FC = () => {
     const loadingTaskIds = useAppSelector(selectLoadingTaskIds);
     const cellErrors = useAppSelector(selectCellUpdateErrors);
 
-    // Derived state
     const isLoading = isProjectLoading || isTasksLoading;
     const error = projectError || tasksError;
 
-    // Use custom hooks to organize functionality
     const { tasks, currentTask } = useTaskDataMapper({ projectTasks });
     const { handleAddTask, handleDeleteTask, handleStartTimer } =
         useTaskActionsHandler({
@@ -58,7 +54,6 @@ const ProjectDetails: React.FC = () => {
     const columns = useTaskColumns({ handleStartTimer, handleDeleteTask });
     const projectUIProps = useProjectStats({ project, tasks });
 
-    // Define which fields can be edited directly
     const editableFields = [
         "name",
         "estimatedTime",
@@ -66,7 +61,6 @@ const ProjectDetails: React.FC = () => {
         "description",
         "priority",
         "progress",
-        "status",
     ];
 
     useEffect(() => {
@@ -74,7 +68,6 @@ const ProjectDetails: React.FC = () => {
             return;
         }
 
-        // Fetch project details and tasks
         dispatch(fetchProjectById(projectId));
         dispatch(fetchTasks(projectId));
     }, [projectId, dispatch]);
@@ -223,7 +216,6 @@ const ProjectDetails: React.FC = () => {
                     </div>
                 )}
 
-                {/* Display cell update errors if needed */}
                 {Object.keys(cellErrors).length > 0 && (
                     <div className="cell-errors">
                         <h4>Update Errors</h4>
