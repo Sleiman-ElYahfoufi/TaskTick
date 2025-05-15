@@ -241,7 +241,17 @@ class ProjectsService {
 
     async updateProject(projectId: string | number, project: Partial<Project>): Promise<Project> {
         try {
-            const response = await api.put<Project>(`/projects/${projectId}`, project);
+            const currentProject = await this.getProjectById(projectId);
+
+            const response = await api.patch<Project>(`/projects/${projectId}`, project);
+
+            if (!response.data.completedTasks && currentProject.completedTasks) {
+                response.data.completedTasks = currentProject.completedTasks;
+            }
+            if (!response.data.totalTasks && currentProject.totalTasks) {
+                response.data.totalTasks = currentProject.totalTasks;
+            }
+
             return this.mapProjectData(response.data);
         } catch (error) {
             console.error(`Error updating project ${projectId}:`, error);
