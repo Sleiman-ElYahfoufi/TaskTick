@@ -15,9 +15,8 @@ TaskTick is an AI-powered task management system designed  for software develope
 <!-- System Design -->
 <img src="./readme/title3.svg"/>
 
-### Add Title Here
-
-- To be decided on later on.
+### ER Diagram
+<img src="https://i.ibb.co/v6v7wgq7/ER-Diagram.png" />
 
 <br><br>
 
