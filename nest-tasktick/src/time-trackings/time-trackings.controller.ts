@@ -1,10 +1,10 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
   Delete,
   Query,
   UseGuards,
@@ -20,7 +20,7 @@ import { AuthGuard } from '../auth/auth.guard';
 @Controller('time-trackings')
 @UseGuards(AuthGuard)
 export class TimeTrackingsController {
-  constructor(private readonly timeTrackingsService: TimeTrackingsService) {}
+  constructor(private readonly timeTrackingsService: TimeTrackingsService) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -42,25 +42,25 @@ export class TimeTrackingsController {
   endSession(@Param('id', ParseIntPipe) id: number) {
     return this.timeTrackingsService.endSession(id);
   }
-  
+
   @Post(':id/pause')
   @HttpCode(HttpStatus.OK)
   pauseSession(@Param('id', ParseIntPipe) id: number) {
     return this.timeTrackingsService.pauseUserSession(id);
   }
-  
+
   @Post(':id/resume-paused')
   @HttpCode(HttpStatus.OK)
   resumeUserPausedSession(@Param('id', ParseIntPipe) id: number) {
     return this.timeTrackingsService.resumeUserPausedSession(id);
   }
-  
+
   @Post(':id/resume-auto-paused')
   @HttpCode(HttpStatus.OK)
   resumeAutoPausedSession(@Param('id', ParseIntPipe) id: number) {
     return this.timeTrackingsService.resumeAutoPausedSession(id);
   }
-  
+
   @Post(':id/heartbeat')
   @HttpCode(HttpStatus.OK)
   updateHeartbeat(@Param('id', ParseIntPipe) id: number) {
@@ -76,15 +76,15 @@ export class TimeTrackingsController {
     if (userId && autoPaused === 'true') {
       return this.timeTrackingsService.findAutoPausedSessionsByUserId(+userId);
     }
-    
+
     if (userId) {
       return this.timeTrackingsService.findAllByUserId(+userId);
     }
-    
+
     if (taskId) {
       return this.timeTrackingsService.findAllByTaskId(+taskId);
     }
-    
+
     return this.timeTrackingsService.findAll();
   }
 
@@ -92,19 +92,19 @@ export class TimeTrackingsController {
   findActiveSession(@Param('userId', ParseIntPipe) userId: number) {
     return this.timeTrackingsService.findActiveSessionByUserId(userId);
   }
-  
+
   @Get('tasks/:taskId/summary')
   getTaskSummary(@Param('taskId', ParseIntPipe) taskId: number) {
     return this.timeTrackingsService.getTaskTimeSummary(taskId);
   }
-  
+
   @Get('users/:userId/productivity')
   getUserProductivity(
     @Param('userId', ParseIntPipe) userId: number,
     @Query('days', ParseIntPipe) days?: number
   ) {
     return this.timeTrackingsService.getUserProductivity(
-      userId, 
+      userId,
       days || 7
     );
   }
@@ -116,7 +116,7 @@ export class TimeTrackingsController {
 
   @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: number, 
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateTimeTrackingDto: UpdateTimeTrackingDto
   ) {
     return this.timeTrackingsService.update(id, updateTimeTrackingDto);

@@ -71,7 +71,7 @@ export class TasksService {
 
     const savedTask = await this.tasksRepository.save(updatedTask);
 
-    // Update project status after task update
+
     await this.projectsService.updateProjectStatus(updateTaskDto.project_id || projectId);
 
     return savedTask;
@@ -86,7 +86,7 @@ export class TasksService {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
 
-    // Update project status after task deletion
+
     await this.projectsService.updateProjectStatus(projectId);
   }
 

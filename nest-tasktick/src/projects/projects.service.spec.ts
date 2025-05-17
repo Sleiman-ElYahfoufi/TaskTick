@@ -24,7 +24,7 @@ describe('ProjectsService', () => {
     user_id: 1,
     created_at: new Date(),
     updated_at: new Date(),
-    user: {} as any, // Mock a user object
+    user: {} as any,
     tasks: []
   };
 
@@ -93,13 +93,13 @@ describe('ProjectsService', () => {
       expect(repository.find).toHaveBeenCalled();
       expect(result).toEqual(projects);
     });
-    
+
     it('should find projects by status', async () => {
       const projects = [mockProject];
       jest.spyOn(repository, 'find').mockResolvedValue(projects);
-      
+
       const result = await service.findByStatus(ProjectStatus.PLANNING);
-      
+
       expect(repository.find).toHaveBeenCalledWith({
         where: { status: ProjectStatus.PLANNING }
       });

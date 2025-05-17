@@ -15,7 +15,7 @@ export class ProjectsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createProjectDto: CreateProjectDto, @GetUser('sub') userId: number) {
-    // Ensure the user_id in the DTO matches the authenticated user
+
     createProjectDto.user_id = userId;
     return this.projectsService.create(createProjectDto);
   }

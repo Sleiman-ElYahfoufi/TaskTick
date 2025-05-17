@@ -16,7 +16,7 @@ import { Project, PriorityLevel as ProjectPriorityLevel, DetailDepth } from '../
 import { ExperienceLevel } from '../users/entities/user.entity';
 import { PriorityLevel as TaskPriorityLevel } from '../tasks/entities/task.entity';
 
-// Define the shape of task data from AI
+
 interface ParsedTask {
   name: string;
   description?: string;
@@ -41,19 +41,19 @@ export class ProjectDecompositionService {
     private timeTrackingsService: TimeTrackingsService,
   ) {
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');
-    
+
     if (!apiKey) {
       this.logger.error('OPENAI_API_KEY not found in environment variables');
     }
 
-    // Initialize the OpenAI model
+
     this.model = new ChatOpenAI({
       openAIApiKey: apiKey,
       modelName: 'o4-mini-2025-04-16',
       temperature: 1,
     });
 
-    // Initialize the parser with our task schema
+
     this.outputParser = StructuredOutputParser.fromZodSchema(
       z.array(z.object({
         name: z.string().min(1),
@@ -73,34 +73,34 @@ export class ProjectDecompositionService {
       const { projectDetails, userId, maxTasks = 15 } = generateTasksDto;
       this.logger.log(`Generating tasks for project: ${projectDetails.name}`);
 
-      // Get the current date
+
       const currentDate = new Date();
       const todayStr = currentDate.toISOString().split('T')[0];
 
-      // Normalize enum values
+
       const priority = this.normalizeProjectPriority(projectDetails.priority);
       const detailDepth = this.normalizeDetailDepth(projectDetails.detail_depth);
 
-      // Get user data and context
+
       const user = await this.usersService.findOne(userId);
       const userTechStacks = await this.userTechStacksService.findByUserId(userId);
       const userProjects = await this.projectsService.findAllByUserId(userId);
       const timeTrackingData = await this.timeTrackingsService.getUserProductivity(userId, 30);
-      
-      // Get completed tasks from previous projects
+
+
       const completedTasks: any[] = [];
       for (const project of userProjects) {
         const projectTasks = await this.tasksService.findAllByProjectId(project.id);
         completedTasks.push(...projectTasks.filter(task => task.status === 'completed'));
       }
 
-      // Build user context based on their history and skills
+
       const userContext = this.buildUserContext(user, userTechStacks, completedTasks, timeTrackingData);
-      
-      // Create the messages directly 
+
+
       const messages = [
         {
-          role: "system", 
+          role: "system",
           content: "You are an expert software development project manager breaking down projects into tasks. " +
             "For each task, include: name, description, estimated_time (hours), priority (LOW/MEDIUM/HIGH), and dueDate. " +
             "IMPORTANT: Today's date is " + todayStr + ". All due dates MUST start from today or later. " +
@@ -108,11 +108,11 @@ export class ProjectDecompositionService {
             "High priority tasks should have due dates within the next 7 days, medium priority within 14 days, and low priority within 30 days."
         },
         {
-          role: "system", 
+          role: "system",
           content: this.outputParser.getFormatInstructions()
         },
         {
-          role: "user", 
+          role: "user",
           content: `USER CONTEXT:\n${userContext}\n\nPROJECT DETAILS:
 Name: ${projectDetails.name}
 Description: ${projectDetails.description}
@@ -125,24 +125,24 @@ Please decompose this project into appropriate tasks with realistic due dates st
         }
       ];
 
-      // Call the model directly first
+
       this.logger.log('Sending request to AI model...');
       const response = await this.model.invoke(messages);
-      
-      // Then parse the response with LangChain's structured parser
+
+
       const responseContent = response.content as string;
       this.logger.log('Parsing response with LangChain parser...');
-      
+
       const parsedTasks = await this.outputParser.parse(responseContent) as ParsedTask[];
       this.logger.log(`Successfully parsed ${parsedTasks.length} tasks from AI response`);
 
-      // Transform tasks to application format and ensure due dates are from today onwards
+
       const tasks: GeneratedTaskDto[] = parsedTasks.slice(0, maxTasks).map(task => {
         let dueDate: Date | undefined;
-        
+
         if (task.dueDate) {
           const parsedDate = new Date(task.dueDate);
-          // If the AI generated a past date, adjust it to be from today
+
           if (parsedDate < currentDate) {
             const daysDiff = Math.ceil((currentDate.getTime() - parsedDate.getTime()) / (1000 * 60 * 60 * 24));
             dueDate = new Date(currentDate.getTime() + (daysDiff * 24 * 60 * 60 * 1000));
@@ -154,7 +154,7 @@ Please decompose this project into appropriate tasks with realistic due dates st
         return {
           name: task.name,
           description: task.description || '',
-          estimated_time: typeof task.estimated_time === 'number' ? 
+          estimated_time: typeof task.estimated_time === 'number' ?
             task.estimated_time : parseFloat(String(task.estimated_time)) || 1,
           priority: this.mapToTaskPriority(task.priority),
           dueDate,
@@ -189,17 +189,17 @@ Please decompose this project into appropriate tasks with realistic due dates st
 
     try {
       if (projectId) {
-        // Add tasks to existing project
+
         this.logger.log(`Adding ${tasks.length} tasks to existing project ID: ${projectId}`);
         project = await this.projectsService.findOne(projectId);
-        
+
         for (const task of tasks) {
           await this.tasksService.create({ ...task, project_id: project.id });
         }
       } else if (projectDetails) {
-        // Create a new project with tasks
+
         this.logger.log(`Creating new project "${projectDetails.name}" with ${tasks.length} tasks`);
-        
+
         project = await this.projectsService.create({
           name: projectDetails.name,
           description: projectDetails.description,
@@ -209,7 +209,7 @@ Please decompose this project into appropriate tasks with realistic due dates st
           estimated_time: tasks.reduce((sum, task) => sum + task.estimated_time, 0),
           user_id: userId || 1
         });
-        
+
         for (const task of tasks) {
           await this.tasksService.create({ ...task, project_id: project.id });
         }
@@ -230,29 +230,29 @@ Please decompose this project into appropriate tasks with realistic due dates st
   }
 
   private buildUserContext(user, userTechStacks, completedTasks, timeTrackingData): string {
-    // Map experience level to years
+
     const experienceYears = {
       [ExperienceLevel.BEGINNER]: '0-2',
       [ExperienceLevel.INTERMEDIATE]: '3-5',
       [ExperienceLevel.EXPERT]: '6+'
     };
 
-    // Format tech stacks
-    const techStacks = userTechStacks.map(uts => 
+
+    const techStacks = userTechStacks.map(uts =>
       `${uts.techStack.name} (Proficiency: ${uts.proficiency_level}/5)`
     ).join(', ');
 
-    // Calculate estimation accuracy
+
     let totalEstimated = 0, totalActual = 0;
     const tasksByPriority = { high: [], medium: [], low: [] };
-    
+
     completedTasks.forEach(task => {
       const actual = task.timeTrackings?.reduce((sum, tt) => sum + (tt.duration_hours || 0), 0) || 0;
       const estimated = task.estimated_time || 0;
-      
+
       totalEstimated += estimated;
       totalActual += actual;
-      
+
       if (task.priority) {
         const priority = task.priority.toLowerCase();
         if (tasksByPriority[priority]) {
@@ -265,7 +265,7 @@ Please decompose this project into appropriate tasks with realistic due dates st
       }
     });
 
-    // Get recent task examples with accuracy info
+
     const taskExamples = completedTasks
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
       .map(task => {
@@ -273,10 +273,10 @@ Please decompose this project into appropriate tasks with realistic due dates st
         const ratioNum = task.estimated_time ? actual / task.estimated_time : 0;
         const ratio = ratioNum.toFixed(2);
         let accuracy = 'ACCURATE';
-        
+
         if (ratioNum > 1.1) accuracy = 'UNDERESTIMATED';
         else if (ratioNum < 0.9) accuracy = 'OVERESTIMATED';
-        
+
         return `- "${task.name}": Estimated ${task.estimated_time}h, Actual ${actual}h (${accuracy})`;
       })
       .join('\n');
@@ -292,26 +292,26 @@ Recent Task Examples:
 ${taskExamples || 'No completed tasks found'}`;
   }
 
-  // Helper methods for normalization and mapping
+
   private normalizeProjectPriority(priority?: string): ProjectPriorityLevel {
     if (!priority) return ProjectPriorityLevel.MEDIUM;
-    
+
     return priority.toLowerCase() === 'high' ? ProjectPriorityLevel.HIGH :
-           priority.toLowerCase() === 'low' ? ProjectPriorityLevel.LOW :
-           ProjectPriorityLevel.MEDIUM;
+      priority.toLowerCase() === 'low' ? ProjectPriorityLevel.LOW :
+        ProjectPriorityLevel.MEDIUM;
   }
 
   private normalizeDetailDepth(detailDepth?: string): DetailDepth {
     if (!detailDepth) return DetailDepth.NORMAL;
-    
+
     return detailDepth.toLowerCase() === 'detailed' ? DetailDepth.DETAILED :
-           detailDepth.toLowerCase() === 'minimal' ? DetailDepth.MINIMAL :
-           DetailDepth.NORMAL;
+      detailDepth.toLowerCase() === 'minimal' ? DetailDepth.MINIMAL :
+        DetailDepth.NORMAL;
   }
 
   private mapToTaskPriority(priority: string): TaskPriorityLevel {
     return priority.toLowerCase() === 'high' ? TaskPriorityLevel.HIGH :
-           priority.toLowerCase() === 'low' ? TaskPriorityLevel.LOW :
-           TaskPriorityLevel.MEDIUM;
+      priority.toLowerCase() === 'low' ? TaskPriorityLevel.LOW :
+        TaskPriorityLevel.MEDIUM;
   }
 }

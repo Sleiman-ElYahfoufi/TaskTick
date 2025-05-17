@@ -9,9 +9,9 @@ export class CreateTimeTrackingDto {
   @IsNumber()
   task_id: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsDateString()
-  start_time: Date;
+  start_time?: Date;
 
   @IsOptional()
   @IsDateString()
