@@ -78,13 +78,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
     const handleToggleEdit = () => {
         if (isEditing) {
-            // Reset form values if canceling
             setEditedTitle(title);
             setEditedDescription(description);
             setEditedDeadline(deadline || "");
         }
         setIsEditing(!isEditing);
-        // Hide delete confirmation if it was showing
+
         setShowDeleteConfirm(false);
     };
 
@@ -119,7 +118,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         if (!editedDeadline) return "";
         try {
             const date = new Date(editedDeadline);
-            return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+            return date.toISOString().split("T")[0];
         } catch (e) {
             return "";
         }
