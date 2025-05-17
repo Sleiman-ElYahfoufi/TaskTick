@@ -1,0 +1,79 @@
+.task-column {
+    padding: 10px;
+    min-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #eee;
+}
+
+.time-spent-column {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.time-spent-column:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.time-spent-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.time-spent-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-spent-value {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.time-spent-sessions {
+    font-size: 12px;
+    color: #666;
+}
+
+.time-spent-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.time-spent-column:hover .time-spent-actions {
+    opacity: 1;
+}
+
+.start-tracking-icon {
+    color: #4caf50;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.start-tracking-icon:hover {
+    color: #388e3c;
+}
+
+.time-spent-column.session-active-disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    background-color: #f9f9f9;
+}
+
+.time-spent-column.session-active-disabled:hover {
+    background-color: #f9f9f9;
+}
+
+.start-tracking-icon.disabled {
+    color: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.start-tracking-icon.disabled:hover {
+    color: #b0b0b0;
+}

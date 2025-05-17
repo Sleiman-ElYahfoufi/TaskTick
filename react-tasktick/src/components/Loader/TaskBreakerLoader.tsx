@@ -206,7 +206,7 @@ const TaskBreakerLoader: React.FC<TaskBreakerLoaderProps> = ({
                         </div>
 
                         <div className="progress-container">
-                            <div className="progress-bar">
+                            <div className="progress-bar-loader">
                                 <motion.div
                                     className="progress-fill"
                                     animate={{ width: `${progress}%` }}
@@ -221,7 +221,7 @@ const TaskBreakerLoader: React.FC<TaskBreakerLoaderProps> = ({
                             </div>
                         </div>
 
-                        <div className="loader-title">TaskBreaker AI</div>
+                        <div className="loader-title">Task Tick</div>
                     </div>
                 </motion.div>
             )}

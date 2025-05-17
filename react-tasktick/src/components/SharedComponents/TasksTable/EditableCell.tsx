@@ -5,10 +5,17 @@ export interface EditableCellProps {
     row: any;
     field: string;
     onValueChange: (id: string | number, field: string, value: any) => void;
+    editingDisabled?: boolean;
 }
 
 export const EditableCell = memo(
-    ({ value, row, field, onValueChange }: EditableCellProps) => {
+    ({
+        value,
+        row,
+        field,
+        onValueChange,
+        editingDisabled = false,
+    }: EditableCellProps) => {
         const [isEditing, setIsEditing] = useState(false);
         const [editValue, setEditValue] = useState(value);
         const inputRef = useRef<HTMLInputElement>(null);
@@ -53,12 +60,18 @@ export const EditableCell = memo(
         }, [value, isEditing, processValue]);
 
         const handleClick = () => {
+            if (editingDisabled) return;
             setIsEditing(true);
             setEditValue(processValue(value, true));
         };
 
         const finishEditing = () => {
             setIsEditing(false);
+
+            if (editingDisabled) {
+                setEditValue(processValue(value, true));
+                return;
+            }
 
             const processedCurrent = processValue(editValue, true);
             const processedOriginal = processValue(value, true);
@@ -91,8 +104,12 @@ export const EditableCell = memo(
 
         return (
             <div
-                className="editable-cell-container"
-                onClick={!isEditing ? handleClick : undefined}
+                className={`editable-cell-container ${
+                    editingDisabled ? "disabled" : ""
+                }`}
+                onClick={
+                    !isEditing && !editingDisabled ? handleClick : undefined
+                }
             >
                 {isEditing ? (
                     <input
