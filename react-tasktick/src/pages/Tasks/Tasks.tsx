@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { GridColDef } from "@mui/x-data-grid";
-import TasksTable, {
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { GridColDef, DataGrid } from "@mui/x-data-grid";
+import {
     renderActionsCell,
     renderStatusCell,
     renderProjectCell,
-} from "../../components/SharedComponents/TasksTable/TasksTable";
+} from "../../components/SharedComponents/TasksTable/TableCellRenderers";
 import CurrentTask from "../../components/SharedComponents/CurrentTask/CurrentTask";
 import TaskFilters from "../../components/TasksComponents/TaskFilters/TaskFilters";
 import TaskStats from "../../components/TasksComponents/TaskStats/TaskStats";
@@ -29,7 +29,6 @@ const Tasks: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
-    // Current task data
     const currentTask = {
         name: "Initial UI/UX Analysis",
         category: "E-commerce",
@@ -177,6 +176,16 @@ const Tasks: React.FC = () => {
         console.log("Edit task:", taskId);
     };
 
+    const processRowUpdate = useCallback((newRow: any, oldRow: any) => {
+        console.debug(
+            "Process row update:",
+            newRow.id,
+            "Changes:",
+            JSON.stringify(newRow)
+        );
+        return newRow;
+    }, []);
+
     const columns: GridColDef[] = [
         {
             field: "name",
@@ -226,6 +235,75 @@ const Tasks: React.FC = () => {
         },
     ];
 
+    const makeColumnsEditable = useCallback((cols: GridColDef[]) => {
+        return cols.map((col) => {
+            return {
+                ...col,
+                editable: [
+                    "name",
+                    "project",
+                    "estimatedTime",
+                    "dueDate",
+                    "status",
+                ].includes(col.field),
+            };
+        });
+    }, []);
+
+    const enhancedColumns = useMemo(
+        () => makeColumnsEditable(columns),
+        [columns, makeColumnsEditable]
+    );
+
+    const responsiveColumns = useMemo(() => {
+        const width = window.innerWidth;
+
+        return enhancedColumns.map((col) => {
+            const baseConfig = {
+                ...col,
+                minWidth: col.minWidth,
+                flex: col.flex,
+            };
+
+            if (width < 576) {
+                if (col.field === "name") {
+                    return { ...baseConfig, flex: 1.5, minWidth: 100 };
+                } else if (col.field === "actions") {
+                    return { ...baseConfig, flex: 0.7, minWidth: 60 };
+                } else if (col.field === "status") {
+                    return { ...baseConfig, flex: 0.8, minWidth: 80 };
+                } else if (col.field === "project") {
+                    return { ...baseConfig, flex: 0.8, minWidth: 80 };
+                } else if (col.field === "estimatedTime") {
+                    return { ...baseConfig, flex: 0.6, minWidth: 60 };
+                } else if (col.field === "dueDate") {
+                    return { ...baseConfig, flex: 0.8, minWidth: 80 };
+                }
+            } else if (width < 768) {
+                if (col.field === "name") {
+                    return { ...baseConfig, flex: 1.5, minWidth: 120 };
+                } else if (col.field === "actions") {
+                    return { ...baseConfig, flex: 0.8, minWidth: 80 };
+                } else {
+                    return { ...baseConfig, flex: 1, minWidth: 90 };
+                }
+            }
+
+            return baseConfig;
+        });
+    }, [enhancedColumns]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setFilteredTasks([...filteredTasks]);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [filteredTasks]);
+
     return (
         <div className="tasks-page">
             <h1 className="page-title">Tasks</h1>
@@ -260,19 +338,112 @@ const Tasks: React.FC = () => {
                 />
             </div>
 
-            <TasksTable
-                tasks={filteredTasks}
-                columns={columns}
-                onStartTimer={handleStartTimer}
-                onDeleteTask={handleDeleteTask}
-                editableFields={[
-                    "name",
-                    "project",
-                    "estimatedTime",
-                    "dueDate",
-                    "status",
-                ]}
-            />
+            <div className="responsive-table-container">
+                <div className="tasks-table-container">
+                    <DataGrid
+                        rows={filteredTasks}
+                        columns={responsiveColumns}
+                        editMode="cell"
+                        processRowUpdate={processRowUpdate}
+                        onProcessRowUpdateError={(error) =>
+                            console.error(error)
+                        }
+                        autoHeight
+                        getRowHeight={() => "auto"}
+                        disableRowSelectionOnClick
+                        disableColumnFilter
+                        disableColumnMenu
+                        hideFooter={filteredTasks.length <= 10}
+                        getRowId={(row) => row.id}
+                        loading={false}
+                        initialState={{
+                            sorting: {
+                                sortModel: [{ field: "id", sort: "desc" }],
+                            },
+                            columns: {
+                                columnVisibilityModel: {
+                                    dueDate: window.innerWidth > 576,
+                                    estimatedTime: window.innerWidth > 576,
+                                },
+                            },
+                        }}
+                        sx={{
+                            width: "100%",
+                            "& .MuiDataGrid-cell--editing": {
+                                backgroundColor: "rgba(0,0,0,0.04)",
+                                padding: "16px",
+                                boxShadow: "inset 0 0 0 2px #1976d2",
+                                zIndex: 10,
+                            },
+                            "& .MuiDataGrid-cell:focus": {
+                                outline: "none",
+                            },
+                            "& .MuiDataGrid-cell.MuiDataGrid-cell--editable:hover":
+                                {
+                                    backgroundColor: "rgba(0,0,0,0.04)",
+                                },
+                            "& .MuiDataGrid-row:hover": {
+                                backgroundColor: "#f9fafb",
+                            },
+                            border: "none",
+                            "& .MuiDataGrid-columnHeaders": {
+                                backgroundColor: "#f9fafb",
+                                borderBottom: "1px solid #e5e7eb",
+                            },
+                            "& .MuiDataGrid-columnHeader": {
+                                padding: {
+                                    xs: "4px",
+                                    sm: "8px",
+                                    md: "16px",
+                                },
+                            },
+                            "& .MuiDataGrid-columnHeaderTitle": {
+                                fontWeight: "600",
+                                color: "#6b7280",
+                                fontSize: {
+                                    xs: "0.65rem",
+                                    sm: "0.7rem",
+                                    md: "0.75rem",
+                                },
+                                textTransform: "uppercase",
+                                whiteSpace: {
+                                    xs: "normal",
+                                    sm: "normal",
+                                    md: "nowrap",
+                                },
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            },
+                            "& .MuiDataGrid-cell": {
+                                padding: {
+                                    xs: "6px 4px",
+                                    sm: "8px 8px",
+                                    md: "12px 16px",
+                                },
+                                borderBottom: "1px solid #e5e7eb",
+                                whiteSpace: "normal",
+                                lineHeight: "normal",
+                                transition: "none",
+                                fontSize: {
+                                    xs: "0.75rem",
+                                    sm: "0.8rem",
+                                    md: "0.875rem",
+                                },
+                            },
+
+                            "& .MuiDataGrid-main": {
+                                overflow: "visible",
+                            },
+                            "& .MuiDataGrid-virtualScroller": {
+                                overflowX: "visible",
+                            },
+                            "& .MuiDataGrid-virtualScrollerContent": {
+                                willChange: "transform",
+                            },
+                        }}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

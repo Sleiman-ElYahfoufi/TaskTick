@@ -1,21 +1,290 @@
 .tasks-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 16px;
-  font-family: "Inter", sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.page-title,
+.current-task-wrapper,
+.task-filters-container,
+.task-stats-container {
+    width: 90vw;
+    max-width: 1200px;
 }
 
 .page-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 24px;
 }
 
 .current-task-wrapper {
-  margin-bottom: 24px;
+    margin-bottom: 24px;
     display: flex;
-  justify-content: space-between;
+    justify-content: center;
     align-items: end;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
 
+.table-error-fallback {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.table-error-fallback h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.simple-task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.simple-task-item {
+    padding: 12px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.simple-task-item span:first-child {
+    font-weight: 500;
+}
+
+.simple-task-item span:last-child {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #f0f7ff;
+    color: #0066cc;
+    font-size: 0.9em;
+}
+
+.data-grid-wrapper {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.responsive-table-container {
+    width: 90vw;
+    max-width: 90vw;
+    overflow-x: auto;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tasks-table-container {
+    width: 100%;
+    min-width: 700px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-color: white;
+}
+
+/* Status badge styles */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.status-badge.completed {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.status-badge.in-progress {
+    background-color: #f0f7ff;
+    color: #1d4ed8;
+}
+
+.status-badge.not-started {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Project badge styles */
+.project-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Priority badge styles */
+.priority-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.priority-badge.high {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.priority-badge.medium {
+    background-color: #fffbeb;
+    color: #d97706;
+}
+
+.priority-badge.low {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Action buttons */
+.actions-cell {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-button,
+.delete-button {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-button {
+    background-color: #f0f7ff;
+    color: #1d4ed8;
+}
+
+.edit-button:hover {
+    background-color: #dbeafe;
+}
+
+.delete-button {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.delete-button:hover {
+    background-color: #fee2e2;
+}
+
+/* Enhanced responsive styles */
+@media (max-width: 992px) {
+    .responsive-table-container {
+        width: 90vw;
+        max-width: 90vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tasks-table-container {
+        min-width: 650px;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tasks-page {
+        padding: 16px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .responsive-table-container {
+        width: 90vw;
+        max-width: 90vw;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tasks-table-container {
+        min-width: 600px;
+    }
+
+    .priority-badge,
+    .status-badge,
+    .project-badge {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+    }
+
+    .edit-button,
+    .delete-button {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+
+    .actions-cell {
+        gap: 4px;
+    }
+}
+
+@media (max-width: 576px) {
+    .responsive-table-container {
+        width: 90vw;
+        max-width: 90vw;
+    }
+
+    .tasks-table-container {
+        min-width: 550px;
+    }
+
+    .edit-button span,
+    .delete-button span {
+        display: none;
+    }
+
+    .edit-button:after {
+        content: "✏️";
+    }
+
+    .delete-button:after {
+        content: "🗑️";
+    }
+
+    .actions-cell {
+        justify-content: space-evenly;
+    }
+
+    /* Make the data grid header and cells more compact */
+    .MuiDataGrid-columnHeader {
+        padding: 0 !important;
+    }
+
+    .MuiDataGrid-columnHeaderTitle {
+        font-size: 0.65rem !important;
+        padding: 0 4px !important;
+    }
+
+    .MuiDataGrid-cell {
+        padding: 6px 4px !important;
+    }
 }
