@@ -12,10 +12,12 @@ import Projects from "./pages/Projects/Projects";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 function App() {
     return (
         <Router>
+            <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
             <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
@@ -25,8 +27,11 @@ function App() {
                     <Route path="/dashboard" element={<DashboardLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="projects" element={<Projects />} />
-                        <Route path="projects/:projectId" element={<ProjectDetails />} />
-                        <Route path="add-project" element={<AddProject />} />
+                        <Route
+                            path="projects/:projectId"
+                            element={<ProjectDetails />}
+                        />
+                        <Route path="projects/new" element={<AddProject />} />
                         <Route
                             path="generated-tasks"
                             element={<GeneratedTasks />}
