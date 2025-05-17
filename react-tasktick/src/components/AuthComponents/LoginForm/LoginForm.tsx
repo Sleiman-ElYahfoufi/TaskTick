@@ -22,7 +22,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
         (state) => state.auth
     );
 
-    // Redirect if authenticated
     useEffect(() => {
         if (isAuthenticated) {
             const from =
@@ -30,7 +29,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
             navigate(from, { replace: true });
         }
 
-        // Clear errors on unmount
         return () => {
             dispatch(clearError());
         };
@@ -45,10 +43,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
 
         try {
             await dispatch(login({ username, password })).unwrap();
-            // Redirect handled by useEffect
-        } catch (err) {
-            // Error already handled by Redux
-        }
+        } catch (err) {}
     };
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
