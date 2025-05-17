@@ -39,15 +39,23 @@ export const addTask = createAsyncThunk(
         const tempId = `temp-${Date.now()}`;
 
         try {
+
+            const taskName = (!task.name || task.name.trim() === '') ? 'New Task' : task.name;
+
             const optimisticTask = {
                 ...task,
                 id: tempId,
-                name: task.name || 'New Task',
+                name: taskName,
             } as ProjectTask;
 
             dispatch(addTaskOptimistic(optimisticTask));
 
-            const newTask = await projectsService.addProjectTask(projectId, task);
+
+            const taskToSave = {
+                ...task,
+                name: taskName
+            };
+            const newTask = await projectsService.addProjectTask(projectId, taskToSave);
 
             dispatch(replaceOptimisticTask({ tempId, newTask }));
 
@@ -67,6 +75,11 @@ export const updateTask = createAsyncThunk(
         taskData: Partial<ProjectTask>
     }, { rejectWithValue }) => {
         try {
+
+            if (taskData.name !== undefined && (!taskData.name || taskData.name.trim() === '')) {
+                taskData.name = "New Task";
+            }
+
             const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
             return updatedTask;
         } catch (error: any) {
@@ -102,6 +115,10 @@ export const updateTaskCell = createAsyncThunk(
         value: any;
     }, { rejectWithValue }) => {
         try {
+
+            if (field === 'name' && (!value || value.trim() === '')) {
+                value = "New Task";
+            }
 
             const taskData = { [field]: value } as Partial<ProjectTask>;
 
@@ -176,10 +193,16 @@ const tasksSlice = createSlice({
             const index = state.tasks.findIndex(task => String(task.id) === String(id));
 
             if (index !== -1) {
-                state.tasks[index] = { ...state.tasks[index], ...updatedFields };
+
+                const validatedFields = { ...updatedFields };
+                if (validatedFields.name !== undefined && (!validatedFields.name || validatedFields.name.trim() === '')) {
+                    validatedFields.name = 'New Task';
+                }
+
+                state.tasks[index] = { ...state.tasks[index], ...validatedFields };
 
                 if (state.currentTask && String(state.currentTask.id) === String(id)) {
-                    state.currentTask = { ...state.currentTask, ...updatedFields };
+                    state.currentTask = { ...state.currentTask, ...validatedFields };
                 }
             }
         },
@@ -193,15 +216,21 @@ const tasksSlice = createSlice({
                     delete state.cellUpdateErrors[`${taskId}_${field}`];
                 }
 
+
+                let finalValue = value;
+                if (field === 'name' && (!value || value.trim() === '')) {
+                    finalValue = 'New Task';
+                }
+
                 state.tasks[index] = {
                     ...state.tasks[index],
-                    [field]: value
+                    [field]: finalValue
                 };
 
                 if (state.currentTask && String(state.currentTask.id) === String(taskId)) {
                     state.currentTask = {
                         ...state.currentTask,
-                        [field]: value
+                        [field]: finalValue
                     };
                 }
             }
