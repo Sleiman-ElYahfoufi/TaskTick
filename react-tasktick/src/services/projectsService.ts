@@ -88,7 +88,7 @@ class ProjectsService {
             if (project.estimated_time > 1000) {
                 estimatedHours = '1000+';
             } else {
-                // Treat estimated_time as hours directly, not minutes
+
                 estimatedHours = `${project.estimated_time}h`;
             }
         }
@@ -416,7 +416,7 @@ class ProjectsService {
         return priorityMap[priority] || 'medium';
     }
 
-    // Add a public method that can be used by the redux store
+
     formatProject(project: Project): Project {
         return this.mapProjectData(project);
     }
