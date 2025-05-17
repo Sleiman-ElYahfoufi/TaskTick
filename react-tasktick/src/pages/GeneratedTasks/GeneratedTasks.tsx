@@ -15,6 +15,7 @@ import {
     DecompositionResult,
     GeneratedTaskDto,
 } from "../../services/projectDecompositionService";
+import projectDecompositionService from "../../services/projectDecompositionService";
 import "./GeneratedTasks.css";
 
 interface Task extends GeneratedTaskDto {
@@ -33,14 +34,11 @@ const GeneratedTasks: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    // Helper function to validate dates
     const isValidDate = (date: any): boolean => {
         if (!date) return false;
 
-        // If it's already a Date object
         if (date instanceof Date) return !isNaN(date.getTime());
 
-        // If it's a string, try to parse it
         if (typeof date === "string") {
             const parsed = new Date(date);
             return !isNaN(parsed.getTime());
@@ -50,7 +48,6 @@ const GeneratedTasks: React.FC = () => {
     };
 
     useEffect(() => {
-        // Retrieve the generated tasks from session storage
         const savedResult = sessionStorage.getItem("decompositionResult");
 
         if (!savedResult) {
@@ -67,11 +64,10 @@ const GeneratedTasks: React.FC = () => {
                 setProjectDescription(result.projectDetails.description);
             }
 
-            // Map the tasks to include an id for the DataGrid and ensure numeric values
             const tasksWithIds = result.tasks.map((task) => ({
                 ...task,
                 id: uuidv4(),
-                // Ensure estimated_time is a number
+
                 estimated_time:
                     typeof task.estimated_time === "string"
                         ? parseFloat(task.estimated_time)
@@ -85,7 +81,6 @@ const GeneratedTasks: React.FC = () => {
         }
     }, []);
 
-    // Calculate total with explicit number conversion
     const totalEstimatedTime = tasks.reduce((total, task) => {
         const timeValue =
             typeof task.estimated_time === "string"
@@ -100,7 +95,6 @@ const GeneratedTasks: React.FC = () => {
     };
 
     const handleAddTask = () => {
-        // Create a default due date (7 days from now)
         const defaultDueDate = new Date();
         defaultDueDate.setDate(defaultDueDate.getDate() + 7);
 
@@ -110,15 +104,14 @@ const GeneratedTasks: React.FC = () => {
             description: "",
             estimated_time: 2,
             priority: "medium",
-            dueDate: defaultDueDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
+            dueDate: defaultDueDate.toISOString().split("T")[0],
             progress: 0,
         };
-        // Add the new task at the beginning of the array
+
         setTasks([newTask, ...tasks]);
     };
 
     const processRowUpdate = (newRow: GridRowModel, _: GridRowModel) => {
-        // Ensure estimated_time is always a number
         const updatedRow = {
             ...newRow,
             estimated_time:
@@ -151,7 +144,6 @@ const GeneratedTasks: React.FC = () => {
             return;
         }
 
-        // Validate all tasks have required fields
         const emptyFieldTasks = tasks.filter(
             (task) =>
                 !task.name ||
@@ -168,7 +160,6 @@ const GeneratedTasks: React.FC = () => {
             return;
         }
 
-        // Validate all due dates are actual dates
         const invalidDateTasks = tasks.filter(
             (task) => task.dueDate && !isValidDate(task.dueDate)
         );
@@ -185,14 +176,32 @@ const GeneratedTasks: React.FC = () => {
         setSuccessMessage(null);
 
         try {
-            // Prepare the data for saving
+            const formattedTasks = tasks.map(({ id, ...rest }) => ({
+                ...rest,
+
+                dueDate:
+                    typeof rest.dueDate === "string"
+                        ? new Date(rest.dueDate).toISOString()
+                        : rest.dueDate
+                        ? (rest.dueDate as Date).toISOString()
+                        : undefined,
+            }));
+
+            const saveData: DecompositionResult = {
+                projectDetails: decompositionResult.projectDetails,
+                tasks: formattedTasks as GeneratedTaskDto[],
+                saved: false,
+                userId: Number(user.id),
+            };
+
+            const result = await projectDecompositionService.saveTasks(
+                saveData
+            );
 
             setSuccessMessage("Project successfully created!");
 
-            // Clear session storage
             sessionStorage.removeItem("decompositionResult");
 
-            // Navigate to projects list after a delay
             setTimeout(() => {
                 navigate("/dashboard/projects");
             }, 2000);
@@ -205,7 +214,7 @@ const GeneratedTasks: React.FC = () => {
     };
 
     const handleBackToDetails = () => {
-        navigate("/dashboard/add-project");
+        navigate("/dashboard/projects/new");
     };
 
     const columns: GridColDef[] = [
@@ -228,7 +237,6 @@ const GeneratedTasks: React.FC = () => {
             editable: true,
             type: "number",
             valueParser: (value) => {
-                // Parse string input to number, default to previous value if NaN
                 const parsed = parseFloat(value);
                 return isNaN(parsed) ? 0 : parsed;
             },
@@ -243,7 +251,6 @@ const GeneratedTasks: React.FC = () => {
             valueFormatter: (params) => {
                 if (!params.value) return "";
 
-                // Format date as a readable string
                 try {
                     const date = new Date(params.value);
                     if (isNaN(date.getTime())) return "Invalid date";
