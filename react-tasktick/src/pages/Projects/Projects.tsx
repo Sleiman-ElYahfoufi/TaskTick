@@ -53,17 +53,13 @@ const Projects: React.FC = () => {
     >({});
 
     useEffect(() => {
-        // Only fetch projects if user is authenticated
         if (user?.id) {
-            // @ts-ignore: Dispatch type inference issue
             dispatch(fetchProjects(parseInt(user.id)));
         }
     }, [dispatch, user]);
 
-    // Update filtered projects whenever projects array or localProjectUpdates changes
     useEffect(() => {
         if (projects && projects.length > 0) {
-            // Create a merged array by applying local updates over projects
             const mergedProjects = projects.map((project) => {
                 const localUpdate = localProjectUpdates[String(project.id)];
                 return localUpdate ? { ...project, ...localUpdate } : project;
@@ -99,7 +95,6 @@ const Projects: React.FC = () => {
 
         setUpdatingProjectId(projectId);
 
-        // Find the current project
         const existingProject = projects.find(
             (p) => String(p.id) === projectId
         );
@@ -109,14 +104,12 @@ const Projects: React.FC = () => {
             return;
         }
 
-        // Update local state immediately for a responsive UI
         const updatedLocalProject: Partial<ProjectData> = {
             id: projectId,
             name: updatedData.title,
             title: updatedData.title,
             description: updatedData.description,
             deadline: updatedData.deadline,
-            // Preserve these critical display fields
             status: existingProject.status,
             estimated_time: existingProject.estimated_time,
             estimatedHours: existingProject.estimatedHours,
@@ -128,12 +121,10 @@ const Projects: React.FC = () => {
             [projectId]: updatedLocalProject,
         }));
 
-        // Format the data as expected by the API, preserving existing values
         const projectData = {
             name: updatedData.title,
             description: updatedData.description,
             deadline: updatedData.deadline,
-            // Preserve these critical fields
             estimated_time: existingProject.estimated_time,
             status: existingProject.status,
             priority: existingProject.priority || "medium",
@@ -146,11 +137,10 @@ const Projects: React.FC = () => {
                 projectData,
             })
         ).then((action) => {
-            // If the update was successful
             if (action.meta.requestStatus === "fulfilled") {
                 if (action.payload) {
                     const payload = action.payload as any;
-                    // Create a merged object with updated values from the response
+
                     const updatedProject: Partial<ProjectData> = {
                         id: projectId,
                         name: payload.name || updatedData.title,
@@ -167,10 +157,9 @@ const Projects: React.FC = () => {
                             0,
                         estimated_time: payload.estimated_time,
                         status: payload.status,
-                        updated_at: payload.updated_at, // Include updated timestamp
+                        updated_at: payload.updated_at,
                     };
 
-                    // Both update filtered projects and the main projects array
                     const updateProject = (project: ProjectData) => {
                         if (String(project.id) === projectId) {
                             return { ...project, ...updatedProject };
@@ -180,13 +169,10 @@ const Projects: React.FC = () => {
 
                     setFilteredProjects((prev) => prev.map(updateProject));
 
-                    // This is necessary to update the main projects array and ensure consistency
-                    // without causing a full page refresh
                     const updatedProjects = projects.map(updateProject);
                     (projects as any).length = 0;
                     (projects as any).push(...updatedProjects);
 
-                    // Clear local updates for this project
                     setLocalProjectUpdates((prev) => {
                         const newUpdates = { ...prev };
                         delete newUpdates[projectId];
@@ -205,12 +191,10 @@ const Projects: React.FC = () => {
 
         dispatch(deleteProject(projectId)).then((action) => {
             if (action.meta.requestStatus === "fulfilled") {
-                // Update local state immediately for a responsive UI
                 setFilteredProjects((prev) =>
                     prev.filter((project) => String(project.id) !== projectId)
                 );
 
-                // Also update the main projects array without causing a refresh
                 const updatedProjects = projects.filter(
                     (project) => String(project.id) !== projectId
                 );
@@ -255,7 +239,6 @@ const Projects: React.FC = () => {
             }
         }
 
-        // Apply sorting
         switch (sort) {
             case "Name A-Z":
                 result.sort((a, b) => {
@@ -305,7 +288,6 @@ const Projects: React.FC = () => {
                 });
                 break;
             default:
-                // Keep original order
                 break;
         }
 
@@ -313,14 +295,13 @@ const Projects: React.FC = () => {
     };
 
     const handleNewProject = () => {
-        navigate("/projects/new");
+        navigate("/dashboard/projects/new");
     };
 
     const handleViewProjectDetails = (projectId: string) => {
         navigate(`/dashboard/projects/${projectId}`);
     };
 
-    // Helper function to map backend status to UI status
     const mapStatusToUI = (status: string): ProjectStatus => {
         const statusMap: { [key: string]: ProjectStatus } = {
             planning: "planning",
@@ -331,7 +312,6 @@ const Projects: React.FC = () => {
         return statusMap[status] || "planning";
     };
 
-    // Apply any local updates for immediate UI responsiveness
     const getDisplayProject = (project: ProjectData) => {
         const localUpdate = localProjectUpdates[String(project.id)];
         if (localUpdate) {
@@ -357,7 +337,6 @@ const Projects: React.FC = () => {
                     className="retry-button"
                     onClick={() => {
                         if (user?.id) {
-                            // @ts-ignore: Dispatch type inference issue
                             dispatch(fetchProjects(parseInt(user.id)));
                         }
                     }}
@@ -380,8 +359,6 @@ const Projects: React.FC = () => {
             <div className="projects-list">
                 {filteredProjects.length > 0 ? (
                     filteredProjects.map((project) => {
-                        const isUpdating =
-                            updatingProjectId === String(project.id);
                         const displayProject = getDisplayProject(project);
 
                         return (
