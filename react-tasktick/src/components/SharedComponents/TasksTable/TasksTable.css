@@ -64,7 +64,6 @@
     font-weight: 700;
 }
 
-
 .progress-bar-container {
     display: flex;
     flex-direction: column;
@@ -149,6 +148,18 @@
     background-color: #d1fae5;
     color: #047857;
     cursor: default;
+}
+
+.timer-button.session-active {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.timer-button.session-active:hover {
+    background-color: #f3f4f6;
+    box-shadow: none;
 }
 
 .action-buttons {
@@ -464,4 +475,47 @@
     border-style: solid;
     border-width: 0 6px 6px 0;
     border-color: transparent #1976d2 transparent transparent;
+}
+
+@media (max-width: 768px) {
+    .responsive-table-container {
+        width: 90vw !important;
+    }
+}
+
+/* Disabled editing styles */
+.editing-disabled-message {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editing-disabled .MuiDataGrid-cell {
+    cursor: default !important;
+}
+
+.editable-cell-container.disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
+.editable-cell-container.disabled:hover {
+    background-color: transparent;
+}
+
+.custom-editable-cell.disabled .overlay-edit-trigger {
+    display: none;
+}
+
+.edit-button.disabled,
+.delete-button.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

@@ -1,5 +1,7 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { EditableCell } from "./EditableCell";
+import { useAppSelector } from "../../../store/hooks";
+import { selectActiveSession } from "../../../store/slices/timeTrackingsSlice";
 
 export const renderPriorityCell = (params: GridRenderCellParams) => (
     <div className={`priority-badge ${params.value?.toString().toLowerCase()}`}>
@@ -38,50 +40,89 @@ export const renderProjectCell = (params: GridRenderCellParams) => (
 
 export const renderTimerCell =
     (onStartTimer: (id: string | number) => void) =>
-    (params: GridRenderCellParams) =>
-        (
+    (params: GridRenderCellParams) => {
+        const activeSession = useAppSelector(selectActiveSession);
+
+        const isDisabled = !!activeSession || params.row.status === "Completed";
+
+        const buttonClass = `timer-button ${
+            params.row.status === "Completed" ? "completed" : ""
+        } ${
+            activeSession && params.row.status !== "Completed"
+                ? "session-active"
+                : ""
+        }`;
+
+        return (
             <button
-                className={`timer-button ${
-                    params.row.status === "Completed" ? "completed" : ""
-                }`}
-                onClick={() =>
-                    params.row.status !== "Completed" &&
-                    onStartTimer(params.row.id)
+                className={buttonClass}
+                onClick={() => !isDisabled && onStartTimer(params.row.id)}
+                disabled={isDisabled}
+                title={
+                    activeSession && params.row.status !== "Completed"
+                        ? "Cannot start a new timer while another session is active"
+                        : params.row.status === "Completed"
+                        ? "Task is completed"
+                        : "Start timer for this task"
                 }
-                disabled={params.row.status === "Completed"}
             >
                 {params.row.status === "Completed" ? "Completed" : "Start"}
             </button>
         );
+    };
 
 export const renderActionsCell =
     (
         onDelete?: (id: string | number) => void,
         onEdit?: (id: string | number) => void
     ) =>
-    (params: GridRenderCellParams) =>
-        (
+    (params: GridRenderCellParams) => {
+        const activeSession = useAppSelector(selectActiveSession);
+        const editingDisabled = !!activeSession;
+
+        return (
             <div className="actions-cell">
                 {onEdit && (
                     <button
-                        className="edit-button"
-                        onClick={() => onEdit(params.row.id)}
+                        className={`edit-button ${
+                            editingDisabled ? "disabled" : ""
+                        }`}
+                        onClick={() =>
+                            !editingDisabled && onEdit(params.row.id)
+                        }
                         aria-label="Edit task"
+                        disabled={editingDisabled}
+                        title={
+                            editingDisabled
+                                ? "Editing disabled during active session"
+                                : "Edit task"
+                        }
                     >
                         <span>Edit</span>
                     </button>
                 )}
                 {onDelete && (
                     <button
-                        className="delete-button"
-                        onClick={() => onDelete(params.row.id)}
+                        className={`delete-button ${
+                            editingDisabled ? "disabled" : ""
+                        }`}
+                        onClick={() =>
+                            !editingDisabled && onDelete(params.row.id)
+                        }
                         aria-label="Delete task"
+                        disabled={editingDisabled}
+                        title={
+                            editingDisabled
+                                ? "Deletion disabled during active session"
+                                : "Delete task"
+                        }
                     >
                         <span>Delete</span>
                     </button>
                 )}
             </div>
         );
+    };
 
 export const renderEditableCell =
     (
@@ -89,10 +130,17 @@ export const renderEditableCell =
             id: string | number,
             field: string,
             value: any
-        ) => void
+        ) => void,
+        parentEditingDisabled?: boolean
     ) =>
     (params: GridRenderCellParams) => {
         const { field } = params;
+
+        const activeSession = useAppSelector(selectActiveSession);
+        const editingDisabled =
+            parentEditingDisabled !== undefined
+                ? parentEditingDisabled
+                : !!activeSession;
 
         const safeValue =
             params.value instanceof Date
@@ -101,85 +149,106 @@ export const renderEditableCell =
 
         if (field === "priority") {
             return (
-                <div className="custom-editable-cell">
+                <div
+                    className={`custom-editable-cell ${
+                        editingDisabled ? "disabled" : ""
+                    }`}
+                >
                     {renderPriorityCell(params)}
-                    <div
-                        className="overlay-edit-trigger"
-                        onClick={() => {
-                            const options = ["Low", "Medium", "High"];
-                            const newValue = window.prompt(
-                                "Select priority:",
-                                String(safeValue)
-                            );
-                            if (newValue && options.includes(newValue)) {
-                                onCellValueChange(
-                                    params.row.id,
-                                    field,
-                                    newValue
+                    {!editingDisabled && (
+                        <div
+                            className="overlay-edit-trigger"
+                            onClick={() => {
+                                if (editingDisabled) return;
+                                const options = ["Low", "Medium", "High"];
+                                const newValue = window.prompt(
+                                    "Select priority:",
+                                    String(safeValue)
                                 );
-                            }
-                        }}
-                    ></div>
+                                if (newValue && options.includes(newValue)) {
+                                    onCellValueChange(
+                                        params.row.id,
+                                        field,
+                                        newValue
+                                    );
+                                }
+                            }}
+                        ></div>
+                    )}
                 </div>
             );
         }
 
         if (field === "progress") {
             return (
-                <div className="custom-editable-cell">
+                <div
+                    className={`custom-editable-cell ${
+                        editingDisabled ? "disabled" : ""
+                    }`}
+                >
                     {renderProgressCell(params)}
-                    <div
-                        className="overlay-edit-trigger"
-                        onClick={() => {
-                            const newValue = window.prompt(
-                                "Enter progress (0-100):",
-                                String(safeValue)
-                            );
-                            if (newValue !== null) {
-                                const numValue = parseInt(newValue);
-                                if (
-                                    !isNaN(numValue) &&
-                                    numValue >= 0 &&
-                                    numValue <= 100
-                                ) {
-                                    onCellValueChange(
-                                        params.row.id,
-                                        field,
-                                        numValue
-                                    );
+                    {!editingDisabled && (
+                        <div
+                            className="overlay-edit-trigger"
+                            onClick={() => {
+                                if (editingDisabled) return;
+                                const newValue = window.prompt(
+                                    "Enter progress (0-100):",
+                                    String(safeValue)
+                                );
+                                if (newValue !== null) {
+                                    const numValue = parseInt(newValue);
+                                    if (
+                                        !isNaN(numValue) &&
+                                        numValue >= 0 &&
+                                        numValue <= 100
+                                    ) {
+                                        onCellValueChange(
+                                            params.row.id,
+                                            field,
+                                            numValue
+                                        );
+                                    }
                                 }
-                            }
-                        }}
-                    ></div>
+                            }}
+                        ></div>
+                    )}
                 </div>
             );
         }
 
         if (field === "status") {
             return (
-                <div className="custom-editable-cell">
+                <div
+                    className={`custom-editable-cell ${
+                        editingDisabled ? "disabled" : ""
+                    }`}
+                >
                     {renderStatusCell(params)}
-                    <div
-                        className="overlay-edit-trigger"
-                        onClick={() => {
-                            const options = [
-                                "Not Started",
-                                "In Progress",
-                                "Completed",
-                            ];
-                            const newValue = window.prompt(
-                                "Select status:",
-                                String(safeValue)
-                            );
-                            if (newValue && options.includes(newValue)) {
-                                onCellValueChange(
-                                    params.row.id,
-                                    field,
-                                    newValue
+                    {!editingDisabled && (
+                        <div
+                            className="overlay-edit-trigger"
+                            onClick={() => {
+                                if (editingDisabled) return;
+                                const options = [
+                                    "Not Started",
+                                    "In Progress",
+                                    "Completed",
+                                ];
+                                const newValue = window.prompt(
+                                    "Select status:",
+                                    String(safeValue)
                                 );
-                            }
-                        }}
-                    ></div>
+                                if (newValue && options.includes(newValue)) {
+                                    onCellValueChange(
+                                        params.row.id,
+                                        field,
+                                        newValue
+                                    );
+                                }
+                            }}
+                        ></div>
+                    )}
                 </div>
             );
         }
@@ -191,6 +260,7 @@ export const renderEditableCell =
                     row={params.row}
                     field={params.field}
                     onValueChange={onCellValueChange}
+                    editingDisabled={editingDisabled}
                 />
             );
         }
@@ -201,6 +271,7 @@ export const renderEditableCell =
                 row={params.row}
                 field={params.field}
                 onValueChange={onCellValueChange}
+                editingDisabled={editingDisabled}
             />
         );
     };

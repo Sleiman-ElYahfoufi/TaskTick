@@ -52,7 +52,7 @@ export const statusColumn = (
     headerName: "STATUS",
     width: 150,
     minWidth: 80,
-    editable: false, // Status can only be changed through progress updates
+    editable: false,
     renderCell: renderStatusCell,
     type: "singleSelect",
     valueOptions: options,
