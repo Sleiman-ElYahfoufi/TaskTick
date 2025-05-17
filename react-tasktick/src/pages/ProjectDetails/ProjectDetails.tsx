@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -15,6 +15,12 @@ import {
     selectLoadingTaskIds,
     selectCellUpdateErrors,
 } from "../../store/slices/tasksSlice";
+import {
+    fetchActiveSession,
+    fetchTaskTimeSummary,
+    fetchTaskTimeTrackings,
+    selectActiveSession,
+} from "../../store/slices/timeTrackingsSlice";
 import ProjectOverviewCard from "../../components/ProjectDetailsComponents/ProjectOverviewCard/ProjectOverviewCard";
 import CurrentTask from "../../components/SharedComponents/CurrentTask/CurrentTask";
 import TasksTable from "../../components/SharedComponents/TasksTable/TasksTable";
@@ -25,11 +31,21 @@ import useTaskCellHandlers from "../../components/ProjectDetailsComponents/TaskC
 import useTaskColumns from "../../components/ProjectDetailsComponents/TaskColumns/TaskColumns";
 import useTaskDataMapper from "../../components/ProjectDetailsComponents/TaskDataMapper/TaskDataMapper";
 import useProjectStats from "../../components/ProjectDetailsComponents/ProjectStats/ProjectStats";
+import timeTrackingService from "../../services/timeTrackingService";
 
 const ProjectDetails: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const { user } = useAppSelector((state) => state.auth);
+
+    const [selectedTaskId, setSelectedTaskId] = useState<
+        string | number | null
+    >(null);
+    const [selectedTaskDetails, setSelectedTaskDetails] = useState({
+        sessions: 0,
+        totalTime: "0h 0m",
+    });
 
     const project = useAppSelector(selectSelectedProject);
     const projectTasks = useAppSelector(selectAllTasks);
@@ -39,19 +55,70 @@ const ProjectDetails: React.FC = () => {
     const tasksError = useAppSelector(selectTasksError);
     const loadingTaskIds = useAppSelector(selectLoadingTaskIds);
     const cellErrors = useAppSelector(selectCellUpdateErrors);
+    const activeSession = useAppSelector(selectActiveSession);
 
     const isLoading = isProjectLoading || isTasksLoading;
     const error = projectError || tasksError;
 
     const { tasks, currentTask } = useTaskDataMapper({ projectTasks });
-    const { handleAddTask, handleDeleteTask, handleStartTimer } =
-        useTaskActionsHandler({
-            projectId: projectId || "",
-        });
+    const {
+        handleAddTask,
+        handleDeleteTask,
+        handleStartTimer,
+        DeleteTaskModal,
+    } = useTaskActionsHandler({
+        projectId: projectId || "",
+    });
     const { handleCellValueChange, handleTaskUpdate } = useTaskCellHandlers({
         projectId: projectId || "",
     });
-    const columns = useTaskColumns({ handleStartTimer, handleDeleteTask });
+
+    const handleTimeClick = async (taskId: string | number) => {
+        console.log(
+            `[ProjectDetails] handleTimeClick - Task ${taskId} time clicked`
+        );
+        setSelectedTaskId(taskId);
+
+        try {
+            console.log(
+                `[ProjectDetails] handleTimeClick - Fetching summary for task ${taskId}`
+            );
+            const summary = await timeTrackingService.getTaskTimeSummary(
+                Number(taskId)
+            );
+
+            console.log(
+                `[ProjectDetails] handleTimeClick - Fetching time trackings for task ${taskId}`
+            );
+            await timeTrackingService.getTimeTrackingsByTaskId(Number(taskId));
+
+            console.log(
+                `[ProjectDetails] handleTimeClick - Summary received:`,
+                summary
+            );
+            setSelectedTaskDetails({
+                sessions: summary.session_count || 0,
+                totalTime: timeTrackingService.formatTime(
+                    summary.total_duration_hours || 0
+                ),
+            });
+
+            dispatch(fetchTaskTimeSummary(Number(taskId)));
+            dispatch(fetchTaskTimeTrackings(Number(taskId)));
+        } catch (error) {
+            console.error(
+                "[ProjectDetails] handleTimeClick - Error fetching time tracking data:",
+                error
+            );
+        }
+    };
+
+    const columns = useTaskColumns({
+        handleStartTimer,
+        handleDeleteTask,
+        onTimeClick: handleTimeClick,
+    });
+
     const projectUIProps = useProjectStats({ project, tasks });
 
     const editableFields = [
@@ -70,7 +137,21 @@ const ProjectDetails: React.FC = () => {
 
         dispatch(fetchProjectById(projectId));
         dispatch(fetchTasks(projectId));
-    }, [projectId, dispatch]);
+
+        if (user?.id) {
+            dispatch(fetchActiveSession(Number(user.id)));
+        }
+    }, [projectId, dispatch, user]);
+
+    useEffect(() => {
+        if (activeSession) {
+            console.log(
+                `[ProjectDetails] Active session detected for task ${activeSession.task_id}`
+            );
+            setSelectedTaskId(activeSession.task_id);
+            handleTimeClick(activeSession.task_id);
+        }
+    }, [activeSession]);
 
     if (isLoading) {
         return (
@@ -147,8 +228,16 @@ const ProjectDetails: React.FC = () => {
         );
     }
 
+    const selectedTask = selectedTaskId
+        ? tasks.find((task) => String(task.id) === String(selectedTaskId)) ||
+          currentTask
+        : currentTask;
+
     return (
         <div className="project-details-page">
+            {/* Delete Task Modal */}
+            {DeleteTaskModal}
+
             <div className="project-details-header">
                 <h1>Projects</h1>
                 <button
@@ -169,15 +258,19 @@ const ProjectDetails: React.FC = () => {
                 />
 
                 <div className="tasks-header">
-                    {currentTask ? (
+                    {selectedTask ? (
                         <CurrentTask
-                            taskName={currentTask.name}
-                            category={currentTask.category || "Task"}
-                            estimatedTime={currentTask.estimatedTime || "0 hrs"}
-                            progress={currentTask.progress || 0}
-                            elapsedTime={currentTask.elapsedTime || "00:00:00"}
-                            sessions={4}
-                            totalTime="2h 15m total"
+                            taskId={selectedTask.id}
+                            taskName={selectedTask.name}
+                            category={selectedTask.priority || "Task"}
+                            estimatedTime={
+                                selectedTask.estimatedTime || "0 hrs"
+                            }
+                            progress={selectedTask.progress || 0}
+                            elapsedTime={selectedTask.elapsedTime || "00:00:00"}
+                            sessions={selectedTaskDetails.sessions}
+                            totalTime={selectedTaskDetails.totalTime}
+                            projectId={projectId}
                         />
                     ) : (
                         <div className="no-current-task">
@@ -191,41 +284,28 @@ const ProjectDetails: React.FC = () => {
                 </div>
 
                 {tasks.length > 0 ? (
-                    <TasksTable
-                        key="tasks-table"
-                        tasks={tasks}
-                        columns={columns}
-                        onStartTimer={handleStartTimer}
-                        onDeleteTask={handleDeleteTask}
-                        onTaskUpdate={(updatedTask: any) =>
-                            handleTaskUpdate(updatedTask)
-                        }
-                        onCellValueChange={handleCellValueChange}
-                        loadingTaskIds={loadingTaskIds}
-                        editableFields={editableFields}
-                    />
+                    <div className="responsive-table-container">
+                        <TasksTable
+                            key="tasks-table"
+                            tasks={tasks}
+                            columns={columns}
+                            onStartTimer={handleStartTimer}
+                            onDeleteTask={handleDeleteTask}
+                            onTaskUpdate={(updatedTask: any) =>
+                                handleTaskUpdate(updatedTask)
+                            }
+                            onCellValueChange={handleCellValueChange}
+                            editableFields={editableFields}
+                            loadingTaskIds={loadingTaskIds}
+                            cellErrors={cellErrors}
+                        />
+                    </div>
                 ) : (
                     <div className="no-tasks-message">
-                        <p>No tasks found for this project.</p>
-                        <button
-                            className="add-task-button"
-                            onClick={handleAddTask}
-                        >
-                            Add Your First Task
-                        </button>
-                    </div>
-                )}
-
-                {Object.keys(cellErrors).length > 0 && (
-                    <div className="cell-errors">
-                        <h4>Update Errors</h4>
-                        <ul>
-                            {Object.entries(cellErrors).map(
-                                ([key, errorMsg]) => (
-                                    <li key={key}>{errorMsg}</li>
-                                )
-                            )}
-                        </ul>
+                        <p>
+                            No tasks found for this project. Add a task to get
+                            started.
+                        </p>
                     </div>
                 )}
             </div>
