@@ -8,6 +8,8 @@ interface Project {
     hours: string;
     status: string;
     progress: number;
+    completedTasks?: number;
+    totalTasks?: number;
 }
 
 interface ActiveProjectsProps {
@@ -50,11 +52,17 @@ const ActiveProjects: React.FC<ActiveProjectsProps> = ({
                                     {project.hours} hours
                                 </span>
                                 <span
-                                    className={`active-projects-status ${project.status
+                                    className={`active-projects-status status-badge ${project.status
                                         .toLowerCase()
                                         .replace(/\s+/g, "-")}`}
                                 >
-                                    {project.status}
+                                    In Progress
+                                </span>
+                            </div>
+                            <div className="project-tasks-count">
+                                <span className="tasks-count">
+                                    {project.completedTasks || 0}/
+                                    {project.totalTasks || 0} tasks completed
                                 </span>
                             </div>
                         </div>
