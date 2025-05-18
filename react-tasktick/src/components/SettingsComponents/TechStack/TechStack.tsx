@@ -48,12 +48,10 @@ const TechStack: React.FC<TechStackProps> = ({
         []
     );
 
-    
     const initializedRef = useRef(false);
     const shouldUpdateParentRef = useRef(false);
     const userInteractionRef = useRef(false);
 
-    
     useEffect(() => {
         const fetchTechStacks = async () => {
             try {
@@ -79,7 +77,6 @@ const TechStack: React.FC<TechStackProps> = ({
         fetchTechStacks();
     }, []);
 
-    
     useEffect(() => {
         if (!userId) return;
 
@@ -99,14 +96,11 @@ const TechStack: React.FC<TechStackProps> = ({
         fetchUserTechStacks();
     }, [userId]);
 
-    
     useEffect(() => {
-        
         if (initializedRef.current || !techStacks.length || isLoading) {
             return;
         }
 
-        
         if (userTechStacks.length > 0) {
             const selections = userTechStacks.map((item) => ({
                 techId: item.tech_id,
@@ -115,7 +109,6 @@ const TechStack: React.FC<TechStackProps> = ({
 
             setSelectedTechs(selections);
 
-            
             const techNames = selections
                 .map((selection) => {
                     const tech = techStacks.find(
@@ -125,13 +118,11 @@ const TechStack: React.FC<TechStackProps> = ({
                 })
                 .filter((name) => name !== "");
 
-            
             setTechnologies(techNames);
             initializedRef.current = true;
             return;
         }
 
-        
         if (technologies.length > 0) {
             const techSelections: UserTechSelection[] = [];
 
@@ -147,14 +138,12 @@ const TechStack: React.FC<TechStackProps> = ({
         }
     }, [techStacks, technologies, userTechStacks, setTechnologies, isLoading]);
 
-    
     useEffect(() => {
         if (!shouldUpdateParentRef.current || !userInteractionRef.current) {
             return;
         }
 
         if (techStacks.length > 0) {
-            
             const techNames = selectedTechs
                 .map((selection) => {
                     const tech = techStacks.find(
@@ -166,17 +155,14 @@ const TechStack: React.FC<TechStackProps> = ({
 
             setTechnologies(techNames);
 
-            
             if (onTechSelectionsChange) {
                 onTechSelectionsChange(selectedTechs);
             }
 
-            
             shouldUpdateParentRef.current = false;
         }
     }, [selectedTechs, techStacks, setTechnologies, onTechSelectionsChange]);
 
-    
     const handleTechnologyToggle = useCallback(
         (tech: TechStack) => {
             userInteractionRef.current = true;
@@ -188,7 +174,6 @@ const TechStack: React.FC<TechStackProps> = ({
                         (item) => item.techId !== tech.id
                     );
                 } else {
-                    
                     const existingTech = userTechStacks.find(
                         (item) => item.tech_id === tech.id
                     );
@@ -220,7 +205,6 @@ const TechStack: React.FC<TechStackProps> = ({
         []
     );
 
-    
     const techsByCategory = CATEGORIES.reduce((acc, category) => {
         acc[category] = techStacks.filter(
             (tech) => tech.category.toUpperCase() === category.toUpperCase()

@@ -4,9 +4,6 @@ import api from "../../utils/api.ts";
 import ProfileInputs from "../../components/SettingsComponents/ProfileInputs/ProfileInputs";
 import TechStack from "../../components/SettingsComponents/TechStack/TechStack";
 
-
-
-
 interface UserTechStack {
     id: number;
     name: string;
@@ -32,10 +29,6 @@ const Settings: React.FC = () => {
     const [userId, setUserId] = useState<number | undefined>(undefined);
     const [isSaving, setIsSaving] = useState(false);
 
- 
-
-   
-
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -51,7 +44,6 @@ const Settings: React.FC = () => {
                     setRole(fetchedUser.role);
                     setExperience(fetchedUser.experience_level);
 
-                    
                     const techNames =
                         fetchedUser.userTechStacks?.map(
                             (tech: UserTechStack) => tech.name
@@ -93,15 +85,12 @@ const Settings: React.FC = () => {
                 experience_level: experience,
             };
 
-            
             if (password) {
                 updateData.password = password;
             }
 
-            
             const response = await api.patch(`/users/${user.id}`, updateData);
 
-            
             const updatedUserData = {
                 ...user,
                 username: response.data.username,
@@ -112,13 +101,11 @@ const Settings: React.FC = () => {
 
             localStorage.setItem("userData", JSON.stringify(updatedUserData));
 
-            
             const existingTechStacksResponse = await api.get(
                 `/user-tech-stacks?userId=${user.id}`
             );
             const existingTechStacks = existingTechStacksResponse.data || [];
 
-            
             const techIdsToKeep = techSelections.map(
                 (selection) => selection.techId
             );
@@ -126,14 +113,12 @@ const Settings: React.FC = () => {
                 (stack: any) => !techIdsToKeep.includes(stack.tech_id)
             );
 
-            
             await Promise.all(
                 techStacksToDelete.map((stack: any) =>
                     api.delete(`/user-tech-stacks/${user.id}/${stack.tech_id}`)
                 )
             );
 
-            
             await Promise.all(
                 techSelections.map(async (selection) => {
                     const existingStack = existingTechStacks.find(
@@ -141,7 +126,6 @@ const Settings: React.FC = () => {
                     );
 
                     if (existingStack) {
-                        
                         if (
                             existingStack.proficiency_level !==
                             selection.proficiency
@@ -154,7 +138,6 @@ const Settings: React.FC = () => {
                             );
                         }
                     } else {
-                        
                         await api.post("/user-tech-stacks", {
                             user_id: user.id,
                             tech_id: selection.techId,
@@ -165,7 +148,7 @@ const Settings: React.FC = () => {
             );
 
             setMessage("Profile and tech stacks updated successfully");
-            
+
             setPassword("");
         } catch (error) {
             console.error("Error updating profile:", error);
