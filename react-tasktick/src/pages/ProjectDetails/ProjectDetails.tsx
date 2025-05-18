@@ -1,157 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import {
-    fetchProjectById,
-    selectSelectedProject,
-    selectProjectsLoading,
-    selectProjectsError,
-} from "../../store/slices/projectsSlice";
-import {
-    fetchTasks,
-    selectAllTasks,
-    selectTasksLoading,
-    selectTasksError,
-    selectLoadingTaskIds,
-    selectCellUpdateErrors,
-} from "../../store/slices/tasksSlice";
-import {
-    fetchActiveSession,
-    fetchTaskTimeSummary,
-    fetchTaskTimeTrackings,
-    selectActiveSession,
-} from "../../store/slices/timeTrackingsSlice";
+import React from "react";
 import ProjectOverviewCard from "../../components/ProjectDetailsComponents/ProjectOverviewCard/ProjectOverviewCard";
 import CurrentTask from "../../components/SharedComponents/CurrentTask/CurrentTask";
 import TasksTable from "../../components/SharedComponents/TasksTable/TasksTable";
 import "./ProjectDetails.css";
 
-import useTaskActionsHandler from "../../components/ProjectDetailsComponents/TaskActionsHandler/TaskActionsHandler";
-import useTaskCellHandlers from "../../components/ProjectDetailsComponents/TaskCellHandlers/TaskCellHandlers";
-import useTaskColumns from "../../components/ProjectDetailsComponents/TaskColumns/TaskColumns";
-import useTaskDataMapper from "../../components/ProjectDetailsComponents/TaskDataMapper/TaskDataMapper";
-import useProjectStats from "../../components/ProjectDetailsComponents/ProjectStats/ProjectStats";
-import timeTrackingService from "../../services/timeTrackingService";
+import { useProjectDetails } from "./projectDetailsHooks";
+import { retryLoadingProject } from "./projectDetailsActions";
 
 const ProjectDetails: React.FC = () => {
-    const { projectId } = useParams<{ projectId: string }>();
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const { user } = useAppSelector((state) => state.auth);
-
-    const [selectedTaskId, setSelectedTaskId] = useState<
-        string | number | null
-    >(null);
-    const [selectedTaskDetails, setSelectedTaskDetails] = useState({
-        sessions: 0,
-        totalTime: "0h 0m",
-    });
-
-    const project = useAppSelector(selectSelectedProject);
-    const projectTasks = useAppSelector(selectAllTasks);
-    const isProjectLoading = useAppSelector(selectProjectsLoading);
-    const isTasksLoading = useAppSelector(selectTasksLoading);
-    const projectError = useAppSelector(selectProjectsError);
-    const tasksError = useAppSelector(selectTasksError);
-    const loadingTaskIds = useAppSelector(selectLoadingTaskIds);
-    const cellErrors = useAppSelector(selectCellUpdateErrors);
-    const activeSession = useAppSelector(selectActiveSession);
-
-    const isLoading = isProjectLoading || isTasksLoading;
-    const error = projectError || tasksError;
-
-    const { tasks, currentTask } = useTaskDataMapper({ projectTasks });
     const {
+        projectId,
+        project,
+        isLoading,
+        error,
+        dispatch,
+        loadingTaskIds,
+        cellErrors,
+
         handleAddTask,
         handleDeleteTask,
         handleStartTimer,
+        handleTaskUpdate,
+        handleCellValueChange,
         DeleteTaskModal,
-    } = useTaskActionsHandler({
-        projectId: projectId || "",
-    });
-    const { handleCellValueChange, handleTaskUpdate } = useTaskCellHandlers({
-        projectId: projectId || "",
-    });
-
-    const handleTimeClick = async (taskId: string | number) => {
-        console.log(
-            `[ProjectDetails] handleTimeClick - Task ${taskId} time clicked`
-        );
-        setSelectedTaskId(taskId);
-
-        try {
-            console.log(
-                `[ProjectDetails] handleTimeClick - Fetching summary for task ${taskId}`
-            );
-            const summary = await timeTrackingService.getTaskTimeSummary(
-                Number(taskId)
-            );
-
-            console.log(
-                `[ProjectDetails] handleTimeClick - Fetching time trackings for task ${taskId}`
-            );
-            await timeTrackingService.getTimeTrackingsByTaskId(Number(taskId));
-
-            console.log(
-                `[ProjectDetails] handleTimeClick - Summary received:`,
-                summary
-            );
-            setSelectedTaskDetails({
-                sessions: summary.session_count || 0,
-                totalTime: timeTrackingService.formatTime(
-                    summary.total_duration_hours || 0
-                ),
-            });
-
-            dispatch(fetchTaskTimeSummary(Number(taskId)));
-            dispatch(fetchTaskTimeTrackings(Number(taskId)));
-        } catch (error) {
-            console.error(
-                "[ProjectDetails] handleTimeClick - Error fetching time tracking data:",
-                error
-            );
-        }
-    };
-
-    const columns = useTaskColumns({
-        handleStartTimer,
-        handleDeleteTask,
-        onTimeClick: handleTimeClick,
-    });
-
-    const projectUIProps = useProjectStats({ project, tasks });
-
-    const editableFields = [
-        "name",
-        "estimatedTime",
-        "dueDate",
-        "description",
-        "priority",
-        "progress",
-    ];
-
-    useEffect(() => {
-        if (!projectId) {
-            return;
-        }
-
-        dispatch(fetchProjectById(projectId));
-        dispatch(fetchTasks(projectId));
-
-        if (user?.id) {
-            dispatch(fetchActiveSession(Number(user.id)));
-        }
-    }, [projectId, dispatch, user]);
-
-    useEffect(() => {
-        if (activeSession) {
-            console.log(
-                `[ProjectDetails] Active session detected for task ${activeSession.task_id}`
-            );
-            setSelectedTaskId(activeSession.task_id);
-            handleTimeClick(activeSession.task_id);
-        }
-    }, [activeSession]);
+        navigateToProjects,
+        columns,
+        tasks,
+        selectedTask,
+        selectedTaskDetails,
+        projectUIProps,
+        editableFields,
+    } = useProjectDetails();
 
     if (isLoading) {
         return (
@@ -160,7 +39,7 @@ const ProjectDetails: React.FC = () => {
                     <h1>Projects</h1>
                     <button
                         className="back-button"
-                        onClick={() => navigate("/dashboard/projects")}
+                        onClick={navigateToProjects}
                     >
                         Back to Projects
                     </button>
@@ -180,7 +59,7 @@ const ProjectDetails: React.FC = () => {
                     <h1>Projects</h1>
                     <button
                         className="back-button"
-                        onClick={() => navigate("/dashboard/projects")}
+                        onClick={navigateToProjects}
                     >
                         Back to Projects
                     </button>
@@ -189,12 +68,7 @@ const ProjectDetails: React.FC = () => {
                     <p className="error-message">{error}</p>
                     <button
                         className="retry-button"
-                        onClick={() => {
-                            if (projectId) {
-                                dispatch(fetchProjectById(projectId));
-                                dispatch(fetchTasks(projectId));
-                            }
-                        }}
+                        onClick={() => retryLoadingProject(projectId, dispatch)}
                     >
                         Try Again
                     </button>
@@ -210,7 +84,7 @@ const ProjectDetails: React.FC = () => {
                     <h1>Projects</h1>
                     <button
                         className="back-button"
-                        onClick={() => navigate("/dashboard/projects")}
+                        onClick={navigateToProjects}
                     >
                         Back to Projects
                     </button>
@@ -219,7 +93,7 @@ const ProjectDetails: React.FC = () => {
                     <p className="error-message">Project not found.</p>
                     <button
                         className="back-button"
-                        onClick={() => navigate("/dashboard/projects")}
+                        onClick={navigateToProjects}
                     >
                         Back to Projects
                     </button>
@@ -228,11 +102,6 @@ const ProjectDetails: React.FC = () => {
         );
     }
 
-    const selectedTask = selectedTaskId
-        ? tasks.find((task) => String(task.id) === String(selectedTaskId)) ||
-          currentTask
-        : currentTask;
-
     return (
         <div className="project-details-page">
             {/* Delete Task Modal */}
@@ -240,10 +109,7 @@ const ProjectDetails: React.FC = () => {
 
             <div className="project-details-header">
                 <h1>Projects</h1>
-                <button
-                    className="back-button"
-                    onClick={() => navigate("/dashboard/projects")}
-                >
+                <button className="back-button" onClick={navigateToProjects}>
                     Back to Projects
                 </button>
             </div>
@@ -291,9 +157,7 @@ const ProjectDetails: React.FC = () => {
                             columns={columns}
                             onStartTimer={handleStartTimer}
                             onDeleteTask={handleDeleteTask}
-                            onTaskUpdate={(updatedTask: any) =>
-                                handleTaskUpdate(updatedTask)
-                            }
+                            onTaskUpdate={handleTaskUpdate}
                             onCellValueChange={handleCellValueChange}
                             editableFields={editableFields}
                             loadingTaskIds={loadingTaskIds}
