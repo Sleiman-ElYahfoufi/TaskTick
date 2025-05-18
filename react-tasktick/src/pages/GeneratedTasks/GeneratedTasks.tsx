@@ -1,220 +1,101 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../store/hooks";
+import React, { useState } from "react";
 import {
     DataGrid,
     GridColDef,
-    GridRowId,
     GridActionsCellItem,
-    GridRowModel,
+    GridCellModes,
+    useGridApiContext
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { v4 as uuidv4 } from "uuid";
 import StepIndicator from "../../components/AddProjectComponents/StepIndicator/StepIndicator";
-import {
-    DecompositionResult,
-    GeneratedTaskDto,
-} from "../../services/projectDecompositionService";
-import projectDecompositionService from "../../services/projectDecompositionService";
 import "./GeneratedTasks.css";
-
-interface Task extends GeneratedTaskDto {
-    id: string;
-}
+import {
+    Task,
+    parseEstimatedTime,
+    formatDate,
+    calculateTotalEstimatedTime,
+    PRIORITY_OPTIONS,
+    getRowClassName,
+} from "./generatedTasksFunctions";
+import { useGeneratedTasks } from "./generatedTasksHooks";
+import DeleteModal from "../../components/SharedComponents/DeleteModal/DeleteModal";
 
 const GeneratedTasks: React.FC = () => {
-    const navigate = useNavigate();
-    const { user } = useAppSelector((state) => state.auth);
-    const [tasks, setTasks] = useState<Task[]>([]);
-    const [projectName, setProjectName] = useState("");
-    const [_, setProjectDescription] = useState("");
-    const [decompositionResult, setDecompositionResult] =
-        useState<DecompositionResult | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const {
+        tasks,
+        projectName,
+        isLoading,
+        error,
+        successMessage,
+        handleDeleteTask,
+        handleAddTask,
+        processRowUpdate,
+        handleSaveProject,
+        handleBackToDetails,
+    } = useGeneratedTasks();
 
-    const isValidDate = (date: any): boolean => {
-        if (!date) return false;
+    const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
-        if (date instanceof Date) return !isNaN(date.getTime());
+    const totalEstimatedTime = calculateTotalEstimatedTime(tasks);
 
-        if (typeof date === "string") {
-            const parsed = new Date(date);
-            return !isNaN(parsed.getTime());
-        }
-
-        return false;
+    const confirmDeleteTask = (id: string) => {
+        setTaskToDelete(id);
     };
 
-    useEffect(() => {
-        const savedResult = sessionStorage.getItem("decompositionResult");
-
-        if (!savedResult) {
-            setError("No generated tasks found. Please generate tasks first.");
-            return;
+    const handleConfirmDelete = () => {
+        if (taskToDelete) {
+            handleDeleteTask(taskToDelete);
+            setTaskToDelete(null);
         }
-
-        try {
-            const result: DecompositionResult = JSON.parse(savedResult);
-            setDecompositionResult(result);
-
-            if (result.projectDetails) {
-                setProjectName(result.projectDetails.name);
-                setProjectDescription(result.projectDetails.description);
-            }
-
-            const tasksWithIds = result.tasks.map((task) => ({
-                ...task,
-                id: uuidv4(),
-
-                estimated_time:
-                    typeof task.estimated_time === "string"
-                        ? parseFloat(task.estimated_time)
-                        : Number(task.estimated_time),
-            }));
-
-            setTasks(tasksWithIds);
-        } catch (err) {
-            console.error("Error parsing saved tasks:", err);
-            setError("Failed to load generated tasks. Please try again.");
-        }
-    }, []);
-
-    const totalEstimatedTime = tasks.reduce((total, task) => {
-        const timeValue =
-            typeof task.estimated_time === "string"
-                ? parseFloat(task.estimated_time)
-                : Number(task.estimated_time);
-
-        return total + (isNaN(timeValue) ? 0 : timeValue);
-    }, 0);
-
-    const handleDeleteTask = (id: GridRowId) => {
-        setTasks(tasks.filter((task) => task.id !== id));
     };
 
-    const handleAddTask = () => {
-        const defaultDueDate = new Date();
-        defaultDueDate.setDate(defaultDueDate.getDate() + 7);
+    const handleCancelDelete = () => {
+        setTaskToDelete(null);
+    };
 
-        const newTask: Task = {
-            id: uuidv4(),
-            name: "",
-            description: "",
-            estimated_time: 2,
-            priority: "medium",
-            dueDate: defaultDueDate.toISOString().split("T")[0],
-            progress: 0,
+    // Cell component that starts edit mode on first click
+    const EditableCell = (props: any) => {
+        const { id, field, value } = props;
+        const apiRef = useGridApiContext();
+        
+        const handleClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            apiRef.current.startCellEditMode({ id, field });
         };
-
-        setTasks([newTask, ...tasks]);
-    };
-
-    const processRowUpdate = (newRow: GridRowModel, _: GridRowModel) => {
-        const updatedRow = {
-            ...newRow,
-            estimated_time:
-                typeof newRow.estimated_time === "string"
-                    ? parseFloat(newRow.estimated_time)
-                    : Number(newRow.estimated_time),
-        };
-
-        setTasks(
-            tasks.map((task) =>
-                task.id === newRow.id ? (updatedRow as Task) : task
-            )
-        );
-        return updatedRow;
-    };
-
-    const handleSaveProject = async () => {
-        if (!user?.id) {
-            setError("User ID not found. Please log in again.");
-            return;
+        
+        // Don't handle clicks for action column
+        if (field === 'actions') {
+            return <div>{value}</div>;
         }
-
-        if (tasks.length === 0) {
-            setError("At least one task is required.");
-            return;
-        }
-
-        if (!decompositionResult?.projectDetails) {
-            setError("Project details not found.");
-            return;
-        }
-
-        const emptyFieldTasks = tasks.filter(
-            (task) =>
-                !task.name ||
-                !task.description ||
-                task.estimated_time <= 0 ||
-                !task.priority ||
-                !task.dueDate
-        );
-
-        if (emptyFieldTasks.length > 0) {
-            setError(
-                `Please fill in all required fields for all tasks. ${emptyFieldTasks.length} task(s) have empty fields.`
+        
+        // Format the display values
+        let displayValue = value;
+        
+        if (field === 'estimated_time') {
+            displayValue = `${value} hrs`;
+        } else if (field === 'dueDate') {
+            displayValue = formatDate(value);
+        } else if (field === 'priority') {
+            const priorityValue = value?.toString().toLowerCase() || "medium";
+            const displayText = 
+                priorityValue === "high" ? "High" : 
+                priorityValue === "medium" ? "Medium" : "Low";
+                
+            return (
+                <div 
+                    onClick={handleClick} 
+                    className={`tasks-priority-badge ${priorityValue}`}
+                >
+                    {displayText}
+                </div>
             );
-            return;
         }
-
-        const invalidDateTasks = tasks.filter(
-            (task) => task.dueDate && !isValidDate(task.dueDate)
+        
+        return (
+            <div onClick={handleClick} style={{ cursor: 'pointer', width: '100%', height: '100%' }}>
+                {displayValue}
+            </div>
         );
-
-        if (invalidDateTasks.length > 0) {
-            setError(
-                `Please enter valid dates for all tasks. ${invalidDateTasks.length} task(s) have invalid dates.`
-            );
-            return;
-        }
-
-        setIsLoading(true);
-        setError(null);
-        setSuccessMessage(null);
-
-        try {
-            const formattedTasks = tasks.map(({ id, ...rest }) => ({
-                ...rest,
-
-                dueDate:
-                    typeof rest.dueDate === "string"
-                        ? new Date(rest.dueDate).toISOString()
-                        : rest.dueDate
-                        ? (rest.dueDate as Date).toISOString()
-                        : undefined,
-            }));
-
-            const saveData: DecompositionResult = {
-                projectDetails: decompositionResult.projectDetails,
-                tasks: formattedTasks as GeneratedTaskDto[],
-                saved: false,
-                userId: Number(user.id),
-            };
-
-        await projectDecompositionService.saveTasks(
-                saveData
-            );
-
-            setSuccessMessage("Project successfully created!");
-
-            sessionStorage.removeItem("decompositionResult");
-
-            setTimeout(() => {
-                navigate("/dashboard/projects");
-            }, 2000);
-        } catch (err) {
-            console.error("Error saving project:", err);
-            setError("Failed to save project. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleBackToDetails = () => {
-        navigate("/dashboard/projects/new");
     };
 
     const columns: GridColDef[] = [
@@ -223,12 +104,14 @@ const GeneratedTasks: React.FC = () => {
             headerName: "TASK NAME",
             flex: 2,
             editable: true,
+            renderCell: (params) => <EditableCell {...params} />,
         },
         {
             field: "description",
             headerName: "DESCRIPTION",
             flex: 3,
             editable: true,
+            renderCell: (params) => <EditableCell {...params} />,
         },
         {
             field: "estimated_time",
@@ -236,11 +119,8 @@ const GeneratedTasks: React.FC = () => {
             flex: 1,
             editable: true,
             type: "number",
-            valueParser: (value) => {
-                const parsed = parseFloat(value);
-                return isNaN(parsed) ? 0 : parsed;
-            },
-            renderCell: (params) => `${params.value} hrs`,
+            valueParser: parseEstimatedTime,
+            renderCell: (params) => <EditableCell {...params} />,
         },
         {
             field: "dueDate",
@@ -248,18 +128,8 @@ const GeneratedTasks: React.FC = () => {
             flex: 1,
             editable: true,
             type: "date",
-            valueFormatter: (params) => {
-                if (!params.value) return "";
-
-                try {
-                    const date = new Date(params.value);
-                    if (isNaN(date.getTime())) return "Invalid date";
-
-                    return date.toLocaleDateString();
-                } catch (e) {
-                    return "Invalid date";
-                }
-            },
+            valueFormatter: (params) => formatDate(params.value),
+            renderCell: (params) => <EditableCell {...params} />,
         },
         {
             field: "priority",
@@ -267,23 +137,8 @@ const GeneratedTasks: React.FC = () => {
             flex: 1,
             editable: true,
             type: "singleSelect",
-            valueOptions: ["high", "medium", "low"],
-            renderCell: (params) => {
-                const value =
-                    params.value?.toString().toLowerCase() || "medium";
-                const displayText =
-                    value === "high"
-                        ? "High"
-                        : value === "medium"
-                        ? "Medium"
-                        : "Low";
-
-                return (
-                    <div className={`tasks-priority-badge ${value}`}>
-                        {displayText}
-                    </div>
-                );
-            },
+            valueOptions: PRIORITY_OPTIONS,
+            renderCell: (params) => <EditableCell {...params} />,
         },
         {
             field: "actions",
@@ -294,7 +149,7 @@ const GeneratedTasks: React.FC = () => {
                 <GridActionsCellItem
                     icon={<DeleteIcon />}
                     label="Delete"
-                    onClick={() => handleDeleteTask(params.id)}
+                    onClick={() => confirmDeleteTask(params.id as string)}
                 />,
             ],
         },
@@ -364,27 +219,15 @@ const GeneratedTasks: React.FC = () => {
                         disableRowSelectionOnClick
                         processRowUpdate={processRowUpdate}
                         pageSizeOptions={[10, 25, 50]}
+                        editMode="cell"
                         initialState={{
                             pagination: {
                                 paginationModel: { pageSize: 10 },
                             },
                         }}
-                        getRowClassName={(params) => {
-                            const task = params.row as Task;
-                            if (
-                                !task.name ||
-                                !task.description ||
-                                task.estimated_time <= 0 ||
-                                !task.priority ||
-                                !task.dueDate
-                            ) {
-                                return "invalid-task-row";
-                            }
-                            if (task.dueDate && !isValidDate(task.dueDate)) {
-                                return "invalid-date-row";
-                            }
-                            return "";
-                        }}
+                        getRowClassName={(params) =>
+                            getRowClassName(params.row as Task)
+                        }
                         sx={{
                             "& .MuiDataGrid-cell:focus": {
                                 outline: "none",
@@ -432,6 +275,15 @@ const GeneratedTasks: React.FC = () => {
                     </button>
                 </div>
             </div>
+
+            {taskToDelete && (
+                <DeleteModal
+                    isOpen={!!taskToDelete}
+                    onClose={handleCancelDelete}
+                    onConfirm={handleConfirmDelete}
+                    itemName="this task"
+                />
+            )}
         </div>
     );
 };
