@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -90,6 +90,52 @@ export class TasksService {
     await this.projectsService.updateProjectStatus(projectId);
   }
 
+  async findTasksForUser(userId: number, options?: { projectId?: number, status?: TaskStatus }): Promise<Task[]> {
+
+    const userProjects = await this.projectsService.findAllByUserId(userId);
+    const projectIds = userProjects.map(project => project.id);
+
+
+    const projectsMap = new Map();
+    userProjects.forEach(project => {
+      projectsMap.set(project.id, project.name || `Project ${project.id}`);
+    });
+
+
+    if (options?.projectId) {
+
+      if (!projectIds.includes(options.projectId)) {
+        throw new NotFoundException('Project not found or does not belong to the user');
+      }
+
+
+      const tasks = await this.findAllByProjectId(options.projectId);
+
+
+      return tasks.map(task => ({
+        ...task,
+        project_name: projectsMap.get(task.project_id) || `Unknown Project`
+      }));
+    }
+
+
+    const queryBuilder = this.tasksRepository.createQueryBuilder('task')
+      .where('task.project_id IN (:...projectIds)', { projectIds });
+
+
+    if (options?.status) {
+      queryBuilder.andWhere('task.status = :status', { status: options.status });
+    }
+
+    const tasks = await queryBuilder.getMany();
+
+
+    return tasks.map(task => ({
+      ...task,
+      project_name: projectsMap.get(task.project_id) || `Unknown Project`
+    }));
+  }
+
   private updateStatusBasedOnProgress(task: Task): void {
     if (task.progress === 0) {
       task.status = TaskStatus.TODO;
@@ -98,5 +144,17 @@ export class TasksService {
     } else {
       task.status = TaskStatus.IN_PROGRESS;
     }
+  }
+
+  async createTaskWithOwnerCheck(createTaskDto: CreateTaskDto, userId: number): Promise<Task> {
+
+    const project = await this.projectsService.findOne(createTaskDto.project_id);
+
+    if (project.user_id !== userId) {
+      throw new ForbiddenException('You can only create tasks for your own projects');
+    }
+
+
+    return this.create(createTaskDto);
   }
 }

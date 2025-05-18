@@ -3,7 +3,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { TaskStatus } from './entities/task.entity';
+import { Task, TaskStatus } from './entities/task.entity';
 import { TaskOwnerGuard } from './guards/task-owner.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { ProjectsService } from '../projects/projects.service';
@@ -19,13 +19,7 @@ export class TasksController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createTaskDto: CreateTaskDto, @GetUser('sub') userId: number) {
-    // Verify that the project belongs to the authenticated user
-    const project = await this.projectsService.findOne(createTaskDto.project_id);
-    if (project.user_id !== userId) {
-      throw new BadRequestException('You can only create tasks for your own projects');
-    }
-
-    return this.tasksService.create(createTaskDto);
+    return this.tasksService.createTaskWithOwnerCheck(createTaskDto, userId);
   }
 
   @Get()
@@ -34,27 +28,10 @@ export class TasksController {
     @Query('projectId') projectId?: string,
     @Query('status') status?: TaskStatus
   ) {
-    if (projectId) {
-      const project = await this.projectsService.findOne(+projectId);
-      if (project.user_id !== userId) {
-        throw new BadRequestException('You can only access tasks for your own projects');
-      }
-      return this.tasksService.findAllByProjectId(+projectId);
-    }
-
-    if (status) {
-      const userProjects = await this.projectsService.findAllByUserId(userId);
-      const projectIds = userProjects.map(project => project.id);
-
-      const allTasksWithStatus = await this.tasksService.findAllByStatus(status);
-      return allTasksWithStatus.filter(task => projectIds.includes(task.project_id));
-    }
-
-    const userProjects = await this.projectsService.findAllByUserId(userId);
-    const projectIds = userProjects.map(project => project.id);
-
-    const allTasks = await this.tasksService.findAll();
-    return allTasks.filter(task => projectIds.includes(task.project_id));
+    return this.tasksService.findTasksForUser(userId, {
+      projectId: projectId ? +projectId : undefined,
+      status
+    });
   }
 
   @Get(':id')
