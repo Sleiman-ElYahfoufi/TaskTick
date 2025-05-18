@@ -14,7 +14,6 @@ import {
     UpdateProjectData
 } from "./projectActions";
 
-// Hook for project filtering and sorting
 export const useProjectFilters = (projects: ProjectData[]) => {
     const [filteredProjects, setFilteredProjects] = useState<ProjectData[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +23,6 @@ export const useProjectFilters = (projects: ProjectData[]) => {
         Record<string, Partial<ProjectData>>
     >({});
 
-    // Apply filters when dependencies change
     useEffect(() => {
         if (projects && projects.length > 0) {
             const mergedProjects = projects.map((project) => {
@@ -78,7 +76,6 @@ export const useProjectFilters = (projects: ProjectData[]) => {
     };
 };
 
-// Hook for fetching projects
 export const useProjectData = () => {
     const dispatch = useAppDispatch();
     const { user } = useSelector((state: RootState) => state.auth);
@@ -87,7 +84,6 @@ export const useProjectData = () => {
     );
     const [updatingProjectId, setUpdatingProjectId] = useState<string | null>(null);
 
-    // Fetch projects on mount or when user changes
     useEffect(() => {
         if (user?.id) {
             dispatch(fetchProjects(parseInt(user.id)));
@@ -109,7 +105,6 @@ export const useProjectData = () => {
     };
 };
 
-// Hook for project operations
 export const useProjectOperations = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
