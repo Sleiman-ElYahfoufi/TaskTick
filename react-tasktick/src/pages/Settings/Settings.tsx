@@ -1,183 +1,242 @@
-import React, { useState } from 'react';
-import './Settings.css';
+import React, { useState, useEffect } from "react";
+import "./Settings.css";
+import api from "../../utils/api.ts";
+import ProfileInputs from "../../components/SettingsComponents/ProfileInputs/ProfileInputs";
+import TechStack from "../../components/SettingsComponents/TechStack/TechStack";
 
-interface ExperienceLevel {
-  label: string;
-  years: string;
+
+
+
+interface UserTechStack {
+    id: number;
+    name: string;
+}
+
+interface UserTechSelection {
+    techId: number;
+    proficiency: number;
 }
 
 const Settings: React.FC = () => {
-  const [username, setUsername] = useState('johndadev');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [password, setPassword] = useState('••••••••••••');
-  const [role, setRole] = useState('Web Developer');
-  const [experience, setExperience] = useState('Beginner');
-  const [technologies, setTechnologies] = useState<string[]>(['JavaScript', 'Java', 'Python']);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const experienceLevels: ExperienceLevel[] = [
-    { label: 'Beginner', years: 'Less than 1 year of experience' },
-    { label: 'Intermediate', years: '1-3 years of experience' },
-    { label: 'Expert', years: '3+ years of experience' }
-  ];
-
-  const techOptions = [
-    'JavaScript', 'Java', 'Python', 'Python',
-    'Python', 'Python', 'Python', 'Python'
-  ];
-
-  const handleTechnologyToggle = (tech: string) => {
-    setTechnologies(prev =>
-      prev.includes(tech)
-        ? prev.filter(t => t !== tech)
-        : [...prev, tech]
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+    const [experience, setExperience] = useState("");
+    const [technologies, setTechnologies] = useState<string[]>([]);
+    const [techSelections, setTechSelections] = useState<UserTechSelection[]>(
+        []
     );
-  };
+    const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState("");
+    const [userId, setUserId] = useState<number | undefined>(undefined);
+    const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({ username, email, password, role, experience, technologies });
-  };
+ 
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+   
 
-  return (
-    <div className="settings-container">
-      <h1 className="settings-title">Settings</h1>
-      
-      <div className="settings-card">
-        <div className="profile-settings-header">
-          <h2>Profile Settings</h2>
-          <p>Manage your account information and preferences</p>
-        </div>
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const userData = localStorage.getItem("userData");
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    setUserId(user.id);
+                    const response = await api.get(`/users/${user.id}`);
+                    const fetchedUser = response.data;
 
-        <form onSubmit={handleSubmit}>
-          <div className="settings-section">
-            <h3>Personal Information</h3>
+                    setUsername(fetchedUser.username);
+                    setEmail(fetchedUser.email);
+                    setRole(fetchedUser.role);
+                    setExperience(fetchedUser.experience_level);
+
+                    
+                    const techNames =
+                        fetchedUser.userTechStacks?.map(
+                            (tech: UserTechStack) => tech.name
+                        ) || [];
+                    setTechnologies(techNames);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                setMessage("Failed to load user data");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    const handleTechSelectionsChange = (selections: UserTechSelection[]) => {
+        setTechSelections(selections);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSaving(true);
+
+        try {
+            const userData = localStorage.getItem("userData");
+            if (!userData) {
+                setMessage("User data not found. Please log in again.");
+                setIsSaving(false);
+                return;
+            }
+
+            const user = JSON.parse(userData);
+            const updateData: any = {
+                username,
+                email,
+                role,
+                experience_level: experience,
+            };
+
             
-            <div className="settings-form-row">
-              <div className="settings-left-column">
-                <div className="settings-form-group">
-                  <label>Username</label>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="settings-form-input"
-                  />
-                </div>
-                
-                <div className="settings-form-group">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="settings-form-input"
-                  />
+            if (password) {
+                updateData.password = password;
+            }
+
+            
+            const response = await api.patch(`/users/${user.id}`, updateData);
+
+            
+            const updatedUserData = {
+                ...user,
+                username: response.data.username,
+                email: response.data.email,
+                role: response.data.role,
+                experience_level: response.data.experience_level,
+            };
+
+            localStorage.setItem("userData", JSON.stringify(updatedUserData));
+
+            
+            const existingTechStacksResponse = await api.get(
+                `/user-tech-stacks?userId=${user.id}`
+            );
+            const existingTechStacks = existingTechStacksResponse.data || [];
+
+            
+            const techIdsToKeep = techSelections.map(
+                (selection) => selection.techId
+            );
+            const techStacksToDelete = existingTechStacks.filter(
+                (stack: any) => !techIdsToKeep.includes(stack.tech_id)
+            );
+
+            
+            await Promise.all(
+                techStacksToDelete.map((stack: any) =>
+                    api.delete(`/user-tech-stacks/${user.id}/${stack.tech_id}`)
+                )
+            );
+
+            
+            await Promise.all(
+                techSelections.map(async (selection) => {
+                    const existingStack = existingTechStacks.find(
+                        (stack: any) => stack.tech_id === selection.techId
+                    );
+
+                    if (existingStack) {
+                        
+                        if (
+                            existingStack.proficiency_level !==
+                            selection.proficiency
+                        ) {
+                            await api.patch(
+                                `/user-tech-stacks/${user.id}/${selection.techId}`,
+                                {
+                                    proficiency_level: selection.proficiency,
+                                }
+                            );
+                        }
+                    } else {
+                        
+                        await api.post("/user-tech-stacks", {
+                            user_id: user.id,
+                            tech_id: selection.techId,
+                            proficiency_level: selection.proficiency,
+                        });
+                    }
+                })
+            );
+
+            setMessage("Profile and tech stacks updated successfully");
+            
+            setPassword("");
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            setMessage("Failed to update profile");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    if (loading) {
+        return <div className="settings-container">Loading...</div>;
+    }
+
+    return (
+        <div className="settings-container">
+            <h1 className="settings-title">Settings</h1>
+
+            <div className="settings-card">
+                <div className="profile-settings-header">
+                    <h2>Profile Settings</h2>
+                    <p>Manage your account information and preferences</p>
                 </div>
 
-                <div className="settings-form-group">
-                  <label>Password</label>
-                  <div className="settings-password-input-container">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="settings-form-input"
-                    />
-                    <button 
-                      type="button" 
-                      className="settings-password-toggle"
-                      onClick={togglePasswordVisibility}
+                {message && (
+                    <div
+                        className={`settings-message ${
+                            message.includes("Failed") ? "error" : "success"
+                        }`}
                     >
-                      {showPassword ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                          <line x1="1" y1="1" x2="23" y2="23"></line>
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                </div>
+                        {message}
+                    </div>
+                )}
 
-                <div className="settings-form-group">
-                  <label>Role</label>
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="settings-form-select"
-                  >
-                    <option value="Web Developer">Web Developer</option>
-                    <option value="Mobile Developer">Mobile Developer</option>
-                    <option value="Full Stack Developer">Full Stack Developer</option>
-                    <option value="Frontend Developer">Frontend Developer</option>
-                    <option value="Backend Developer">Backend Developer</option>
-                  </select>
-                </div>
-              </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="settings-section">
+                        <h3>Personal Information</h3>
 
-              <div className="settings-right-column">
-                <div className="settings-form-group settings-experience-group">
-                  <label>Experience level</label>
-                  <div className="settings-experience-options">
-                    {experienceLevels.map((level) => (
-                      <label key={level.label} className="settings-experience-option">
-                        <input
-                          type="radio"
-                          name="experience"
-                          value={level.label}
-                          checked={experience === level.label}
-                          onChange={(e) => setExperience(e.target.value)}
+                        <ProfileInputs
+                            username={username}
+                            setUsername={setUsername}
+                            email={email}
+                            setEmail={setEmail}
+                            password={password}
+                            setPassword={setPassword}
+                            role={role}
+                            setRole={setRole}
+                            experience={experience}
+                            setExperience={setExperience}
                         />
-                        <div className="settings-experience-card">
-                          <div className="settings-radio-circle"></div>
-                          <div className="settings-experience-text">
-                            <span className="settings-experience-label">{level.label}</span>
-                            <span className="settings-experience-years">{level.years}</span>
-                          </div>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="settings-form-group settings-tech-stack-group">
-              <label>Tech Stack</label>
-              <p className="settings-tech-stack-description">Select the technologies you work with most frequently</p>
-              <div className="settings-technology-grid">
-                {techOptions.map((tech, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className={`settings-tech-option ${technologies.includes(tech) ? 'selected' : ''}`}
-                    onClick={() => handleTechnologyToggle(tech)}
-                  >
-                    {tech}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+                        <TechStack
+                            technologies={technologies}
+                            setTechnologies={setTechnologies}
+                            userId={userId}
+                            onTechSelectionsChange={handleTechSelectionsChange}
+                        />
+                    </div>
 
-          <div className="settings-actions">
-            <button type="submit" className="settings-save-button">
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+                    <div className="settings-actions">
+                        <button
+                            type="submit"
+                            className="settings-save-button"
+                            disabled={isSaving}
+                        >
+                            {isSaving ? "Saving..." : "Save Changes"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 export default Settings;
