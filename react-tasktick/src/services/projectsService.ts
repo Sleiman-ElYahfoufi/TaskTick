@@ -76,6 +76,7 @@ class ProjectsService {
     }
 
     private mapProjectData(project: Project): Project {
+
         const completedTasks = project.completedTasks !== undefined ? project.completedTasks :
             project.tasks?.filter(t =>
                 t.status?.toLowerCase() === "completed" ||
@@ -90,7 +91,6 @@ class ProjectsService {
             if (project.estimated_time > 1000) {
                 estimatedHours = '1000+';
             } else {
-
                 estimatedHours = `${project.estimated_time}h`;
             }
         }
@@ -128,9 +128,21 @@ class ProjectsService {
             'completed': 'completed'
         };
 
-        const status = statusMap[project.status?.toLowerCase()] || 'planning';
+        // Handle status mapping with more care
+        let status: ProjectStatus = 'planning'; // Default
+        if (project.status) {
+            const normalizedStatus = project.status.toLowerCase();
+            if (statusMap[normalizedStatus]) {
+                status = statusMap[normalizedStatus];
+            } else if (normalizedStatus === 'in-progress') {
+                // Handle case where UI format is already in the object
+                status = 'in-progress';
+            } else {
+                console.warn(`Unknown status "${project.status}" being mapped to "planning"`);
+            }
+        }
 
-        return {
+        const result = {
             id: project.id,
             title: project.name || project.title || '',
             description: project.description || '',
@@ -147,8 +159,11 @@ class ProjectsService {
             created_at: project.created_at,
             updated_at: project.updated_at,
             accuracy_rating: project.accuracy_rating,
-            tasks: project.tasks
+            tasks: project.tasks,
+            estimated_time: project.estimated_time,
         };
+
+        return result;
     }
 
     async getProjectById(projectId: string | number): Promise<Project> {
@@ -207,20 +222,92 @@ class ProjectsService {
         }
     }
 
+    // Convert between UI status format (with hyphen) and API format (with underscore)
+    private uiToApiStatus(status: string): string {
+        // Normalize the input
+        const normalized = status.toLowerCase();
+
+        // Already in API format with underscore
+        if (normalized === "in_progress") return "in_progress";
+
+        // Ensure we're sending exactly what the backend expects
+        switch (normalized) {
+            case "in-progress": return "in_progress";
+            case "planning": return "planning";
+            case "delayed": return "delayed";
+            case "completed": return "completed";
+            default: return "planning"; // Safe default
+        }
+    }
+
+    // Convert from API status format (with underscore) to UI format (with hyphen)
+    private apiToUiStatus(status: string): ProjectStatus {
+        // Ensure we're using the correct UI format
+        switch (status.toLowerCase()) {
+            case "in_progress": return "in-progress";
+            case "planning": return "planning";
+            case "delayed": return "delayed";
+            case "completed": return "completed";
+            default: return "planning"; // Safe default
+        }
+    }
+
     async updateProject(projectId: string | number, project: Partial<Project>): Promise<Project> {
         try {
+            // First get and store the current project with all its data
             const currentProject = await this.getProjectById(projectId);
-
-            const response = await api.patch<Project>(`/projects/${projectId}`, project);
-
-            if (!response.data.completedTasks && currentProject.completedTasks) {
-                response.data.completedTasks = currentProject.completedTasks;
+            // Determine which status to use - use incoming status if provided
+            // This allows explicit updates to status when needed
+            let statusToSend;
+            if (project.status) {
+                // If we're explicitly passing a new status, use that
+                statusToSend = project.status;
+            } else {
+                // Otherwise preserve the current status
+                statusToSend = currentProject.status;
             }
-            if (!response.data.totalTasks && currentProject.totalTasks) {
-                response.data.totalTasks = currentProject.totalTasks;
-            }
 
-            return this.mapProjectData(response.data);
+            // Cache the important fields that must be preserved
+            const preservedFields = {
+                completedTasks: currentProject.completedTasks || 0,
+                totalTasks: currentProject.totalTasks || 0,
+                estimated_time: currentProject.estimated_time
+            };
+
+            // Create a clean API-only object with just the fields the backend expects
+            const apiProject: any = {
+                name: project.name || project.title,
+                description: project.description,
+                deadline: project.deadline,
+                estimated_time: project.estimated_time,
+                priority: project.priority,
+                detail_depth: project.detail_depth
+            };
+
+            // ALWAYS include status in API call, using the properly formatted value
+            if (statusToSend) {
+                // Convert UI format to API format using our helper
+                apiProject.status = this.uiToApiStatus(String(statusToSend));
+            }
+            const response = await api.patch<any>(`/projects/${projectId}`, apiProject);
+
+            // Create merged result with both API response and preserved fields
+            const mergedResult = {
+                ...currentProject,          // Base is current project 
+                ...response.data,           // Override with API response
+                completedTasks: preservedFields.completedTasks,  // Force preserve task counts
+                totalTasks: preservedFields.totalTasks,
+                estimated_time: response.data.estimated_time ?? preservedFields.estimated_time
+            };
+
+            // ALWAYS convert the status in the response to UI format
+            if (response.data.status) {
+                mergedResult.status = this.apiToUiStatus(response.data.status);
+            } else if (statusToSend) {
+                // If API didn't return a status, use our converted version of what we sent
+                mergedResult.status = this.apiToUiStatus(this.uiToApiStatus(String(statusToSend)));
+            }
+            return this.mapProjectData(mergedResult);
         } catch (error) {
             console.error(`Error updating project ${projectId}:`, error);
             throw error;

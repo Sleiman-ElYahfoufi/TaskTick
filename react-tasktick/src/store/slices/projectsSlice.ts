@@ -16,7 +16,17 @@ const initialState: ProjectsState = {
     error: null
 };
 
-export const fetchProjects = createAsyncThunk<ProjectsResponse | Project[], number>(
+const setPending = (state: ProjectsState) => {
+    state.isLoading = true;
+    state.error = null;
+};
+
+const setFailed = (state: ProjectsState, action: any) => {
+    state.isLoading = false;
+    state.error = action.payload?.message || action.error?.message || action.payload || 'An error occurred';
+};
+
+export const fetchProjects = createAsyncThunk<Project[] | ProjectsResponse, number>(
     'projects/fetchProjects',
     async (userId: number, { rejectWithValue }) => {
         try {
@@ -28,7 +38,7 @@ export const fetchProjects = createAsyncThunk<ProjectsResponse | Project[], numb
     }
 );
 
-export const fetchProjectById = createAsyncThunk(
+export const fetchProjectById = createAsyncThunk<Project, string | number>(
     'projects/fetchProjectById',
     async (projectId: string | number, { rejectWithValue }) => {
         try {
@@ -40,11 +50,11 @@ export const fetchProjectById = createAsyncThunk(
     }
 );
 
-export const addProject = createAsyncThunk(
+export const addProject = createAsyncThunk<Project, Omit<Project, 'id'>>(
     'projects/addProject',
-    async (project: Omit<Project, 'id'>, { rejectWithValue }) => {
+    async (projectData: Omit<Project, 'id'>, { rejectWithValue }) => {
         try {
-            const newProject = await projectsService.createProject(project);
+            const newProject = await projectsService.createProject(projectData);
             return newProject;
         } catch (error: any) {
             return rejectWithValue(error.message || 'Failed to add project');
@@ -52,9 +62,9 @@ export const addProject = createAsyncThunk(
     }
 );
 
-export const updateProject = createAsyncThunk(
+export const updateProject = createAsyncThunk<Project, { projectId: string | number, projectData: Partial<Project> }>(
     'projects/updateProject',
-    async ({ projectId, projectData }: { projectId: string | number, projectData: Partial<Project> }, { rejectWithValue }) => {
+    async ({ projectId, projectData }, { rejectWithValue }) => {
         try {
             const updatedProject = await projectsService.updateProject(projectId, projectData);
             return updatedProject;
@@ -64,7 +74,7 @@ export const updateProject = createAsyncThunk(
     }
 );
 
-export const deleteProject = createAsyncThunk(
+export const deleteProject = createAsyncThunk<string | number, string | number>(
     'projects/deleteProject',
     async (projectId: string | number, { rejectWithValue }) => {
         try {
@@ -80,16 +90,6 @@ export const selectAllProjects = (state: RootState) => state.projects.projects;
 export const selectSelectedProject = (state: RootState) => state.projects.selectedProject;
 export const selectProjectsLoading = (state: RootState) => state.projects.isLoading;
 export const selectProjectsError = (state: RootState) => state.projects.error;
-
-const setPending = (state: ProjectsState) => {
-    state.isLoading = true;
-    state.error = null;
-};
-
-const setFailed = (state: ProjectsState, action: PayloadAction<any>) => {
-    state.isLoading = false;
-    state.error = action.payload as string;
-};
 
 const projectsSlice = createSlice({
     name: 'projects',
@@ -147,11 +147,26 @@ const projectsSlice = createSlice({
         builder.addCase(updateProject.fulfilled, (state, action) => {
             state.isLoading = false;
             const index = state.projects.findIndex(p => String(p.id) === String(action.payload.id));
+
             if (index !== -1) {
-                state.projects[index] = action.payload;
+                const existingProject = state.projects[index];
+                const updatedProject = {
+                    ...action.payload,
+                    completedTasks: action.payload.completedTasks ?? existingProject.completedTasks ?? 0,
+                    totalTasks: action.payload.totalTasks ?? existingProject.totalTasks ?? 0,
+                    status: action.payload.status ?? existingProject.status
+                };
+
+                state.projects[index] = updatedProject;
             }
             if (state.selectedProject && String(state.selectedProject.id) === String(action.payload.id)) {
-                state.selectedProject = action.payload;
+                const updatedSelectedProject = {
+                    ...action.payload,
+                    completedTasks: action.payload.completedTasks ?? state.selectedProject.completedTasks ?? 0,
+                    totalTasks: action.payload.totalTasks ?? state.selectedProject.totalTasks ?? 0,
+                    status: action.payload.status ?? state.selectedProject.status
+                };
+                state.selectedProject = updatedSelectedProject;
             }
         });
         builder.addCase(updateProject.rejected, setFailed);

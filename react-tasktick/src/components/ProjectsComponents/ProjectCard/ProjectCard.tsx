@@ -158,16 +158,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         </div>
                         <div className="edit-buttons">
                             <button
-                                className="project-card-save-btn"
-                                onClick={handleSave}
-                            >
-                                Save
-                            </button>
-                            <button
                                 className="cancel-btn"
                                 onClick={handleToggleEdit}
                             >
                                 Cancel
+                            </button>
+                            <button
+                                className="project-card-save-btn"
+                                onClick={handleSave}
+                            >
+                                Save
                             </button>
                         </div>
                     </div>
