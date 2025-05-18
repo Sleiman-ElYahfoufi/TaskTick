@@ -1,5 +1,6 @@
 import api from '../utils/api';
 import { ProjectStatus } from '../components/ProjectsComponents/ProjectCard/ProjectCard';
+import tasksService from './tasksService';
 
 export interface Project {
     id: string | number;
@@ -39,6 +40,7 @@ export interface ProjectTask {
     created_at?: string;
     updated_at?: string;
     hours_spent?: number;
+    project_name?: string;
 }
 
 export interface ProjectsResponse {
@@ -160,31 +162,10 @@ class ProjectsService {
     }
 
     async getProjectTasks(projectId: string | number): Promise<ProjectTask[]> {
-        try {
-            const project = await this.getProjectById(projectId);
-
-            if (project && project.tasks && Array.isArray(project.tasks)) {
-                return project.tasks.map(task => this.mapTaskData(task));
-            }
-
-            const response = await api.get<ProjectTask[] | ProjectTasksResponse>(`/tasks?projectId=${projectId}`);
-
-            if (Array.isArray(response.data)) {
-                return response.data.map(task => this.mapTaskData(task));
-            }
-
-            if (response.data && 'tasks' in response.data && Array.isArray(response.data.tasks)) {
-                return response.data.tasks.map(task => this.mapTaskData(task));
-            }
-
-            return [];
-        } catch (error) {
-            console.error(`Error fetching tasks for project ${projectId}:`, error);
-            return [];
-        }
+        return tasksService.getTasksByProjectId(projectId);
     }
 
-    private mapTaskData(task: ProjectTask): ProjectTask {
+    mapTaskData(task: ProjectTask): ProjectTask {
         const estimatedHours = task.estimated_time !== undefined ? String(task.estimated_time) : '0';
         task.estimatedTime = `${estimatedHours} hrs`;
 
@@ -204,22 +185,9 @@ class ProjectsService {
                 case 'done':
                     task.status = 'Completed';
                     break;
-                default:
-                    break;
             }
         } else {
             task.status = 'Not Started';
-        }
-
-        if (task.priority) {
-            const priorityMap: { [key: string]: string } = {
-                'low': 'Low',
-                'medium': 'Medium',
-                'high': 'High'
-            };
-            task.priority = priorityMap[task.priority.toLowerCase()] || 'Medium';
-        } else {
-            task.priority = 'Medium';
         }
 
         if (task.progress === undefined) {
@@ -268,131 +236,22 @@ class ProjectsService {
         }
     }
 
-    async updateProjectTask(projectId: string | number, taskId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
-        try {
-            const {
-                name,
-                description,
-                estimated_time,
-                estimatedTime,
-                dueDate,
-                priority,
-                progress,
-                status
-            } = taskData;
-
-            const updateData: any = { project_id: Number(projectId) };
-
-            if (name !== undefined) updateData.name = name;
-            if (description !== undefined) updateData.description = description;
-
-            if (estimated_time !== undefined) {
-                const numValue = Number(estimated_time) || 0;
-                console.log(`Parsed estimated_time to number: ${numValue}`);
-                updateData.estimated_time = numValue;
-            } else if (estimatedTime !== undefined) {
-                let numValue = 0;
-                if (typeof estimatedTime === 'string') {
-                    const match = estimatedTime.match(/^(\d+(?:\.\d+)?)/);
-                    if (match && match[1]) {
-                        numValue = Number(match[1]) || 0;
-                    }
-                } else if (typeof estimatedTime === 'number') {
-                    numValue = estimatedTime;
-                }
-                console.log(`Extracted numeric value from estimatedTime: ${numValue}`);
-                updateData.estimated_time = numValue;
-            }
-
-            if (progress !== undefined) updateData.progress = progress;
-
-            if (dueDate !== undefined) {
-                if (dueDate && dueDate.trim() !== '') {
-                    try {
-                        const dateObj = new Date(dueDate);
-                        if (!isNaN(dateObj.getTime())) {
-                            updateData.dueDate = dateObj.toISOString();
-                        }
-                    } catch (e) {
-                        console.warn(`Invalid date format for dueDate: ${dueDate}`);
-                    }
-                }
-            }
-
-            if (status !== undefined) {
-                updateData.status = this.mapStatusToBackend(status);
-            }
-
-            if (priority !== undefined) {
-                updateData.priority = this.mapPriorityToBackend(priority);
-            }
-
-            console.log('Updating task with data:', updateData);
-
-            const response = await api.patch<ProjectTask>(`/tasks/${taskId}`, updateData);
-            return this.mapTaskData(response.data);
-        } catch (error) {
-            console.error(`Error updating task ${taskId}:`, error);
-            throw error;
-        }
+    async updateProjectTask(taskId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
+        console.warn('projectsService.updateProjectTask is deprecated, use tasksService.updateTask instead');
+        return tasksService.updateTask(taskId, taskData);
     }
 
     async addProjectTask(projectId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
-        try {
-            const {
-                name,
-                description,
-                estimated_time,
-                dueDate,
-                priority,
-                progress,
-                status
-            } = taskData;
-
-            const task: any = {
-                project_id: Number(projectId),
-                name: name || 'New Task',
-                estimated_time: estimated_time || 1
-            };
-
-            if (description !== undefined) task.description = description;
-            if (progress !== undefined) task.progress = progress;
-
-            if (dueDate !== undefined && dueDate && dueDate.trim() !== '') {
-                try {
-                    const dateObj = new Date(dueDate);
-                    if (!isNaN(dateObj.getTime())) {
-                        task.dueDate = dateObj.toISOString();
-                    }
-                } catch (e) {
-                    console.warn(`Invalid date format for dueDate: ${dueDate}`);
-                }
-            }
-
-            task.status = this.mapStatusToBackend(status);
-            task.priority = this.mapPriorityToBackend(priority);
-
-            console.log('Creating task with data:', task);
-
-            const response = await api.post<ProjectTask>('/tasks', task);
-            return this.mapTaskData(response.data);
-        } catch (error) {
-            console.error(`Error adding task to project ${projectId}:`, error);
-            throw error;
-        }
+        console.warn('projectsService.addProjectTask is deprecated, use tasksService.createTask instead');
+        return tasksService.createTask(projectId, taskData);
     }
 
     async deleteProjectTask(taskId: string | number): Promise<string | number> {
-        try {
-            await api.delete(`/tasks/${taskId}`);
-            return taskId;
-        } catch (error) {
-            console.error(`Error deleting task ${taskId}:`, error);
-            throw error;
-        }
+        console.warn('projectsService.deleteProjectTask is deprecated, use tasksService.deleteTask instead');
+        return tasksService.deleteTask(taskId);
     }
 
-    private mapStatusToBackend(status?: string): string {
+    mapStatusToBackend(status?: string): string {
         if (!status) return 'todo';
 
         const statusMap: { [key: string]: string } = {
@@ -404,7 +263,7 @@ class ProjectsService {
         return statusMap[status] || 'todo';
     }
 
-    private mapPriorityToBackend(priority?: string): string {
+    mapPriorityToBackend(priority?: string): string {
         if (!priority) return 'medium';
 
         const priorityMap: { [key: string]: string } = {
@@ -415,7 +274,6 @@ class ProjectsService {
 
         return priorityMap[priority] || 'medium';
     }
-
 
     formatProject(project: Project): Project {
         return this.mapProjectData(project);
