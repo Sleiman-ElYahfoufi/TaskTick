@@ -74,11 +74,14 @@ describe('ProjectsController', () => {
         estimated_time: 10,
         user_id: 1,
       };
+      
+      const userId = 1;
 
       jest.spyOn(service, 'create').mockResolvedValue(mockProject);
 
-      const result = await controller.create(createProjectDto);
+      const result = await controller.create(createProjectDto, userId);
 
+      expect(createProjectDto.user_id).toEqual(userId);
       expect(service.create).toHaveBeenCalledWith(createProjectDto);
       expect(result).toEqual(mockProject);
     });
@@ -86,42 +89,35 @@ describe('ProjectsController', () => {
 
   describe('findAll', () => {
     it('should return all projects', async () => {
+      const userId = 1;
       const projects = [mockProject];
-      jest.spyOn(service, 'findAll').mockResolvedValue(projects);
+      jest.spyOn(service, 'findAllByUserId').mockResolvedValue(projects);
 
-      const result = await controller.findAll();
+      const result = await controller.findAll(userId);
 
-      expect(service.findAll).toHaveBeenCalled();
+      expect(service.findAllByUserId).toHaveBeenCalledWith(userId);
       expect(result).toEqual(projects);
     });
 
     it('should find projects by name', async () => {
+      const userId = 1;
       const projects = [mockProject];
       jest.spyOn(service, 'findByName').mockResolvedValue(projects);
 
-      const result = await controller.findAll('Test');
+      const result = await controller.findAll(userId, 'Test');
 
       expect(service.findByName).toHaveBeenCalledWith('Test');
       expect(result).toEqual(projects);
     });
 
     it('should find projects by status', async () => {
+      const userId = 1;
       const projects = [mockProject];
       jest.spyOn(service, 'findByStatus').mockResolvedValue(projects);
 
-      const result = await controller.findAll(undefined, ProjectStatus.PLANNING);
+      const result = await controller.findAll(userId, undefined, ProjectStatus.PLANNING);
 
       expect(service.findByStatus).toHaveBeenCalledWith(ProjectStatus.PLANNING);
-      expect(result).toEqual(projects);
-    });
-
-    it('should find projects by user id', async () => {
-      const projects = [mockProject];
-      jest.spyOn(service, 'findAllByUserId').mockResolvedValue(projects);
-
-      const result = await controller.findAll(undefined, undefined, '1');
-
-      expect(service.findAllByUserId).toHaveBeenCalledWith(1);
       expect(result).toEqual(projects);
     });
   });

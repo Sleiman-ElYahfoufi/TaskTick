@@ -40,12 +40,24 @@ describe('TasksService', () => {
             save: jest.fn(),
             merge: jest.fn(),
             delete: jest.fn(),
+            createQueryBuilder: jest.fn(() => ({
+              select: jest.fn().mockReturnThis(),
+              addSelect: jest.fn().mockReturnThis(),
+              where: jest.fn().mockReturnThis(),
+              andWhere: jest.fn().mockReturnThis(),
+              setParameter: jest.fn().mockReturnThis(),
+              groupBy: jest.fn().mockReturnThis(),
+              getRawMany: jest.fn().mockResolvedValue([]),
+              getMany: jest.fn().mockResolvedValue([]),
+            })),
           },
         },
         {
           provide: ProjectsService,
           useValue: {
             findOne: jest.fn(),
+            updateProjectStatus: jest.fn(),
+            findAllByUserId: jest.fn(),
           },
         },
       ],
@@ -70,14 +82,16 @@ describe('TasksService', () => {
       };
 
       jest.spyOn(projectsService, 'findOne').mockResolvedValue({} as any);
-      jest.spyOn(repository, 'create').mockReturnValue(mockTask);
-      jest.spyOn(repository, 'save').mockResolvedValue(mockTask);
+      jest.spyOn(projectsService, 'updateProjectStatus').mockResolvedValue(undefined);
+      jest.spyOn(repository, 'create').mockReturnValue(mockTask as any);
+      jest.spyOn(repository, 'save').mockResolvedValue(mockTask as any);
 
       const result = await service.create(createTaskDto as any);
 
       expect(projectsService.findOne).toHaveBeenCalledWith(createTaskDto.project_id);
       expect(repository.create).toHaveBeenCalledWith(createTaskDto);
       expect(repository.save).toHaveBeenCalled();
+      expect(projectsService.updateProjectStatus).toHaveBeenCalledWith(createTaskDto.project_id);
       expect(result).toEqual(mockTask);
     });
   });
@@ -85,7 +99,7 @@ describe('TasksService', () => {
   describe('findAll', () => {
     it('should return an array of tasks', async () => {
       const tasks = [mockTask];
-      jest.spyOn(repository, 'find').mockResolvedValue(tasks);
+      jest.spyOn(repository, 'find').mockResolvedValue(tasks as any);
 
       const result = await service.findAll();
 
@@ -95,7 +109,7 @@ describe('TasksService', () => {
     
     it('should find tasks by status', async () => {
       const tasks = [mockTask];
-      jest.spyOn(repository, 'find').mockResolvedValue(tasks);
+      jest.spyOn(repository, 'find').mockResolvedValue(tasks as any);
       
       const result = await service.findAllByStatus(TaskStatus.TODO);
       
@@ -107,7 +121,7 @@ describe('TasksService', () => {
     
     it('should find tasks by project ID', async () => {
       const tasks = [mockTask];
-      jest.spyOn(repository, 'find').mockResolvedValue(tasks);
+      jest.spyOn(repository, 'find').mockResolvedValue(tasks as any);
       
       const result = await service.findAllByProjectId(1);
       
@@ -121,7 +135,7 @@ describe('TasksService', () => {
 
   describe('findOne', () => {
     it('should return a task by id', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask);
+      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask as any);
 
       const result = await service.findOne(1);
 
@@ -142,21 +156,23 @@ describe('TasksService', () => {
         name: 'Updated Task',
       };
 
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask);
+      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask as any);
+      jest.spyOn(projectsService, 'updateProjectStatus').mockResolvedValue(undefined);
       jest.spyOn(repository, 'merge').mockReturnValue({
         ...mockTask,
         name: updateTaskDto.name,
-      });
+      } as any);
       jest.spyOn(repository, 'save').mockResolvedValue({
         ...mockTask,
         name: updateTaskDto.name,
-      });
+      } as any);
 
       const result = await service.update(1, updateTaskDto as any);
 
       expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(repository.merge).toHaveBeenCalledWith(mockTask, updateTaskDto);
       expect(repository.save).toHaveBeenCalled();
+      expect(projectsService.updateProjectStatus).toHaveBeenCalledWith(mockTask.project_id);
       expect(result.name).toEqual(updateTaskDto.name);
     });
 
@@ -165,20 +181,22 @@ describe('TasksService', () => {
         project_id: 2,
       };
 
-      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask);
+      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask as any);
       jest.spyOn(projectsService, 'findOne').mockResolvedValue({} as any);
+      jest.spyOn(projectsService, 'updateProjectStatus').mockResolvedValue(undefined);
       jest.spyOn(repository, 'merge').mockReturnValue({
         ...mockTask,
         project_id: updateTaskDto.project_id,
-      });
+      } as any);
       jest.spyOn(repository, 'save').mockResolvedValue({
         ...mockTask,
         project_id: updateTaskDto.project_id,
-      });
+      } as any);
 
       const result = await service.update(1, updateTaskDto as any);
 
       expect(projectsService.findOne).toHaveBeenCalledWith(updateTaskDto.project_id);
+      expect(projectsService.updateProjectStatus).toHaveBeenCalledWith(updateTaskDto.project_id);
       expect(result.project_id).toEqual(updateTaskDto.project_id);
     });
 
@@ -191,17 +209,48 @@ describe('TasksService', () => {
 
   describe('remove', () => {
     it('should delete a task', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask as any);
+      jest.spyOn(projectsService, 'updateProjectStatus').mockResolvedValue(undefined);
       jest.spyOn(repository, 'delete').mockResolvedValue({ affected: 1, raw: {} });
 
       await service.remove(1);
 
+      expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(repository.delete).toHaveBeenCalledWith(1);
+      expect(projectsService.updateProjectStatus).toHaveBeenCalledWith(mockTask.project_id);
     });
 
-    it('should throw NotFoundException if task not found', async () => {
+    it('should throw NotFoundException if task not found during deletion check', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+      await expect(service.remove(999)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw NotFoundException if task not found during deletion', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(mockTask as any);
       jest.spyOn(repository, 'delete').mockResolvedValue({ affected: 0, raw: {} });
 
       await expect(service.remove(999)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('findTasksForUser', () => {
+    it('should find tasks for a user with no filters', async () => {
+      const userId = 1;
+      const projects = [{ id: 1, name: 'Project 1' }];
+      const tasks = [mockTask];
+
+      jest.spyOn(projectsService, 'findAllByUserId').mockResolvedValue(projects as any);
+      jest.spyOn(repository, 'createQueryBuilder').mockImplementation(() => ({
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValue(tasks),
+      }) as any);
+
+      const result = await service.findTasksForUser(userId);
+
+      expect(projectsService.findAllByUserId).toHaveBeenCalledWith(userId);
+      expect(result.length).toEqual(tasks.length);
     });
   });
 });

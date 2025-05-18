@@ -7,6 +7,7 @@ import { Task, TaskStatus, PriorityLevel } from './entities/task.entity';
 import { NotFoundException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from '../auth/auth.guard';
+import { ProjectsService } from '../projects/projects.service';
 
 describe('TasksController', () => {
   let controller: TasksController;
@@ -41,13 +42,18 @@ describe('TasksController', () => {
         {
           provide: TasksService,
           useValue: {
-            create: jest.fn(),
             findAll: jest.fn(),
-            findAllByProjectId: jest.fn(),
-            findAllByStatus: jest.fn(),
+            findTasksForUser: jest.fn(),
             findOne: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
+            createTaskWithOwnerCheck: jest.fn(),
+          },
+        },
+        {
+          provide: ProjectsService,
+          useValue: {
+            findOne: jest.fn(),
           },
         },
       ],
@@ -73,43 +79,49 @@ describe('TasksController', () => {
         project_id: 1,
       };
 
-      jest.spyOn(service, 'create').mockResolvedValue(mockTask);
+      const userId = 1;
+      
+      jest.spyOn(service, 'createTaskWithOwnerCheck').mockResolvedValue(mockTask);
 
-      const result = await controller.create(createTaskDto);
+      const result = await controller.create(createTaskDto, userId);
 
-      expect(service.create).toHaveBeenCalledWith(createTaskDto);
+      expect(service.createTaskWithOwnerCheck).toHaveBeenCalledWith(createTaskDto, userId);
       expect(result).toEqual(mockTask);
     });
   });
 
   describe('findAll', () => {
     it('should return all tasks', async () => {
+      const userId = 1;
       const tasks = [mockTask];
-      jest.spyOn(service, 'findAll').mockResolvedValue(tasks);
+      jest.spyOn(service, 'findTasksForUser').mockResolvedValue(tasks);
 
-      const result = await controller.findAll();
+      const result = await controller.findAll(userId);
 
-      expect(service.findAll).toHaveBeenCalled();
+      expect(service.findTasksForUser).toHaveBeenCalledWith(userId, {});
       expect(result).toEqual(tasks);
     });
 
     it('should find tasks by project ID', async () => {
+      const userId = 1;
+      const projectId = '1';
       const tasks = [mockTask];
-      jest.spyOn(service, 'findAllByProjectId').mockResolvedValue(tasks);
+      jest.spyOn(service, 'findTasksForUser').mockResolvedValue(tasks);
 
-      const result = await controller.findAll('1');
+      const result = await controller.findAll(userId, projectId);
 
-      expect(service.findAllByProjectId).toHaveBeenCalledWith(1);
+      expect(service.findTasksForUser).toHaveBeenCalledWith(userId, { projectId: 1 });
       expect(result).toEqual(tasks);
     });
 
     it('should find tasks by status', async () => {
+      const userId = 1;
       const tasks = [mockTask];
-      jest.spyOn(service, 'findAllByStatus').mockResolvedValue(tasks);
+      jest.spyOn(service, 'findTasksForUser').mockResolvedValue(tasks);
 
-      const result = await controller.findAll(undefined, TaskStatus.TODO);
+      const result = await controller.findAll(userId, undefined, TaskStatus.TODO);
 
-      expect(service.findAllByStatus).toHaveBeenCalledWith(TaskStatus.TODO);
+      expect(service.findTasksForUser).toHaveBeenCalledWith(userId, { status: TaskStatus.TODO });
       expect(result).toEqual(tasks);
     });
   });
