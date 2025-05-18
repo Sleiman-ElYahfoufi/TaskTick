@@ -80,14 +80,12 @@ export class ProjectDecompositionService {
       const { projectDetails, userId, maxTasks = 15 } = generateTasksDto;
       this.logger.log(`Generating tasks for project: ${projectDetails.name}`);
 
-      // Ensure userId is a number
       const userIdNumber = typeof userId === 'string' ? parseInt(userId, 10) : userId;
       if (isNaN(userIdNumber)) {
         throw new Error('Invalid userId provided');
       }
 
       try {
-        // Sanitize user inputs to prevent prompt injection
         const sanitizedProjectDetails = sanitizeObject(projectDetails);
 
         const currentDate = new Date();
@@ -112,11 +110,9 @@ export class ProjectDecompositionService {
             completedTasks.push(...projectTasks.filter(task => task.status === 'completed'));
           }
 
-          // Build a sanitized context
           const userContext = this.buildUserContext(user, userTechStacks, completedTasks, timeTrackingData);
           const sanitizedUserContext = sanitizePromptInput(userContext);
 
-          // Use structured prompt templates with clear boundaries between system and user inputs
           const messages = [
             {
               role: "system",
