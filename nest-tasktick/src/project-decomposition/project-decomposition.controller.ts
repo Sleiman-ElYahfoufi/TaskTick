@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, HttpCode, HttpStatus, Logger, InternalServerErrorException } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { ProjectDecompositionService } from './project-decomposition.service';
 import { GenerateTasksDto } from './dto/generate-tasks.dto';
@@ -7,17 +7,30 @@ import { DecompositionResult } from './interfaces/decomposition-result.interface
 @Controller('project-decomposition')
 @UseGuards(AuthGuard)
 export class ProjectDecompositionController {
-  constructor(private readonly projectDecompositionService: ProjectDecompositionService) {}
+  private readonly logger = new Logger(ProjectDecompositionController.name);
+
+  constructor(private readonly projectDecompositionService: ProjectDecompositionService) { }
 
   @Post('generate')
   @HttpCode(HttpStatus.OK)
   async generateTasks(@Body() generateTasksDto: GenerateTasksDto): Promise<DecompositionResult> {
-    return this.projectDecompositionService.generateTasks(generateTasksDto);
+    try {
+      this.logger.log(`Generating tasks for project: ${generateTasksDto.projectDetails.name}`);
+      return await this.projectDecompositionService.generateTasks(generateTasksDto);
+    } catch (error) {
+      this.logger.error(`Error in generateTasks: ${error.message}`, error.stack);
+      throw new InternalServerErrorException(`Failed to generate tasks: ${error.message}`);
+    }
   }
 
   @Post('save')
   @HttpCode(HttpStatus.CREATED)
   async saveTasks(@Body() decompositionResult: DecompositionResult): Promise<DecompositionResult> {
-    return this.projectDecompositionService.saveTasks(decompositionResult);
+    try {
+      return await this.projectDecompositionService.saveTasks(decompositionResult);
+    } catch (error) {
+      this.logger.error(`Error in saveTasks: ${error.message}`, error.stack);
+      throw new InternalServerErrorException(`Failed to save tasks: ${error.message}`);
+    }
   }
 }

@@ -21,4 +21,4 @@ import { TimeTrackingsModule } from '../time-trackings/time-trackings.module';
   providers: [ProjectDecompositionService],
   exports: [ProjectDecompositionService]
 })
-export class ProjectDecompositionModule {}
+export class ProjectDecompositionModule { }
