@@ -54,6 +54,26 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+/* Specific styling for date input */
+input[type="date"].form-control {
+    appearance: none;
+    padding-right: 10px;
+    position: relative;
+}
+
+input[type="date"].form-control::-webkit-calendar-picker-indicator {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+input[type="date"].form-control::-webkit-datetime-edit {
+    color: #4b5563;
+}
+
+input[type="date"].form-control:focus::-webkit-datetime-edit {
+    color: #111827;
+}
+
 textarea.form-control {
     resize: vertical;
     min-height: 100px;
@@ -92,7 +112,7 @@ textarea.form-control {
 
 .select-input {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 16px;
@@ -106,9 +126,29 @@ textarea.form-control {
     margin-top: 32px;
 }
 
-.generate-tasks-btn,
+.generate-tasks-btn {
+    background-color: #01398e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.generate-tasks-btn:hover {
+    background-color: #002a6b;
+}
+
+.generate-tasks-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
 .save-project-btn {
-    background-color: #2563eb;
+    background-color: var(--primary);
     color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -119,7 +159,6 @@ textarea.form-control {
     transition: background-color 0.2s;
 }
 
-.generate-tasks-btn:hover,
 .save-project-btn:hover {
     background-color: #1d4ed8;
 }

@@ -20,8 +20,9 @@ import {
 import {
     editablePriorityColumn,
     editableProgressColumn,
-    editableStatusColumn,
 } from "./TableColumnDefinitions";
+import { useAppSelector } from "../../../store/hooks";
+import { selectActiveSession } from "../../../store/slices/timeTrackingsSlice";
 
 export interface BaseTask {
     id: string | number;
@@ -43,18 +44,21 @@ interface TasksTableProps<T extends BaseTask> {
     hideFooter?: boolean;
     className?: string;
     editableFields?: string[];
+    cellErrors?: Record<string, string>;
+    disableEditing?: boolean;
 }
 
 const TasksTable = memo(function TasksTable<T extends BaseTask>({
     tasks,
     columns,
-    onStartTimer,
-    onDeleteTask,
+
     onTaskUpdate,
     loadingTaskIds = [],
     hideFooter = false,
     className = "",
     editableFields = [],
+
+    disableEditing,
 }: TasksTableProps<T>) {
     const apiRef = useGridApiRef();
     const [cellModesModel, setCellModesModel] = useState<GridCellModesModel>(
@@ -62,13 +66,16 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     );
     const [editingId, _] = useState<string | null>(null);
 
-    
+    const activeSession = useAppSelector(selectActiveSession);
+    const editingDisabled =
+        disableEditing !== undefined ? disableEditing : !!activeSession;
 
     const handleCellClick = useCallback(
         (params: GridCellParams) => {
             if (
                 editableFields.includes(params.field) &&
-                editingId !== String(params.id)
+                editingId !== String(params.id) &&
+                !editingDisabled
             ) {
                 apiRef.current.startCellEditMode({
                     id: params.id,
@@ -76,23 +83,29 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                 });
             }
         },
-        [apiRef, editableFields, editingId]
+        [apiRef, editableFields, editingId, editingDisabled]
     );
 
     const processRowUpdate = useCallback(
-        (newRow: GridRowModel, _: GridRowModel) => {
+        (newRow: GridRowModel, oldRow: GridRowModel) => {
             console.debug(
                 "[TasksTable] Process row update:",
                 newRow.id,
                 "Changes:",
                 JSON.stringify(newRow)
             );
+
+            if (editingDisabled) {
+                console.debug("[TasksTable] Editing disabled, ignoring update");
+                return oldRow;
+            }
+
             if (onTaskUpdate) {
                 onTaskUpdate(newRow as T);
             }
             return newRow;
         },
-        [onTaskUpdate]
+        [onTaskUpdate, editingDisabled]
     );
 
     const handleProcessRowUpdateError = useCallback((error: Error) => {
@@ -102,14 +115,14 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     const makeColumnsEditable = useCallback(
         (cols: GridColDef[]) => {
             return cols.map((col) => {
-                if (!editableFields.includes(col.field)) {
+                if (!editableFields.includes(col.field) || editingDisabled) {
                     return col;
                 }
 
                 if (col.field === "progress") {
                     return {
                         ...col,
-                        editable: true,
+                        editable: !editingDisabled,
                         type: "number",
                         preProcessEditCellProps: (
                             params: GridPreProcessEditCellProps
@@ -132,7 +145,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                 if (col.field === "priority") {
                     return {
                         ...col,
-                        editable: true,
+                        editable: !editingDisabled,
                         type: "singleSelect",
                         valueOptions: ["Low", "Medium", "High"],
                     };
@@ -141,7 +154,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                 if (col.field === "status") {
                     return {
                         ...col,
-                        editable: true,
+                        editable: !editingDisabled,
                         type: "singleSelect",
                         valueOptions: [
                             "Not Started",
@@ -154,18 +167,18 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                 if (col.field === "dueDate") {
                     return {
                         ...col,
-                        editable: true,
+                        editable: !editingDisabled,
                         type: "date",
                     };
                 }
 
                 return {
                     ...col,
-                    editable: true,
+                    editable: !editingDisabled,
                 };
             });
         },
-        [editableFields]
+        [editableFields, editingDisabled]
     );
 
     const enhancedColumns = useMemo(
@@ -185,14 +198,24 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
         }));
     }, [enhancedColumns]);
 
+    const taskTableClasses = `tasks-table-container ${className} ${
+        editingDisabled ? "editing-disabled" : ""
+    }`;
+
     return (
         <div className="responsive-table-container">
-            <div className={`tasks-table-container ${className}`}>
+            {editingDisabled && (
+                <div className="editing-disabled-message">
+                    Task editing is disabled while a time tracking session is
+                    active
+                </div>
+            )}
+            <div className={taskTableClasses}>
                 <DataGrid
                     apiRef={apiRef}
                     rows={tasks}
                     columns={responsiveColumns}
-                    editMode="cell"
+                    editMode={editingDisabled ? undefined : "cell"}
                     onCellClick={handleCellClick}
                     processRowUpdate={processRowUpdate}
                     onProcessRowUpdateError={handleProcessRowUpdateError}
@@ -290,7 +313,6 @@ export {
     renderActionsCell,
     editablePriorityColumn,
     editableProgressColumn,
-    editableStatusColumn,
 };
 
 export default TasksTable;

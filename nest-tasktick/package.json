@@ -21,10 +21,11 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:generate": "npm run typeorm -- migration:generate -d database/data-source.ts database/migrations/%npm_config_name%",
-    "migration:run": "npm run typeorm -- migration:run -d database/data-source.ts",
+    "migration:run": "typeorm migration:run -d dist/database/data-source.js",
     "migration:revert": "npm run typeorm -- migration:revert -d database/data-source.ts",
     "migration:show": "npm run typeorm -- migration:show -d database/data-source.ts",
-    "seed": "ts-node -r tsconfig-paths/register database/seeds/run-seeds.ts"
+    "seed": "node dist/database/seeds/run-seeds.js"
+
   },
   "dependencies": {
     "@langchain/core": "^0.3.55",

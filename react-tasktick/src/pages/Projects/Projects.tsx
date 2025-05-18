@@ -4,9 +4,14 @@ import ProjectCard, {
     ProjectStatus,
 } from "../../components/ProjectsComponents/ProjectCard/ProjectCard";
 import ProjectFilters from "../../components/ProjectsComponents/ProjectFilters/ProjectFilters";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { fetchProjects } from "../../store/slices/projectsSlice";
+import { useAppDispatch } from "../../store/hooks";
+import {
+    fetchProjects,
+    updateProject,
+    deleteProject,
+} from "../../store/slices/projectsSlice";
 import "./Projects.css";
 
 import CircularProgress from "@mui/material/CircularProgress";
@@ -18,13 +23,17 @@ interface ProjectData {
     description?: string;
     status: string;
     estimated_time?: number;
+    estimatedHours?: string;
     created_at?: string;
     updated_at?: string;
-    tasks?: any[]; 
+    tasks?: any[];
+    totalTasks?: number;
+    completedTasks?: number;
+    deadline?: string | null;
 }
 
 const Projects: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const { user } = useSelector((state: RootState) => state.auth);
@@ -36,41 +45,173 @@ const Projects: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [activeFilter, setActiveFilter] = useState("All");
     const [sortBy, setSortBy] = useState("Last Updated");
+    const [updatingProjectId, setUpdatingProjectId] = useState<string | null>(
+        null
+    );
+    const [localProjectUpdates, setLocalProjectUpdates] = useState<
+        Record<string, Partial<ProjectData>>
+    >({});
 
     useEffect(() => {
-        // Only fetch projects if user is authenticated
         if (user?.id) {
-            // @ts-ignore: Dispatch type inference issue
             dispatch(fetchProjects(parseInt(user.id)));
         }
     }, [dispatch, user]);
 
-    // Update filtered projects whenever projects array changes
     useEffect(() => {
         if (projects && projects.length > 0) {
-            applyFilters(searchTerm, activeFilter, sortBy);
+            const mergedProjects = projects.map((project) => {
+                const localUpdate = localProjectUpdates[String(project.id)];
+                return localUpdate ? { ...project, ...localUpdate } : project;
+            });
+
+            applyFilters(searchTerm, activeFilter, sortBy, mergedProjects);
         } else {
             setFilteredProjects([]);
         }
-    }, [projects]);
+    }, [projects, localProjectUpdates, searchTerm, activeFilter, sortBy]);
 
     const handleSearch = (term: string) => {
         setSearchTerm(term);
-        applyFilters(term, activeFilter, sortBy);
     };
 
     const handleFilterChange = (filter: string) => {
         setActiveFilter(filter);
-        applyFilters(searchTerm, filter, sortBy);
     };
 
     const handleSortChange = (sort: string) => {
         setSortBy(sort);
-        applyFilters(searchTerm, activeFilter, sort);
     };
 
-    const applyFilters = (search: string, filter: string, sort: string) => {
-        let result = [...projects];
+    const handleUpdateProject = (
+        projectId: string,
+        updatedData: {
+            title: string;
+            description: string;
+            deadline?: string | null;
+        }
+    ) => {
+        if (!user?.id) return;
+
+        setUpdatingProjectId(projectId);
+
+        const existingProject = projects.find(
+            (p) => String(p.id) === projectId
+        );
+        if (!existingProject) {
+            console.error("Project not found for updating");
+            setUpdatingProjectId(null);
+            return;
+        }
+
+        const updatedLocalProject: Partial<ProjectData> = {
+            id: projectId,
+            name: updatedData.title,
+            title: updatedData.title,
+            description: updatedData.description,
+            deadline: updatedData.deadline,
+            status: existingProject.status,
+            estimated_time: existingProject.estimated_time,
+            estimatedHours: existingProject.estimatedHours,
+            completedTasks: existingProject.completedTasks || 0,
+            totalTasks: existingProject.totalTasks || 0,
+        };
+        setLocalProjectUpdates((prev) => ({
+            ...prev,
+            [projectId]: updatedLocalProject,
+        }));
+
+        const projectData = {
+            name: updatedData.title,
+            description: updatedData.description,
+            deadline: updatedData.deadline,
+            estimated_time: existingProject.estimated_time,
+            status: existingProject.status,
+            priority: existingProject.priority || "medium",
+            detail_depth: existingProject.detail_depth || "normal",
+        };
+
+        dispatch(
+            updateProject({
+                projectId,
+                projectData,
+            })
+        ).then((action) => {
+            if (action.meta.requestStatus === "fulfilled") {
+                if (action.payload) {
+                    const payload = action.payload as any;
+
+                    const updatedProject: Partial<ProjectData> = {
+                        id: projectId,
+                        name: payload.name || updatedData.title,
+                        title: payload.name || updatedData.title,
+                        description: payload.description,
+                        deadline: payload.deadline,
+                        completedTasks:
+                            payload.completedTasks ||
+                            existingProject.completedTasks ||
+                            0,
+                        totalTasks:
+                            payload.totalTasks ||
+                            existingProject.totalTasks ||
+                            0,
+                        estimated_time: payload.estimated_time,
+                        status: payload.status,
+                        updated_at: payload.updated_at,
+                    };
+
+                    const updateProject = (project: ProjectData) => {
+                        if (String(project.id) === projectId) {
+                            return { ...project, ...updatedProject };
+                        }
+                        return project;
+                    };
+
+                    setFilteredProjects((prev) => prev.map(updateProject));
+
+                    const updatedProjects = projects.map(updateProject);
+                    (projects as any).length = 0;
+                    (projects as any).push(...updatedProjects);
+
+                    setLocalProjectUpdates((prev) => {
+                        const newUpdates = { ...prev };
+                        delete newUpdates[projectId];
+                        return newUpdates;
+                    });
+                }
+            }
+            setUpdatingProjectId(null);
+        });
+    };
+
+    const handleDeleteProject = (projectId: string) => {
+        if (!user?.id) return;
+
+        setUpdatingProjectId(projectId);
+
+        dispatch(deleteProject(projectId)).then((action) => {
+            if (action.meta.requestStatus === "fulfilled") {
+                setFilteredProjects((prev) =>
+                    prev.filter((project) => String(project.id) !== projectId)
+                );
+
+                const updatedProjects = projects.filter(
+                    (project) => String(project.id) !== projectId
+                );
+                (projects as any).length = 0;
+                (projects as any).push(...updatedProjects);
+            }
+            setUpdatingProjectId(null);
+        });
+    };
+
+    const applyFilters = (
+        search: string,
+        filter: string,
+        sort: string,
+        projectsToFilter: ProjectData[] = projects
+    ) => {
+        let result = [...projectsToFilter];
 
         if (search) {
             result = result.filter((project) => {
@@ -98,7 +239,6 @@ const Projects: React.FC = () => {
             }
         }
 
-        // Apply sorting
         switch (sort) {
             case "Name A-Z":
                 result.sort((a, b) => {
@@ -148,7 +288,6 @@ const Projects: React.FC = () => {
                 });
                 break;
             default:
-                // Keep original order
                 break;
         }
 
@@ -156,14 +295,13 @@ const Projects: React.FC = () => {
     };
 
     const handleNewProject = () => {
-        navigate("/projects/new");
+        navigate("/dashboard/projects/new");
     };
 
     const handleViewProjectDetails = (projectId: string) => {
         navigate(`/dashboard/projects/${projectId}`);
     };
 
-    // Helper function to map backend status to UI status
     const mapStatusToUI = (status: string): ProjectStatus => {
         const statusMap: { [key: string]: ProjectStatus } = {
             planning: "planning",
@@ -174,7 +312,15 @@ const Projects: React.FC = () => {
         return statusMap[status] || "planning";
     };
 
-    if (isLoading) {
+    const getDisplayProject = (project: ProjectData) => {
+        const localUpdate = localProjectUpdates[String(project.id)];
+        if (localUpdate) {
+            return { ...project, ...localUpdate };
+        }
+        return project;
+    };
+
+    if (isLoading && !updatingProjectId) {
         return (
             <div className="loading-container">
                 <CircularProgress />
@@ -191,7 +337,6 @@ const Projects: React.FC = () => {
                     className="retry-button"
                     onClick={() => {
                         if (user?.id) {
-                            // @ts-ignore: Dispatch type inference issue
                             dispatch(fetchProjects(parseInt(user.id)));
                         }
                     }}
@@ -213,37 +358,38 @@ const Projects: React.FC = () => {
 
             <div className="projects-list">
                 {filteredProjects.length > 0 ? (
-                    filteredProjects.map((project) => (
-                        <ProjectCard
-                            key={project.id}
-                            id={String(project.id)}
-                            title={
-                                project.title ||
-                                project.name ||
-                                "Unnamed Project"
-                            }
-                            description={project.description || ""}
-                            status={mapStatusToUI(project.status)}
-                            estimatedHours={
-                                project.estimated_time
-                                    ? project.estimated_time.toString()
-                                    : "0"
-                            }
-                            tasksCompleted={
-                                project.tasks?.filter(
-                                    (t) => t.status === "completed"
-                                ).length || 0
-                            }
-                            totalTasks={project.tasks?.length || 0}
-                            lastUpdatedDate={formatDateForDisplay(
-                                project.updated_at
-                            )}
-                            lastUpdatedTime={formatTimeForDisplay(
-                                project.updated_at
-                            )}
-                            onViewDetails={handleViewProjectDetails}
-                        />
-                    ))
+                    filteredProjects.map((project) => {
+                        const displayProject = getDisplayProject(project);
+
+                        return (
+                            <ProjectCard
+                                key={project.id}
+                                id={String(project.id)}
+                                title={
+                                    displayProject.name ||
+                                    displayProject.title ||
+                                    "Unnamed Project"
+                                }
+                                description={displayProject.description || ""}
+                                status={mapStatusToUI(displayProject.status)}
+                                estimatedHours={`${displayProject.estimated_time}h`}
+                                tasksCompleted={
+                                    displayProject.completedTasks || 0
+                                }
+                                totalTasks={displayProject.totalTasks || 0}
+                                deadline={displayProject.deadline}
+                                lastUpdatedDate={formatDateForDisplay(
+                                    displayProject.updated_at
+                                )}
+                                lastUpdatedTime={formatTimeForDisplay(
+                                    displayProject.updated_at
+                                )}
+                                onViewDetails={handleViewProjectDetails}
+                                onUpdateProject={handleUpdateProject}
+                                onDeleteProject={handleDeleteProject}
+                            />
+                        );
+                    })
                 ) : (
                     <div className="no-projects">
                         {projects.length > 0 ? (

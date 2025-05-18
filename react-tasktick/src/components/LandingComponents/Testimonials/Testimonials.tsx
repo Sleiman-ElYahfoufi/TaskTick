@@ -70,9 +70,9 @@ const Testimonials: React.FC = () => {
         <section id="testimonials" className="testimonials">
             <div className="testimonials-container">
                 <div className="testimonials-header">
-                    <h2 className="testimonials-title">Trusted By Tech Teams</h2>
+                    <h2 className="testimonials-title">Trusted By Tech Devs</h2>
                     <p className="testimonials-subtitle">
-                        See what development teams are saying about TaskTick
+                        See what development engineers are saying about TaskTick
                     </p>
                 </div>
                 <div className="testimonials-slider">

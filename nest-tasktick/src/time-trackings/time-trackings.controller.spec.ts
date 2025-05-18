@@ -36,9 +36,9 @@ describe('TimeTrackingsController', () => {
         },
       ],
     })
-    .overrideGuard(AuthGuard)
-    .useValue({ canActivate: jest.fn(() => true) })
-    .compile();
+      .overrideGuard(AuthGuard)
+      .useValue({ canActivate: jest.fn(() => true) })
+      .compile();
 
     controller = module.get<TimeTrackingsController>(TimeTrackingsController);
     service = module.get<TimeTrackingsService>(TimeTrackingsService);
@@ -48,5 +48,5 @@ describe('TimeTrackingsController', () => {
     expect(controller).toBeDefined();
   });
 
-  // You can add more specific tests for each controller method as needed
+
 });

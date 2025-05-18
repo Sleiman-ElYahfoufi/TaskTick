@@ -18,6 +18,7 @@ const AddProject: React.FC = () => {
     const [detailDepth, setDetailDepth] = useState<DetailDepth>(
         DetailDepth.NORMAL
     );
+    const [deadline, setDeadline] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -49,6 +50,10 @@ const AddProject: React.FC = () => {
                 priority: priority.toLowerCase(),
                 detail_depth: detailDepth.toLowerCase(),
             };
+
+            if (deadline) {
+                projectDetails.deadline = deadline;
+            }
 
             const result = await projectDecompositionService.generateTasks({
                 projectDetails,
@@ -158,6 +163,20 @@ const AddProject: React.FC = () => {
                                 </option>
                             </select>
                         </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="deadline">
+                            Project Deadline (Optional)
+                        </label>
+                        <input
+                            type="date"
+                            id="deadline"
+                            className="form-control"
+                            value={deadline}
+                            onChange={(e) => setDeadline(e.target.value)}
+                            min={new Date().toISOString().split("T")[0]}
+                        />
                     </div>
 
                     <div className="form-actions">

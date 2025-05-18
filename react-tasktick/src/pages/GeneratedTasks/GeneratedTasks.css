@@ -120,7 +120,24 @@
 .actions-footer {
     display: flex;
     justify-content: flex-end;
+    gap: 16px;
     margin-top: 32px;
+}
+
+.back-btn {
+    background-color: #f9fafb;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+    background-color: #f3f4f6;
 }
 
 .create-project-btn {
@@ -137,6 +154,11 @@
 
 .create-project-btn:hover {
     background-color: #002a6b;
+}
+
+.create-project-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
 }
 
 .tasks-table {
@@ -157,6 +179,16 @@
     .generated-tasks-stats {
         flex-direction: column;
         gap: 16px;
+    }
+
+    .actions-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .back-btn,
+    .create-project-btn {
+        width: 100%;
     }
 }
 

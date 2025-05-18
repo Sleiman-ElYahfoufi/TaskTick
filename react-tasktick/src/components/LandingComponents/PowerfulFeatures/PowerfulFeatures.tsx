@@ -23,7 +23,7 @@ const PowerfulFeatures: React.FC = () => {
             icon: <Zap />,
             title: "Adaptive Learning Engine",
             description:
-                "Continuously improves estimation accuracy by learning from your team's actual development patterns, getting smarter with every project.",
+                "Continuously improves estimation accuracy by learning from your actual development patterns, getting smarter with every project.",
         },
     ];
 

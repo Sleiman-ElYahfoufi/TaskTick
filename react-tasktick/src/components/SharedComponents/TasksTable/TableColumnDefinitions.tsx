@@ -45,14 +45,14 @@ export const editableProgressColumn = (): GridColDef => ({
     },
 });
 
-export const editableStatusColumn = (
+export const statusColumn = (
     options: string[] = ["Not Started", "In Progress", "Completed"]
 ): GridColDef => ({
     field: "status",
     headerName: "STATUS",
     width: 150,
     minWidth: 80,
-    editable: true,
+    editable: false,
     renderCell: renderStatusCell,
     type: "singleSelect",
     valueOptions: options,

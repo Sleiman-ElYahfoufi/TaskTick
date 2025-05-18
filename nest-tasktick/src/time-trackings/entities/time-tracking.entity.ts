@@ -13,7 +13,7 @@ export class TimeTracking {
   @Column()
   task_id: number;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   start_time: Date;
 
   @Column('timestamp', { nullable: true })
@@ -27,19 +27,19 @@ export class TimeTracking {
 
   @Column('boolean', { default: true })
   is_active: boolean;
-  
+
   @Column('boolean', { default: false })
   is_paused: boolean;
-  
+
   @Column('timestamp', { nullable: true })
   pause_time: Date | null;
-  
+
   @Column('float', { default: 0 })
   paused_duration_hours: number;
-  
+
   @Column('timestamp', { nullable: true })
   last_heartbeat: Date;
-  
+
   @Column('boolean', { default: false })
   auto_paused: boolean;
 

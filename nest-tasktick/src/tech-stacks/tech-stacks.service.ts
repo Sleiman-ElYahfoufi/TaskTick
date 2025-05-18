@@ -10,17 +10,17 @@ export class TechStacksService {
   constructor(
     @InjectRepository(TechStack)
     private techStacksRepository: Repository<TechStack>,
-  ) {}
+  ) { }
 
   async create(createTechStackDto: CreateTechStackDto): Promise<TechStack> {
     const existingTechStack = await this.techStacksRepository.findOne({
       where: { name: createTechStackDto.name }
     });
-    
+
     if (existingTechStack) {
       throw new ConflictException(`Tech stack with name "${createTechStackDto.name}" already exists`);
     }
-    
+
     const techStack = this.techStacksRepository.create(createTechStackDto);
     return this.techStacksRepository.save(techStack);
   }
@@ -51,18 +51,18 @@ export class TechStacksService {
 
   async update(id: number, updateTechStackDto: UpdateTechStackDto): Promise<TechStack> {
     const techStack = await this.findOne(id);
-    
-    // Check if updating to a name that already exists
+
+
     if (updateTechStackDto.name && updateTechStackDto.name !== techStack.name) {
       const existingTechStack = await this.techStacksRepository.findOne({
         where: { name: updateTechStackDto.name }
       });
-      
+
       if (existingTechStack) {
         throw new ConflictException(`Tech stack with name "${updateTechStackDto.name}" already exists`);
       }
     }
-    
+
     const updatedTechStack = this.techStacksRepository.merge(techStack, updateTechStackDto);
     return this.techStacksRepository.save(updatedTechStack);
   }

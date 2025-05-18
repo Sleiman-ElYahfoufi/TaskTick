@@ -1,8 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./HeroSection.css";
 import HeroImage from "../../../assets/hero-illustration.png";
 import TypewriterComponent from "typewriter-effect";
+
 const HeroSection: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleGetStarted = () => {
+        navigate("/auth");
+    };
+
     return (
         <section className="hero">
             <div className="hero-container">
@@ -24,7 +32,12 @@ const HeroSection: React.FC = () => {
                             Get eerily accurate time estimates based on
                             thousands of real projects
                         </p>
-                        <button className="cta-button">Get Started</button>
+                        <button
+                            className="cta-button"
+                            onClick={handleGetStarted}
+                        >
+                            Get Started
+                        </button>
                     </div>
 
                     <div className="illustration-wrapper">

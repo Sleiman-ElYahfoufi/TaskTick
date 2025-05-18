@@ -1,29 +1,36 @@
 import { useMemo } from "react";
 import {
     GridColDef,
-    GridValueGetterParams,
-    GridValueFormatterParams,
     GridRenderCellParams,
+    GridValueFormatterParams,
+    GridValueGetterParams,
 } from "@mui/x-data-grid";
+import TimeSpentColumn from "./TimeSpentColumn";
 import {
+
     renderActionsCell,
-    renderTimerCell,
 } from "../../../components/SharedComponents/TasksTable/TableCellRenderers";
 import {
-    editableProgressColumn,
     editablePriorityColumn,
-    editableStatusColumn,
+    editableProgressColumn,
+    statusColumn,
 } from "../../../components/SharedComponents/TasksTable/TableColumnDefinitions";
-import { formatDateForDisplay } from "../../../utils/TaskFormattingUtils";
 
 interface TaskColumnsProps {
     handleStartTimer: (taskId: string | number) => void;
     handleDeleteTask: (taskId: string | number) => void;
+    onTimeClick: (taskId: string | number) => void;
 }
+
+const formatDateForDisplay = (date: string) => {
+    if (!date) return "No due date";
+    return new Date(date).toLocaleDateString();
+};
 
 export const useTaskColumns = ({
     handleStartTimer,
     handleDeleteTask,
+    onTimeClick,
 }: TaskColumnsProps) => {
     const columns: GridColDef[] = useMemo(
         () => [
@@ -36,13 +43,10 @@ export const useTaskColumns = ({
             },
             {
                 field: "estimatedTime",
-                headerName: "EST. TIME",
-                flex: 0.7,
-                minWidth: 70,
-                align: "center",
-                headerAlign: "center",
+                headerName: "EST",
+                flex: 0.4,
+                minWidth: 60,
                 editable: true,
-                type: "number",
                 valueGetter: (params: GridValueGetterParams) => {
                     if (typeof params.value === "string") {
                         const match = params.value.match(/^(\d+(?:\.\d+)?)/);
@@ -61,59 +65,25 @@ export const useTaskColumns = ({
 
                     return params.value || "0";
                 },
-                renderCell: (params: GridRenderCellParams) => {
-                    const value = params.value;
-                    return <span>{value}</span>;
+                valueFormatter: (params: GridValueFormatterParams) => {
+                    return params.value || "0";
                 },
             },
             {
                 field: "dueDate",
                 headerName: "DUE DATE",
-                flex: 1,
-                minWidth: 130,
-                align: "center",
-                headerAlign: "center",
+                flex: 0.7,
+                minWidth: 110,
                 editable: true,
-                type: "date",
-                valueGetter: (params: GridValueGetterParams) => {
-                    if (!params.value || params.value === "Not set")
-                        return null;
-
-                    try {
-                        const date = new Date(params.value);
-
-                        if (isNaN(date.getTime())) return null;
-
-                        const currentYear = new Date().getFullYear();
-                        if (date.getFullYear() < 2020) {
-                            date.setFullYear(currentYear);
-                        }
-
-                        return new Date(
-                            date.getFullYear(),
-                            date.getMonth(),
-                            date.getDate(),
-                            12,
-                            0,
-                            0
-                        );
-                    } catch (error) {
-                        console.error("Date parsing error:", error);
-                        return null;
-                    }
-                },
                 valueFormatter: (params: GridValueFormatterParams) => {
                     return formatDateForDisplay(params.value);
-                },
-                renderCell: (params: GridRenderCellParams) => {
-                    return <span>{formatDateForDisplay(params.value)}</span>;
                 },
             },
             {
                 field: "description",
                 headerName: "DESCRIPTION",
                 flex: 1.5,
-                minWidth: 150,
+                minWidth: 200,
                 editable: true,
                 renderCell: (params: GridRenderCellParams) => (
                     <div className="description-cell">
@@ -123,29 +93,37 @@ export const useTaskColumns = ({
             },
             editablePriorityColumn(["High", "Medium", "Low"]),
             editableProgressColumn(),
-            editableStatusColumn(),
+            statusColumn(),
             {
-                field: "timer",
-                headerName: "TIMER",
+                field: "timeSpent",
+                headerName: "TIME SPENT",
                 flex: 0.7,
-                minWidth: 80,
+                minWidth: 120,
                 align: "center",
                 headerAlign: "center",
-                renderCell: renderTimerCell(handleStartTimer),
+                editable: false,
+                renderCell: (params: GridRenderCellParams) => (
+                    <TimeSpentColumn
+                        taskId={params.row.id}
+                        onTimeClick={() => onTimeClick(params.row.id)}
+                        onStartTrackingClick={() =>
+                            handleStartTimer(params.row.id)
+                        }
+                    />
+                ),
             },
             {
                 field: "actions",
                 headerName: "ACTIONS",
                 flex: 0.7,
-                minWidth: 90,
+                minWidth: 100,
                 align: "center",
                 headerAlign: "center",
-                sortable: false,
-                filterable: false,
+                editable: false,
                 renderCell: renderActionsCell(handleDeleteTask),
             },
         ],
-        [handleStartTimer, handleDeleteTask]
+        [handleStartTimer, handleDeleteTask, onTimeClick]
     );
 
     return columns;
