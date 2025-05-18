@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import projectsService, { ProjectTask } from '../../services/projectsService';
+import { ProjectTask } from '../../services/projectsService';
+import tasksService from '../../services/tasksService';
 import { RootState } from '../index';
 
 interface TasksState {
@@ -25,8 +26,13 @@ export const fetchTasks = createAsyncThunk(
     'tasks/fetchTasks',
     async (projectId: string | number, { rejectWithValue }) => {
         try {
-            const tasks = await projectsService.getProjectTasks(projectId);
-            return tasks;
+
+            if (projectId === "all") {
+                return await tasksService.getAllUserTasks();
+            }
+
+
+            return await tasksService.getTasksByProjectId(projectId);
         } catch (error: any) {
             return rejectWithValue(error.message || 'Failed to fetch tasks');
         }
@@ -39,7 +45,6 @@ export const addTask = createAsyncThunk(
         const tempId = `temp-${Date.now()}`;
 
         try {
-
             const taskName = (!task.name || task.name.trim() === '') ? 'New Task' : task.name;
 
             const optimisticTask = {
@@ -50,13 +55,12 @@ export const addTask = createAsyncThunk(
 
             dispatch(addTaskOptimistic(optimisticTask));
 
-
             const taskToSave = {
                 ...task,
                 name: taskName
             };
-            const newTask = await projectsService.addProjectTask(projectId, taskToSave);
 
+            const newTask = await tasksService.createTask(projectId, taskToSave);
             dispatch(replaceOptimisticTask({ tempId, newTask }));
 
             return newTask;
@@ -69,19 +73,14 @@ export const addTask = createAsyncThunk(
 
 export const updateTask = createAsyncThunk(
     'tasks/updateTask',
-    async ({ projectId, taskId, taskData }: {
+    async ({ taskId, taskData }: {
         projectId: string | number,
         taskId: string | number,
         taskData: Partial<ProjectTask>
     }, { rejectWithValue }) => {
         try {
 
-            if (taskData.name !== undefined && (!taskData.name || taskData.name.trim() === '')) {
-                taskData.name = "New Task";
-            }
-
-            const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
-            return updatedTask;
+            return await tasksService.updateTask(taskId, taskData);
         } catch (error: any) {
             return rejectWithValue(error.message || 'Failed to update task');
         }
@@ -92,8 +91,7 @@ export const deleteTask = createAsyncThunk(
     'tasks/deleteTask',
     async ({ taskId }: { taskId: string | number }, { rejectWithValue }) => {
         try {
-            await projectsService.deleteProjectTask(taskId);
-            return taskId;
+            return await tasksService.deleteTask(taskId);
         } catch (error: any) {
             return rejectWithValue(error.message || 'Failed to delete task');
         }
@@ -104,7 +102,6 @@ export const deleteTask = createAsyncThunk(
 export const updateTaskCell = createAsyncThunk(
     'tasks/updateTaskCell',
     async ({
-        projectId,
         taskId,
         field,
         value
@@ -115,14 +112,7 @@ export const updateTaskCell = createAsyncThunk(
         value: any;
     }, { rejectWithValue }) => {
         try {
-
-            if (field === 'name' && (!value || value.trim() === '')) {
-                value = "New Task";
-            }
-
-            const taskData = { [field]: value } as Partial<ProjectTask>;
-
-            const updatedTask = await projectsService.updateProjectTask(projectId, taskId, taskData);
+            const updatedTask = await tasksService.updateTaskField(taskId, field, value);
             return { taskId, updatedTask };
         } catch (error: any) {
             return rejectWithValue({
