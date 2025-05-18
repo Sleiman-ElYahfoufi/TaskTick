@@ -194,7 +194,7 @@ const GeneratedTasks: React.FC = () => {
                 userId: Number(user.id),
             };
 
-            const result = await projectDecompositionService.saveTasks(
+        await projectDecompositionService.saveTasks(
                 saveData
             );
 

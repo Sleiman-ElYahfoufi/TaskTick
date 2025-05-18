@@ -1,6 +1,5 @@
 import api from '../utils/api';
 import projectsService, { Project } from './projectsService';
-import timeTrackingService from './timeTrackingService';
 import { ProjectStatus } from '../components/ProjectsComponents/ProjectCard/ProjectCard';
 
 export interface DashboardStats {

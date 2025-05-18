@@ -54,7 +54,7 @@ export class ProjectDecompositionService {
         modelName: 'o4-mini-2025-04-16',
         temperature: 1,
         // Add safety configuration
- 
+
       });
 
       this.outputParser = StructuredOutputParser.fromZodSchema(

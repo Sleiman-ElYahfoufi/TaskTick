@@ -7,9 +7,7 @@ import {
 } from "@mui/x-data-grid";
 import TimeSpentColumn from "./TimeSpentColumn";
 import {
-    renderPriorityCell,
-    renderProgressCell,
-    renderStatusCell,
+
     renderActionsCell,
 } from "../../../components/SharedComponents/TasksTable/TableCellRenderers";
 import {

@@ -6,7 +6,7 @@ import ProductivityHeatmap from "../../components/DashboardComponents/Productivi
 import AIInsights from "../../components/DashboardComponents/AIInsights/AIInsights";
 import RecentActivity from "../../components/DashboardComponents/RecentActivity/RecentActivity";
 import dashboardService, {
-    ProductivityData,
+
 } from "../../services/dashboardService";
 import "./Dashboard.css";
 
