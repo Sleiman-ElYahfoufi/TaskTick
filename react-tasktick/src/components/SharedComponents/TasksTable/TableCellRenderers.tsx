@@ -2,6 +2,7 @@ import { GridRenderCellParams } from "@mui/x-data-grid";
 import { EditableCell } from "./EditableCell";
 import { useAppSelector } from "../../../store/hooks";
 import { selectActiveSession } from "../../../store/slices/timeTrackingsSlice";
+import { useNavigate } from "react-router-dom";
 
 export const renderPriorityCell = (params: GridRenderCellParams) => (
     <div className={`priority-badge ${params.value?.toString().toLowerCase()}`}>
@@ -34,9 +35,27 @@ export const renderStatusCell = (params: GridRenderCellParams) => (
     </div>
 );
 
-export const renderProjectCell = (params: GridRenderCellParams) => (
-    <div className="project-badge">{params.value}</div>
-);
+export const renderProjectCell = (params: GridRenderCellParams) => {
+    const navigate = useNavigate();
+
+    const handleProjectClick = () => {
+        const projectId = params.row.project_id;
+        if (projectId) {
+            navigate(`/dashboard/projects/${projectId}`);
+        }
+    };
+
+    return (
+        <div
+            className="project-badge clickable"
+            onClick={handleProjectClick}
+            title="Click to view project details"
+            style={{ cursor: "pointer" }}
+        >
+            {params.value}
+        </div>
+    );
+};
 
 export const renderTimerCell =
     (onStartTimer: (id: string | number) => void) =>
