@@ -8,17 +8,15 @@ const api = axios.create({
     withCredentials: true,
 });
 
-const isDevelopment = import.meta.env.MODE === 'development';
-
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
 
-            if (isDevelopment) {
+            
                 console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
-            }
+            
         }
         return config;
     },
@@ -41,7 +39,7 @@ api.interceptors.response.use(
             }
         }
 
-        if (isDevelopment && error.response) {
+        if (error.response) {
             const errorMessage = error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data
                 ? error.response.data.message
                 : error.message;

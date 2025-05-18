@@ -31,7 +31,7 @@ export function IsPromptSafe(validationOptions?: ValidationOptions) {
         ...validationOptions
       },
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           try {
             // If not a string, we don't need to validate
             if (typeof value !== 'string') {

@@ -48,12 +48,10 @@ export class ProjectDecompositionService {
     }
 
     try {
-      // Configure the AI model with proper safeguards
       this.model = new ChatOpenAI({
         openAIApiKey: apiKey,
         modelName: 'o4-mini-2025-04-16',
         temperature: 1,
-        // Add safety configuration
 
       });
 
