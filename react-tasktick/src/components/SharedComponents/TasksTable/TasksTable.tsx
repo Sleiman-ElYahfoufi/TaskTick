@@ -227,14 +227,18 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
                     disableColumnFilter
                     disableColumnMenu
                     hideFooterPagination={hideFooter}
-                    hideFooter={hideFooter || tasks.length <= 10}
+                    hideFooter={hideFooter}
                     getRowId={(row) => row.id}
                     loading={false}
                     initialState={{
                         sorting: {
                             sortModel: [{ field: "id", sort: "desc" }],
                         },
+                        pagination: {
+                            paginationModel: { pageSize: 10, page: 0 },
+                        },
                     }}
+                    pageSizeOptions={[10, 25, 50]}
                     getRowClassName={(params) =>
                         loadingTaskIds.includes(params.id) ? "loading-row" : ""
                     }
