@@ -80,15 +80,6 @@
     width: 100%;
 }
 
-.responsive-table-container {
-    width: 90vw;
-    max-width: 90vw;
-    overflow-x: auto;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .tasks-table-container {
     width: 100%;
     min-width: 700px;
@@ -132,6 +123,17 @@
     color: #4b5563;
     font-size: 0.75rem;
     font-weight: 500;
+}
+
+.project-badge.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.project-badge.clickable:hover {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Priority badge styles */
@@ -195,13 +197,6 @@
 
 /* Enhanced responsive styles */
 @media (max-width: 992px) {
-    .responsive-table-container {
-        width: 90vw;
-        max-width: 90vw;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     .tasks-table-container {
         min-width: 650px;
         border-radius: 6px;
@@ -214,15 +209,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    .responsive-table-container {
-        width: 90vw;
-        max-width: 90vw;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .tasks-table-container {
@@ -248,11 +234,6 @@
 }
 
 @media (max-width: 576px) {
-    .responsive-table-container {
-        width: 90vw;
-        max-width: 90vw;
-    }
-
     .tasks-table-container {
         min-width: 550px;
     }
