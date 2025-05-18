@@ -3,8 +3,8 @@ import {
     DataGrid,
     GridColDef,
     GridActionsCellItem,
-    GridCellModes,
-    useGridApiContext
+
+    useGridApiContext,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StepIndicator from "../../components/AddProjectComponents/StepIndicator/StepIndicator";
@@ -53,46 +53,49 @@ const GeneratedTasks: React.FC = () => {
         setTaskToDelete(null);
     };
 
-    // Cell component that starts edit mode on first click
     const EditableCell = (props: any) => {
         const { id, field, value } = props;
         const apiRef = useGridApiContext();
-        
+
         const handleClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             apiRef.current.startCellEditMode({ id, field });
         };
-        
-        // Don't handle clicks for action column
-        if (field === 'actions') {
+
+        if (field === "actions") {
             return <div>{value}</div>;
         }
-        
-        // Format the display values
+
         let displayValue = value;
-        
-        if (field === 'estimated_time') {
+
+        if (field === "estimated_time") {
             displayValue = `${value} hrs`;
-        } else if (field === 'dueDate') {
+        } else if (field === "dueDate") {
             displayValue = formatDate(value);
-        } else if (field === 'priority') {
+        } else if (field === "priority") {
             const priorityValue = value?.toString().toLowerCase() || "medium";
-            const displayText = 
-                priorityValue === "high" ? "High" : 
-                priorityValue === "medium" ? "Medium" : "Low";
-                
+            const displayText =
+                priorityValue === "high"
+                    ? "High"
+                    : priorityValue === "medium"
+                    ? "Medium"
+                    : "Low";
+
             return (
-                <div 
-                    onClick={handleClick} 
+                <div
+                    onClick={handleClick}
                     className={`tasks-priority-badge ${priorityValue}`}
                 >
                     {displayText}
                 </div>
             );
         }
-        
+
         return (
-            <div onClick={handleClick} style={{ cursor: 'pointer', width: '100%', height: '100%' }}>
+            <div
+                onClick={handleClick}
+                style={{ cursor: "pointer", width: "100%", height: "100%" }}
+            >
                 {displayValue}
             </div>
         );
