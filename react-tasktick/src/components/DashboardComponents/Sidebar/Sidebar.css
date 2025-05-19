@@ -142,6 +142,7 @@
     font-weight: 500;
     font-size: 0.9375rem;
     transition: all 0.2s;
+    justify-content: center;
 }
 
 .logout-button:hover {

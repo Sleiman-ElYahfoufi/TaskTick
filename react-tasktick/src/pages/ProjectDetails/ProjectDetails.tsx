@@ -150,20 +150,18 @@ const ProjectDetails: React.FC = () => {
                 </div>
 
                 {tasks.length > 0 ? (
-                    <div className="responsive-table-container">
-                        <TasksTable
-                            key="tasks-table"
-                            tasks={tasks}
-                            columns={columns}
-                            onStartTimer={handleStartTimer}
-                            onDeleteTask={handleDeleteTask}
-                            onTaskUpdate={handleTaskUpdate}
-                            onCellValueChange={handleCellValueChange}
-                            editableFields={editableFields}
-                            loadingTaskIds={loadingTaskIds}
-                            cellErrors={cellErrors}
-                        />
-                    </div>
+                    <TasksTable
+                        key="tasks-table"
+                        tasks={tasks}
+                        columns={columns}
+                        onStartTimer={handleStartTimer}
+                        onDeleteTask={handleDeleteTask}
+                        onTaskUpdate={handleTaskUpdate}
+                        onCellValueChange={handleCellValueChange}
+                        editableFields={editableFields}
+                        loadingTaskIds={loadingTaskIds}
+                        cellErrors={cellErrors}
+                    />
                 ) : (
                     <div className="no-tasks-message">
                         <p>

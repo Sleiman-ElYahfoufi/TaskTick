@@ -77,18 +77,16 @@ const Tasks: React.FC = () => {
                 )}
             </div>
 
-            <div className="responsive-table-container">
-                <div className="tasks-table-container">
-                    <TasksTable
-                        tasks={filteredTasks}
-                        columns={responsiveColumns}
-                        onCellValueChange={handleCellValueChange}
-                        loadingTaskIds={loadingTaskIds}
-                        hideFooter={false}
-                        editableFields={[]}
-                        disableEditing={true}
-                    />
-                </div>
+            <div className="tasks-table-container">
+                <TasksTable
+                    tasks={filteredTasks}
+                    columns={responsiveColumns}
+                    onCellValueChange={handleCellValueChange}
+                    loadingTaskIds={loadingTaskIds}
+                    hideFooter={filteredTasks.length <= 10}
+                    editableFields={[]}
+                    disableEditing={true}
+                />
             </div>
         </div>
     );

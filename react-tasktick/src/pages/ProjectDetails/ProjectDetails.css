@@ -51,6 +51,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    align-items: flex-start;
 }
 
 .tasks-header h2 {
@@ -237,12 +238,7 @@
 @media (max-width: 768px) {
     .tasks-header {
         flex-direction: column;
-        align-items: flex-start;
         gap: 12px;
-    }
-
-    .add-task-button {
-        width: 100%;
     }
 }
 
@@ -296,4 +292,9 @@
     text-overflow: ellipsis;
     max-width: 100%;
     cursor: default;
+}
+@media (max-width: 768px) {
+    .project-details-page {
+        padding: 0;
+    }
 }
