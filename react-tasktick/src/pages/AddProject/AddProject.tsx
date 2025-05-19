@@ -69,9 +69,26 @@ const AddProject: React.FC = () => {
                 navigate("/dashboard/generated-tasks");
                 setIsLoading(false);
             }, 3000);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Error generating tasks:", err);
-            setError("Failed to generate tasks. Please try again.");
+
+            let errorMessage = "Failed to generate tasks. Please try again.";
+
+            if (err.response && err.response.data) {
+                if (typeof err.response.data === "string") {
+                    errorMessage = err.response.data;
+                } else if (err.response.data.message) {
+                    errorMessage = err.response.data.message;
+                }
+
+                // For content policy violations, provide a more helpful message
+                if (errorMessage.includes("cannot be processed")) {
+                    errorMessage =
+                        "Your project description contains content that cannot be processed. Please revise it and avoid using sensitive or inappropriate language.";
+                }
+            }
+
+            setError(errorMessage);
             setIsLoading(false);
         }
     };
