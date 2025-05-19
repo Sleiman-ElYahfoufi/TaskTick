@@ -24,18 +24,8 @@ export interface ProductivityBreakdown {
     taskCount: number;
 }
 
-interface DayHoursCount {
-    hours: number;
-    count: number;
-}
 
-type DayOfWeekTotals = {
-    [key in 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun']: DayHoursCount;
-};
 
-type WorkdayPattern = {
-    [key in '9am' | '10am' | '11am' | '12pm' | '1pm' | '2pm' | '3pm' | '4pm' | '5pm']: number;
-};
 
 export interface DashboardProject extends Project {
     progress: number;
@@ -162,9 +152,9 @@ class DashboardService {
         try {
             const response = await api.get(`/time-trackings/users/${userId}/productivity?days=${days}`);
 
-            // Transform the data for the heatmap
+         
             if (response.data && response.data.dailyBreakdown) {
-                // Transform daily breakdown into day-of-week vs hour-of-day heatmap data
+              
                 return this.transformToHeatmapData(response.data.dailyBreakdown);
             }
 
@@ -175,15 +165,13 @@ class DashboardService {
         }
     }
 
-    // Transform daily data into calendar heatmap format
+    
     private transformToHeatmapData(dailyBreakdown: ProductivityBreakdown[]): any {
-        // Since we're using react-calendar-heatmap directly now,
-        // just return the full data object with its dailyBreakdown property
-        // The component will handle the transformation
+        
         return {
             dailyBreakdown: dailyBreakdown.map(day => ({
                 ...day,
-                // Make sure all API fields are present
+              
                 date: day.date,
                 taskCount: day.taskCount || 0
             }))
