@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     DataGrid,
     GridColDef,
     GridActionsCellItem,
-
     useGridApiContext,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,7 +23,6 @@ const GeneratedTasks: React.FC = () => {
     const {
         tasks,
         projectName,
-        isLoading,
         error,
         successMessage,
         handleDeleteTask,
@@ -35,6 +33,18 @@ const GeneratedTasks: React.FC = () => {
     } = useGeneratedTasks();
 
     const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+    const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const totalEstimatedTime = calculateTotalEstimatedTime(tasks);
 
@@ -101,62 +111,80 @@ const GeneratedTasks: React.FC = () => {
         );
     };
 
-    const columns: GridColDef[] = [
-        {
-            field: "name",
-            headerName: "TASK NAME",
-            flex: 2,
-            editable: true,
-            renderCell: (params) => <EditableCell {...params} />,
-        },
-        {
-            field: "description",
-            headerName: "DESCRIPTION",
-            flex: 3,
-            editable: true,
-            renderCell: (params) => <EditableCell {...params} />,
-        },
-        {
-            field: "estimated_time",
-            headerName: "ESTIMATED TIME",
-            flex: 1,
-            editable: true,
-            type: "number",
-            valueParser: parseEstimatedTime,
-            renderCell: (params) => <EditableCell {...params} />,
-        },
-        {
-            field: "dueDate",
-            headerName: "DUE DATE",
-            flex: 1,
-            editable: true,
-            type: "date",
-            valueFormatter: (params) => formatDate(params.value),
-            renderCell: (params) => <EditableCell {...params} />,
-        },
-        {
-            field: "priority",
-            headerName: "PRIORITY",
-            flex: 1,
-            editable: true,
-            type: "singleSelect",
-            valueOptions: PRIORITY_OPTIONS,
-            renderCell: (params) => <EditableCell {...params} />,
-        },
-        {
-            field: "actions",
-            headerName: "ACTIONS",
-            type: "actions",
-            flex: 0.5,
-            getActions: (params) => [
-                <GridActionsCellItem
-                    icon={<DeleteIcon />}
-                    label="Delete"
-                    onClick={() => confirmDeleteTask(params.id as string)}
-                />,
-            ],
-        },
-    ];
+    const getColumns = (): GridColDef[] => {
+        const baseColumns: GridColDef[] = [
+            {
+                field: "name",
+                headerName: "TASK NAME",
+                flex: 2,
+                minWidth: 150,
+                editable: true,
+                renderCell: (params) => <EditableCell {...params} />,
+            },
+            {
+                field: "description",
+                headerName: "DESCRIPTION",
+                flex: 3,
+                minWidth: 200,
+                editable: true,
+                renderCell: (params) => <EditableCell {...params} />,
+            },
+            {
+                field: "estimated_time",
+                headerName: "ESTIMATED TIME",
+                flex: 1,
+                minWidth: 120,
+                editable: true,
+                type: "number",
+                valueParser: parseEstimatedTime,
+                renderCell: (params) => <EditableCell {...params} />,
+            },
+            {
+                field: "dueDate",
+                headerName: "DUE DATE",
+                flex: 1,
+                minWidth: 110,
+                editable: true,
+                type: "date",
+                valueFormatter: (params) => formatDate(params.value),
+                renderCell: (params) => <EditableCell {...params} />,
+            },
+            {
+                field: "priority",
+                headerName: "PRIORITY",
+                flex: 1,
+                minWidth: 90,
+                editable: true,
+                type: "singleSelect",
+                valueOptions: PRIORITY_OPTIONS,
+                renderCell: (params) => <EditableCell {...params} />,
+            },
+            {
+                field: "actions",
+                headerName: "ACTIONS",
+                type: "actions",
+                flex: 0.5,
+                minWidth: 80,
+                getActions: (params) => [
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={() => confirmDeleteTask(params.id as string)}
+                    />,
+                ],
+            },
+        ];
+
+        if (isMobile) {
+            return baseColumns.filter((col) =>
+                ["name", "estimated_time", "priority", "actions"].includes(
+                    col.field
+                )
+            );
+        }
+
+        return baseColumns;
+    };
 
     return (
         <div className="generated-tasks-container">
@@ -217,15 +245,17 @@ const GeneratedTasks: React.FC = () => {
                 <div className="tasks-table">
                     <DataGrid
                         rows={tasks}
-                        columns={columns}
+                        columns={getColumns()}
                         autoHeight
                         disableRowSelectionOnClick
                         processRowUpdate={processRowUpdate}
-                        pageSizeOptions={[10, 25, 50]}
+                        pageSizeOptions={[5, 10, 25]}
                         editMode="cell"
                         initialState={{
                             pagination: {
-                                paginationModel: { pageSize: 10 },
+                                paginationModel: {
+                                    pageSize: isMobile ? 5 : 10,
+                                },
                             },
                         }}
                         getRowClassName={(params) =>
@@ -249,17 +279,15 @@ const GeneratedTasks: React.FC = () => {
                                 backgroundColor: "#f9fafb",
                                 borderBottom: "1px solid #e5e7eb",
                             },
-                            "& .MuiDataGrid-columnHeader": {
-                                padding: "16px",
+                            "& .MuiDataGrid-cell": {
+                                borderBottom: "1px solid #f3f4f6",
+                                padding: isMobile ? "8px 4px" : "16px 8px",
+                                fontSize: isMobile ? "12px" : "14px",
                             },
                             "& .MuiDataGrid-columnHeaderTitle": {
                                 fontWeight: "600",
-                                color: "#6b7280",
-                                fontSize: "0.875rem",
-                            },
-                            "& .MuiDataGrid-cell": {
-                                padding: "16px",
-                                borderBottom: "1px solid #e5e7eb",
+                                color: "#374151",
+                                fontSize: isMobile ? "12px" : "14px",
                             },
                         }}
                     />
@@ -272,9 +300,9 @@ const GeneratedTasks: React.FC = () => {
                     <button
                         className="create-project-btn"
                         onClick={handleSaveProject}
-                        disabled={isLoading}
+                        disabled={tasks.length === 0}
                     >
-                        {isLoading ? "Creating Project..." : "Create Project"}
+                        Save Project
                     </button>
                 </div>
             </div>
