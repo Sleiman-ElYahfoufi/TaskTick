@@ -92,8 +92,26 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 <br><br>
 
+
+<br><br>
+
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
+
+### Add Title Here
+
+- Description here.
+
+
+| System Prompt                           | Langchain Code                        | Prompt Protection                     |
+| --------------------------------------- | ------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+
+<br><br>
+
+
+<!-- Deployment -->
+<img src="./readme/title8.svg"/>
 
 ### Add Title Here
 
