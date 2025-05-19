@@ -12,7 +12,7 @@ export class AiInsightsController {
   constructor(
     private readonly aiInsightsService: AiInsightsService,
     private readonly aiInsightGeneratorService: AiInsightGeneratorService
-  ) {}
+  ) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -26,16 +26,22 @@ export class AiInsightsController {
     return this.aiInsightGeneratorService.generateInsightsForUser(userId);
   }
 
+  @Get('check-regeneration')
+  async checkShouldRegenerate(@Query('userId') userId: string) {
+    const shouldRegenerate = await this.aiInsightsService.shouldRegenerateInsights(+userId);
+    return { shouldRegenerate };
+  }
+
   @Get()
   findAll(@Query('userId') userId?: string, @Query('type') type?: InsightType) {
     if (userId) {
       return this.aiInsightsService.findByUserId(+userId);
     }
-    
+
     if (type) {
       return this.aiInsightsService.findByType(type);
     }
-    
+
     return this.aiInsightsService.findAll();
   }
 

@@ -12,11 +12,11 @@ export class AiInsightsService {
     @InjectRepository(AiInsight)
     private aiInsightsRepository: Repository<AiInsight>,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   async create(createAiInsightDto: CreateAiInsightDto): Promise<AiInsight> {
     await this.usersService.findOne(createAiInsightDto.user_id);
-    
+
     const insight = this.aiInsightsRepository.create(createAiInsightDto);
     return this.aiInsightsRepository.save(insight);
   }
@@ -29,6 +29,27 @@ export class AiInsightsService {
     return this.aiInsightsRepository.find({
       where: { user_id: userId }
     });
+  }
+
+  async shouldRegenerateInsights(userId: number): Promise<boolean> {
+    const insights = await this.aiInsightsRepository.find({
+      where: { user_id: userId },
+      order: { created_at: 'DESC' },
+      take: 1
+    });
+
+    if (!insights || insights.length === 0) {
+      return true;
+    }
+
+    const latestInsight = insights[0];
+    const currentDate = new Date();
+    const latestInsightDate = new Date(latestInsight.created_at);
+
+    const diffTime = currentDate.getTime() - latestInsightDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays >= 7;
   }
 
   async findByType(type: InsightType): Promise<AiInsight[]> {
@@ -47,11 +68,11 @@ export class AiInsightsService {
 
   async update(id: number, updateAiInsightDto: UpdateAiInsightDto): Promise<AiInsight> {
     const insight = await this.findOne(id);
-    
+
     if (updateAiInsightDto.user_id) {
       await this.usersService.findOne(updateAiInsightDto.user_id);
     }
-    
+
     const updatedInsight = this.aiInsightsRepository.merge(insight, updateAiInsightDto);
     return this.aiInsightsRepository.save(updatedInsight);
   }

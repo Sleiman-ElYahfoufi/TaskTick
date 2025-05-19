@@ -18,6 +18,24 @@ export interface Insight {
     text: string;
 }
 
+export interface ProductivityBreakdown {
+    date: string;
+    hours: number;
+    taskCount: number;
+}
+
+interface DayHoursCount {
+    hours: number;
+    count: number;
+}
+
+type DayOfWeekTotals = {
+    [key in 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun']: DayHoursCount;
+};
+
+type WorkdayPattern = {
+    [key in '9am' | '10am' | '11am' | '12pm' | '1pm' | '2pm' | '3pm' | '4pm' | '5pm']: number;
+};
 
 export interface DashboardProject extends Project {
     progress: number;
@@ -143,24 +161,64 @@ class DashboardService {
     async getProductivityData(userId: number, days: number = 30): Promise<ProductivityData[]> {
         try {
             const response = await api.get(`/time-trackings/users/${userId}/productivity?days=${days}`);
-            return response.data;
+
+            // Transform the data for the heatmap
+            if (response.data && response.data.dailyBreakdown) {
+                // Transform daily breakdown into day-of-week vs hour-of-day heatmap data
+                return this.transformToHeatmapData(response.data.dailyBreakdown);
+            }
+
+            return [];
         } catch (error) {
             console.error('Error fetching productivity data:', error);
             return [];
         }
     }
 
+    // Transform daily data into calendar heatmap format
+    private transformToHeatmapData(dailyBreakdown: ProductivityBreakdown[]): any {
+        // Since we're using react-calendar-heatmap directly now,
+        // just return the full data object with its dailyBreakdown property
+        // The component will handle the transformation
+        return {
+            dailyBreakdown: dailyBreakdown.map(day => ({
+                ...day,
+                // Make sure all API fields are present
+                date: day.date,
+                taskCount: day.taskCount || 0
+            }))
+        };
+    }
+
     async getAIInsights(userId: number): Promise<Insight[]> {
         try {
+            const regenerationCheck = await api.get(`/ai-insights/check-regeneration?userId=${userId}`);
+            const shouldRegenerate = regenerationCheck.data?.shouldRegenerate || false;
+
+            if (shouldRegenerate) {
+                await api.post('/ai-insights/generate', { userId });
+            }
+
+            const response = await api.get(`/ai-insights?userId=${userId}`);
+
+            if (response.data && response.data.length > 0) {
+                return response.data
+                    .map((insight: { id: number, description: string }) => ({
+                        id: insight.id.toString(),
+                        text: insight.description
+                    }))
+                    .slice(0, 5);
+            }
 
             const projectsData = await projectsService.getUserProjects(userId);
             const statsData = await this.getStats(userId);
-
-
             return this.generateInsights(projectsData.projects, statsData);
         } catch (error) {
-            console.error('Error generating AI insights:', error);
-            return [];
+            console.error('Error fetching AI insights:', error);
+
+            const projectsData = await projectsService.getUserProjects(userId);
+            const statsData = await this.getStats(userId);
+            return this.generateInsights(projectsData.projects, statsData);
         }
     }
 
@@ -228,15 +286,13 @@ class DashboardService {
             });
         }
 
-
         insights.push({
             id: `tips-${Date.now()}-1`,
             text: 'Breaking down large tasks improves completion rates by 35%. Consider splitting complex tasks.'
         });
 
-
         return insights.slice(0, Math.min(5, Math.max(4, insights.length)));
     }
 }
 
-export default new DashboardService(); 
+export default new DashboardService();
