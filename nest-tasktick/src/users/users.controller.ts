@@ -20,7 +20,7 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
     
-    const token = await this.authService.generateToken(user.id, user.username);
+    const token = await this.authService.generateToken(user.id, user.username, user.system_role);
     
     return {
       user,
