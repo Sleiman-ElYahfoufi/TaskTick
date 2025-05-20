@@ -99,7 +99,7 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 | Services                                | Validation                            | Testing                        |
 | --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/tests.png) |
+| ![Landing](./readme/demo/service.png) | ![fsdaf](./readme/demo/validation.png) | ![fsdaf](./readme/demo/tests.png) |
 
 
 <br><br>
