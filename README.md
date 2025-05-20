@@ -136,9 +136,9 @@ TaskTick is an AI-powered task management system designed  for software develope
 <!-- Deployment -->
 <img src="./readme/title8.svg"/>
 
-### Add Title Here
+### Deployment Flow
 
-- Description here.
+ ![fsdaf](./readme/demo/Deployment_Flow.png)
 
 
 | Postman API 1                            | Postman API 2                       | Postman API 3                        |
