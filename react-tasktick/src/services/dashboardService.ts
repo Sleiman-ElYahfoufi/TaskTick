@@ -152,9 +152,9 @@ class DashboardService {
         try {
             const response = await api.get(`/time-trackings/users/${userId}/productivity?days=${days}`);
 
-         
+
             if (response.data && response.data.dailyBreakdown) {
-              
+
                 return this.transformToHeatmapData(response.data.dailyBreakdown);
             }
 
@@ -165,13 +165,13 @@ class DashboardService {
         }
     }
 
-    
+
     private transformToHeatmapData(dailyBreakdown: ProductivityBreakdown[]): any {
-        
+
         return {
             dailyBreakdown: dailyBreakdown.map(day => ({
                 ...day,
-              
+
                 date: day.date,
                 taskCount: day.taskCount || 0
             }))
