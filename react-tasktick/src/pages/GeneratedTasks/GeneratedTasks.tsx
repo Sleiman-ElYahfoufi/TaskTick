@@ -127,7 +127,29 @@ const GeneratedTasks: React.FC = () => {
                 flex: 3,
                 minWidth: 200,
                 editable: true,
-                renderCell: (params) => <EditableCell {...params} />,
+                renderCell: (params) => (
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            params.api.startCellEditMode({
+                                id: params.id,
+                                field: "description",
+                            });
+                        }}
+                        style={{
+                            cursor: "pointer",
+                            width: "100%",
+                            height: "100%",
+                            whiteSpace: "normal",
+                            lineHeight: "1.2",
+                            display: "flex",
+                            alignItems: "center",
+                            overflow: "hidden",
+                        }}
+                    >
+                        {params.value}
+                    </div>
+                ),
             },
             {
                 field: "estimated_time",
@@ -137,7 +159,27 @@ const GeneratedTasks: React.FC = () => {
                 editable: true,
                 type: "number",
                 valueParser: parseEstimatedTime,
-                renderCell: (params) => <EditableCell {...params} />,
+                renderCell: (params) => (
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            params.api.startCellEditMode({
+                                id: params.id,
+                                field: "estimated_time",
+                            });
+                        }}
+                        style={{
+                            cursor: "pointer",
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        {`${params.value} hrs`}
+                    </div>
+                ),
             },
             {
                 field: "dueDate",
@@ -247,6 +289,7 @@ const GeneratedTasks: React.FC = () => {
                         rows={tasks}
                         columns={getColumns()}
                         autoHeight
+                        rowHeight={80}
                         disableRowSelectionOnClick
                         processRowUpdate={processRowUpdate}
                         pageSizeOptions={[5, 10, 25]}
