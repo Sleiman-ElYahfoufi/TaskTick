@@ -100,12 +100,12 @@ TaskTick is an AI-powered task management system designed  for software develope
 <img src="./readme/title6.svg"/>
 
 
-# Validation
-- DTO validation with class-validator decorators ensuring data integrity
-# Time Tracking Service
-- Automatic session duration calculation with heartbeat monitoring
-# Comprehensive Test Coverage
-- Thorough testing suite with coverage for all service methods
+### Validation
+ DTO validation with class-validator decorators ensuring data integrity
+### Time Tracking Service
+ Automatic session duration calculation with heartbeat monitoring
+### Comprehensive Test Coverage
+ Thorough testing suite with coverage for all service methods
 
 
 <div align="center">
