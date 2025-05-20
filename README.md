@@ -55,23 +55,6 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 </div>
 
-### AI Project Decomposer
-
-
-- Automatically breaks down project descriptions into granular tasks with a single click
-- Transforms vague requirements into structured tasks instantly
-
-
-### Developer Time Oracle
-
-- Provides eerily accurate time estimates based on thousands of similar projects
-- Shows exactly how long comparable tasks take other developers at your experience level
-
-
-### Adaptive Learning Engine
-
-- Personalizes estimates by learning your unique strengths and work patterns
-- Gets smarter with each completed task, automatically adjusting future estimates
 
 
 
