@@ -52,7 +52,7 @@ const TimeSpentColumn: React.FC<TimeSpentColumnProps> = ({
             );
             return;
         }
-        console.log("handleStartTracking in taskcolumns");
+
         e.stopPropagation();
         onStartTrackingClick(taskId);
     };

@@ -88,7 +88,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
 
     const processRowUpdate = useCallback(
         (newRow: GridRowModel, oldRow: GridRowModel) => {
-            console.debug(
+            
                 "[TasksTable] Process row update:",
                 newRow.id,
                 "Changes:",
@@ -96,7 +96,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
             );
 
             if (editingDisabled) {
-                console.debug("[TasksTable] Editing disabled, ignoring update");
+                
                 return oldRow;
             }
 
@@ -109,7 +109,7 @@ const TasksTable = memo(function TasksTable<T extends BaseTask>({
     );
 
     const handleProcessRowUpdateError = useCallback((error: Error) => {
-        console.error("[TasksTable] Error updating task:", error);
+        
     }, []);
 
     const makeColumnsEditable = useCallback(

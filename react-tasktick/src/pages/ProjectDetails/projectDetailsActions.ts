@@ -44,13 +44,13 @@ export const loadTaskTimeDetails = async (
     setSelectedTaskDetails: (details: TaskDetails) => void
 ): Promise<void> => {
     try {
-        console.log(`[ProjectDetails] handleTimeClick - Fetching summary for task ${taskId}`);
+
         const summary = await timeTrackingService.getTaskTimeSummary(Number(taskId));
 
-        console.log(`[ProjectDetails] handleTimeClick - Fetching time trackings for task ${taskId}`);
+
         await timeTrackingService.getTimeTrackingsByTaskId(Number(taskId));
 
-        console.log(`[ProjectDetails] handleTimeClick - Summary received:`, summary);
+
         setSelectedTaskDetails({
             sessions: summary.session_count || 0,
             totalTime: timeTrackingService.formatTime(summary.total_duration_hours || 0),
@@ -59,7 +59,7 @@ export const loadTaskTimeDetails = async (
         dispatch(fetchTaskTimeSummary(Number(taskId)));
         dispatch(fetchTaskTimeTrackings(Number(taskId)));
     } catch (error) {
-        console.error("[ProjectDetails] handleTimeClick - Error fetching time tracking data:", error);
+
     }
 };
 

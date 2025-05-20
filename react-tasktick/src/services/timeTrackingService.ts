@@ -27,101 +27,101 @@ export interface TaskTimeSummary {
 
 class TimeTrackingService {
     async startUserTaskSession(userId: number, taskId: number): Promise<TimeTracking> {
-        console.log(`[API] startUserTaskSession - Starting session for user ${userId}, task ${taskId}`);
+
         try {
             const response = await api.post<TimeTracking>(`/time-trackings/users/${userId}/tasks/${taskId}/start`);
-            console.log(`[API] startUserTaskSession - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error('[API] startUserTaskSession - Error:', error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async endSession(sessionId: number): Promise<TimeTracking> {
-        console.log(`[API] endSession - Ending session ${sessionId}`);
+
         try {
             const response = await api.post<TimeTracking>(`/time-trackings/${sessionId}/end`);
-            console.log(`[API] endSession - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error('[API] endSession - Error:', error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async pauseSession(sessionId: number): Promise<TimeTracking> {
-        console.log(`[API] pauseSession - Pausing session ${sessionId}`);
+
         try {
             const response = await api.post<TimeTracking>(`/time-trackings/${sessionId}/pause`);
-            console.log(`[API] pauseSession - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error('[API] pauseSession - Error:', error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async resumePausedSession(sessionId: number): Promise<TimeTracking> {
-        console.log(`[API] resumePausedSession - Resuming paused session ${sessionId}`);
+
         try {
             const response = await api.post<TimeTracking>(`/time-trackings/${sessionId}/resume-paused`);
-            console.log(`[API] resumePausedSession - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error('[API] resumePausedSession - Error:', error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async getActiveSession(userId: number): Promise<TimeTracking | null> {
-        console.log(`[API] getActiveSession - Fetching active session for user ${userId}`);
+
         try {
             const response = await api.get<TimeTracking>(`/time-trackings/users/${userId}/active`);
-            console.log(`[API] getActiveSession - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
             if (error.response?.status === 404) {
-                console.log('[API] getActiveSession - No active session found (404)');
+
                 return null;
             }
-            console.error('[API] getActiveSession - Error:', error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async getTaskTimeSummary(taskId: number): Promise<TaskTimeSummary> {
-        console.log(`[API] getTaskTimeSummary - Fetching time summary for task ${taskId}`);
+
         try {
             const response = await api.get<TaskTimeSummary>(`/time-trackings/tasks/${taskId}/summary`);
-            console.log(`[API] getTaskTimeSummary - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error(`[API] getTaskTimeSummary - Error:`, error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async getTimeTrackingsByTaskId(taskId: number): Promise<TimeTracking[]> {
-        console.log(`[API] getTimeTrackingsByTaskId - Fetching time trackings for task ${taskId}`);
+
         try {
             const response = await api.get<TimeTracking[]>(`/time-trackings?taskId=${taskId}`);
-            console.log(`[API] getTimeTrackingsByTaskId - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error(`[API] getTimeTrackingsByTaskId - Error:`, error.response?.data || error.message);
+
             throw error;
         }
     }
 
     async updateHeartbeat(sessionId: number): Promise<TimeTracking> {
-        console.log(`[API] updateHeartbeat - Sending heartbeat for session ${sessionId}`);
+
         try {
             const response = await api.post<TimeTracking>(`/time-trackings/${sessionId}/heartbeat`);
-            console.log(`[API] updateHeartbeat - Success:`, response.data);
+
             return response.data;
         } catch (error: any) {
-            console.error('[API] updateHeartbeat - Error:', error.response?.data || error.message);
+
             throw error;
         }
     }

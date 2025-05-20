@@ -56,7 +56,6 @@ const Projects: React.FC = () => {
         const localUpdate = localProjectUpdates[projectId];
 
         if (!existingProject) {
-            console.error("Project not found for updating");
             return;
         }
 

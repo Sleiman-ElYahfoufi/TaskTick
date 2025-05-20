@@ -97,21 +97,21 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
             }
 
             const intervalTime = timerRunning ? 30000 : 120000;
-            console.log(
+            
                 `[CurrentTask] Setting up heartbeat at ${intervalTime}ms interval for ${
                     timerRunning ? "active" : "paused"
                 } session`
             );
 
             heartbeatRef.current = setInterval(() => {
-                console.log(
+                
                     `[CurrentTask] Sending heartbeat for session ${activeSession.id}`
                 );
                 dispatch(updateSessionHeartbeat(activeSession.id));
             }, intervalTime);
 
             if (!initialHeartbeatSentRef.current) {
-                console.log(
+                
                     `[CurrentTask] Sending initial heartbeat for session ${activeSession.id}`
                 );
                 dispatch(updateSessionHeartbeat(activeSession.id));
@@ -136,11 +136,11 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
 
     const handlePlayPause = () => {
         if (!activeSession) {
-            console.log("[CurrentTask] handlePlayPause - No active session");
+            
             return;
         }
 
-        console.log(
+        
             `[CurrentTask] handlePlayPause - ${
                 timerRunning ? "Pausing" : "Resuming"
             } session ${activeSession.id}`
@@ -154,7 +154,7 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
 
     const handleStop = () => {
         if (!activeSession) {
-            console.log("[CurrentTask] handleStop - No active session");
+            
             return;
         }
 
@@ -164,16 +164,16 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
         );
 
         if (!currentTask && taskId) {
-            console.error(`[CurrentTask] Task ${taskId} not found in state`);
+            
             return;
         }
 
-        console.log(
+        
             `[CurrentTask] handleStop - Stopping session ${activeSession.id} for task ${stoppedTaskId}`
         );
 
         dispatch(endSession(activeSession.id)).then(() => {
-            console.log(
+            
                 `[CurrentTask] handleStop - Session stopped, refreshing time data for task ${stoppedTaskId}`
             );
 
@@ -181,7 +181,7 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
             dispatch(fetchTaskTimeTrackings(stoppedTaskId));
 
             if (taskId && projectId && currentTask) {
-                console.log(
+                
                     `[CurrentTask] handleStop - Updating task ${taskId} status to Completed while preserving other fields`
                 );
 

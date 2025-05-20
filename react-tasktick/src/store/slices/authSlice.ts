@@ -126,7 +126,7 @@ try {
         storedUser = JSON.parse(userData);
     }
 } catch (e) {
-    console.error('Failed to parse stored user data');
+
 }
 
 const initialState: AuthState = {

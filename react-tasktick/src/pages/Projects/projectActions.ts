@@ -109,14 +109,14 @@ export const handleUpdateProject = (
                 });
             }
         } else {
-            console.error(
-                "Project update failed:",
+
+            "Project update failed:",
                 action.meta.requestStatus === "rejected"
                     ? action.payload
                     : "Unknown error"
             );
-        }
-        setUpdatingProjectId(null);
+}
+setUpdatingProjectId(null);
     });
 };
 

@@ -31,7 +31,7 @@ class AdminService {
             const response = await api.get('/admin/analytics/overview');
             return response.data;
         } catch (error) {
-            console.error('Error fetching analytics overview:', error);
+
             return {
                 users: { total: 0, newLastMonth: 0, activeLastWeek: 0 },
                 projects: { total: 0, active: 0, completed: 0, planning: 0 },
@@ -45,7 +45,7 @@ class AdminService {
             const response = await api.get('/admin/analytics/user-growth');
             return response.data;
         } catch (error) {
-            console.error('Error fetching user growth data:', error);
+
             // Return fallback data for the past 12 months if API fails
             return [
                 { label: 'Jan', value: 0 },
@@ -69,7 +69,7 @@ class AdminService {
             const response = await api.get('/admin/analytics/projects-status');
             return response.data;
         } catch (error) {
-            console.error('Error fetching project status data:', error);
+
             return [
                 { label: 'Active', value: 0 },
                 { label: 'Completed', value: 0 },
@@ -83,7 +83,7 @@ class AdminService {
             const response = await api.get('/admin/analytics/tasks-progress');
             return response.data;
         } catch (error) {
-            console.error('Error fetching tasks progress data:', error);
+
             // Return empty data for 12 months if API fails
             return Array(12).fill(0).map((_, i) => {
                 const date = new Date();
@@ -102,7 +102,7 @@ class AdminService {
             const response = await api.get('/admin/analytics/time-tracking');
             return response.data;
         } catch (error) {
-            console.error('Error fetching time tracking data:', error);
+
             return [
                 { label: 'Web Dev', value: 0 },
                 { label: 'Mobile Dev', value: 0 },
