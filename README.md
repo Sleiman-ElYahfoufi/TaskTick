@@ -99,7 +99,13 @@ TaskTick is an AI-powered task management system designed  for software develope
 <!-- Development & Testing -->
 <img src="./readme/title6.svg"/>
 
-### Add Title Here
+
+# Validation
+- DTO validation with class-validator decorators ensuring data integrity
+# Time Tracking Service
+- Automatic session duration calculation with heartbeat monitoring
+# Comprehensive Test Coverage
+- Thorough testing suite with coverage for all service methods
 
 
 <div align="center">
@@ -126,9 +132,12 @@ TaskTick is an AI-powered task management system designed  for software develope
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
 
-### Add Title Here
-
-- Description here.
+### AI Prompt Templates
+- System instructions for task generation with time estimates and priority-based due dates
+### Langchain Integration
+- Zod schema validation and OpenAI model initialization
+### Prompt Injection Protection
+- Detection system for suspicious input patterns to maintain AI system security
 
 <div align="center">
   <table>
@@ -157,9 +166,14 @@ TaskTick is an AI-powered task management system designed  for software develope
 
  ![fsdaf](./readme/demo/Deployment_Flow.png)
 
+### AWS Cloud Deployment:
+TaskTick is deployed using AWS infrastructure with an EC2 instance running the NestJS backend and MySQL database. The frontend is served from S3 buckets for improved performance and reliability. The deployment leverages load balancing for traffic management and auto-scaling to handle demand fluctuations, while CloudWatch monitors system health and performance metrics.
+| Login                                   |     Project Decomposition                        | 
+| --------------------------------------- | ------------------------------------- | 
+| ![Landing](./readme/demo/Login_API.png) | ![fsdaf](./readme/demo/Project_Decompostion_API.png) | 
 
-| Postman API 1                            | Postman API 2                       | Postman API 3                        |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
 
+|Get Time Trackings                        |
+|------------------------------------- |
+|![fsdaf](./readme/demo/TimeTracking_API.png) |
 <br><br>
