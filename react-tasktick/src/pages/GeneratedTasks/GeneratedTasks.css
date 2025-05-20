@@ -1,0 +1,292 @@
+.generated-tasks-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 24px;
+    width: 90vw;
+    max-width: 1200px;
+}
+
+.generated-tasks-content {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 32px 24px;
+    width: 90vw;
+    max-width: 1200px;
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.add-task-btn {
+    background-color: #01398e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-task-btn:hover {
+    background-color: #002a6b;
+}
+
+.generated-tasks-project-summary {
+    background-color: #eff6ff;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.generated-tasks-project-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #01398e;
+    margin-bottom: 16px;
+}
+
+.generated-tasks-stats {
+    display: flex;
+    gap: 40px;
+}
+
+.generated-tasks-stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.generated-tasks-stat-label {
+    font-size: 14px;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+
+.generated-tasks-stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.generated-tasks-accuracy-badge {
+    background-color: #d1fae5;
+    color: #047857;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tasks-table {
+    margin-bottom: 24px;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tasks-priority-badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    width: fit-content;
+}
+
+.tasks-priority-badge.high {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.tasks-priority-badge.medium {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.tasks-priority-badge.low {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.actions-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.back-btn {
+    background-color: #f9fafb;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.create-project-btn {
+    background-color: #01398e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-project-btn:hover {
+    background-color: #002a6b;
+}
+
+.create-project-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.tasks-table {
+    min-height: 400px;
+    width: 100%;
+}
+
+.error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #f87171;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-size: 14px;
+    width: 100%;
+}
+
+.success-message {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* Enhanced responsive styles */
+@media (max-width: 992px) {
+    .generated-tasks-content {
+        padding: 24px 16px;
+    }
+
+    .tasks-table .MuiDataGrid-main {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 768px) {
+    .generated-tasks-container {
+        padding: 16px 8px;
+    }
+
+    .generated-tasks-content {
+        padding: 20px 12px;
+    }
+
+    .top-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .generated-tasks-project-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .generated-tasks-accuracy-badge {
+        margin-top: 16px;
+    }
+
+    .generated-tasks-stats {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .actions-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .back-btn,
+    .create-project-btn {
+        width: 100%;
+    }
+
+    .tasks-priority-badge {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+    }
+
+    .tasks-table .MuiDataGrid-main {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 20px;
+    }
+
+    .generated-tasks-project-name {
+        font-size: 16px;
+    }
+
+    .generated-tasks-stat-label {
+        font-size: 12px;
+    }
+
+    .generated-tasks-stat-value {
+        font-size: 14px;
+    }
+
+    .add-task-btn {
+        width: 100%;
+    }
+
+    .tasks-table .MuiDataGrid-main {
+        min-width: 90vw;
+    }
+
+    .generated-tasks-content {
+        padding: 16px 8px;
+    }
+}

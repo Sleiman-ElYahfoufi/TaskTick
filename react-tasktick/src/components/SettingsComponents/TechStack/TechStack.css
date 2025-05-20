@@ -1,0 +1,137 @@
+.settings-tech-stack-group {
+  margin-top: 1.5rem;
+}
+
+.settings-tech-stack-group label {
+  display: block;
+  font-weight: 500;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.settings-tech-stack-description {
+  color: var(--placeholder);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.tech-selection-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.tech-category-section {
+  margin-bottom: 1.5rem;
+}
+
+.tech-category-heading {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(1, 57, 142, 0.2);
+}
+
+.technology-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.625rem;
+}
+
+.tech-selection-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.tech-option {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  background-color: white;
+  color: var(--dark-placeholder);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.tech-option:hover {
+  border-color: var(--primary);
+}
+
+.tech-option.selected {
+  background-color: var(--accent);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.proficiency-selector {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0 0.25rem 0.5rem;
+}
+
+.proficiency-label {
+  font-size: 0.75rem;
+  color: var(--placeholder);
+  margin-bottom: 0.25rem;
+}
+
+.proficiency-levels {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.proficiency-level {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  background-color: white;
+  color: var(--dark-placeholder);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.proficiency-level:hover {
+  border-color: var(--primary);
+}
+
+.proficiency-level.active {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  font-weight: 600;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 1rem;
+  color: var(--placeholder);
+  font-size: 0.875rem;
+}
+
+.tech-error {
+  background-color: rgba(255, 0, 0, 0.05);
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  color: var(--placeholder);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .technology-grid {
+    grid-template-columns: 1fr;
+  }
+} 

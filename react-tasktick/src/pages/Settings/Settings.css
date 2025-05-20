@@ -1,0 +1,328 @@
+.settings-container {
+    width: 100%;
+}
+
+.settings-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+}
+
+.settings-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.profile-settings-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-settings-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 0.25rem;
+}
+
+.profile-settings-header p {
+    color: var(--placeholder);
+    font-size: 0.875rem;
+}
+
+.settings-section {
+    padding: 1.5rem;
+}
+
+.settings-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 1.25rem;
+}
+
+.settings-form-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.settings-left-column {
+    flex: 1;
+    max-width: 350px;
+}
+
+.settings-right-column {
+    flex: 1;
+    max-width: 400px;
+}
+
+.settings-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.settings-form-group label {
+    display: block;
+    font-weight: 500;
+    color: var(--black);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.settings-form-input {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: white;
+    color: var(--black);
+}
+
+.settings-form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(1, 57, 142, 0.1);
+}
+
+.settings-form-select {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: white;
+    color: var(--black);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px;
+    padding-right: 2.5rem;
+}
+
+.settings-form-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(1, 57, 142, 0.1);
+}
+
+.settings-experience-group {
+    width: 100%;
+}
+
+.settings-experience-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.settings-experience-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.settings-experience-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.settings-experience-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    transition: all 0.2s ease;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+}
+
+.settings-radio-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-experience-option
+    input[type="radio"]:checked
+    ~ .settings-experience-card
+    .settings-radio-circle {
+    border-color: var(--primary);
+    position: relative;
+}
+
+.settings-experience-option
+    input[type="radio"]:checked
+    ~ .settings-experience-card
+    .settings-radio-circle::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    position: absolute;
+}
+
+.settings-experience-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-experience-label {
+    font-weight: 600;
+    color: var(--black);
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.875rem;
+}
+
+.settings-experience-years {
+    font-size: 0.75rem;
+    color: var(--placeholder);
+    display: block;
+}
+
+.settings-experience-option
+    input[type="radio"]:checked
+    ~ .settings-experience-card {
+    border-color: var(--primary);
+}
+
+.settings-password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.settings-password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--placeholder);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.settings-tech-stack-group {
+    margin-top: 1.5rem;
+}
+
+.settings-tech-stack-description {
+    color: var(--placeholder);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.settings-technology-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.625rem;
+}
+
+.settings-tech-option {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: var(--dark-placeholder);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.settings-tech-option:hover {
+    border-color: var(--primary);
+}
+
+.settings-tech-option.selected {
+    background-color: var(--accent);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.settings-message {
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.settings-message.success {
+    background-color: rgba(57, 219, 138, 0.15);
+    border: 1px solid rgba(57, 219, 138, 0.3);
+    color: #24b36b;
+}
+
+.settings-message.error {
+    background-color: rgba(240, 68, 56, 0.15);
+    border: 1px solid rgba(240, 68, 56, 0.3);
+    color: #d63c2e;
+}
+
+.settings-actions {
+    padding: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.settings-save-button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-save-button:hover {
+    background-color: #012a6b;
+    transform: translateY(-1px);
+}
+
+.settings-save-button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .settings-form-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .settings-left-column,
+    .settings-right-column {
+        max-width: 100%;
+    }
+
+    .settings-technology-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
