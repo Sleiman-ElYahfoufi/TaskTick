@@ -20,12 +20,12 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
-    "migration:generate": "npm run typeorm -- migration:generate -d database/data-source.ts database/migrations/%npm_config_name%",
+    "migration:generate": "npm run typeorm -- migration:generate -d database/data-source.ts database/migrations/init_migration",
     "migration:run": "typeorm migration:run -d dist/database/data-source.js",
     "migration:revert": "npm run typeorm -- migration:revert -d database/data-source.ts",
     "migration:show": "npm run typeorm -- migration:show -d database/data-source.ts",
-    "seed": "node dist/database/seeds/run-seeds.js"
-
+    "seed": "node dist/database/seeds/run-seeds.js",
+    "seed:single": "node dist/database/seeds/run-single-seeder.js"
   },
   "dependencies": {
     "@langchain/core": "^0.3.55",
