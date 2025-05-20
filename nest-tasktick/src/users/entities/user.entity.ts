@@ -19,6 +19,11 @@ export enum UserRole {
   SOFTWARE_ENGINEER = 'Software Engineer'
 }
 
+export enum SystemRole {
+  USER = 'user',
+  ADMIN = 'admin'
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -52,7 +57,12 @@ export class User {
   })
   experience_level: ExperienceLevel;
 
-
+  @Column({
+    type: 'enum',
+    enum: SystemRole,
+    default: SystemRole.USER
+  })
+  system_role: SystemRole;
 
   @OneToMany(() => Project, project => project.user)
   projects: Project[];

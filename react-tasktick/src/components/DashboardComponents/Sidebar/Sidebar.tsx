@@ -15,6 +15,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
+    const isAdmin = user?.system_role === 'admin';
 
     const isActive = (path: string) => {
         return (
@@ -116,6 +117,34 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
                         <span className="nav-text">Tasks</span>
                     </Link>
 
+                    {/* Analytics link - only visible to admins */}
+                    {isAdmin && (
+                        <Link
+                            to="/dashboard/analytics"
+                            className={`nav-item ${
+                                isActive("/dashboard/analytics") ? "active" : ""
+                            }`}
+                            onClick={closeSidebar}
+                        >
+                            <span className="nav-icon">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                            </span>
+                            <span className="nav-text">Analytics</span>
+                        </Link>
+                    )}
+
                     <Link
                         to="/dashboard/settings"
                         className={`nav-item ${
@@ -154,6 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
                     <div className="user-info">
                         <h3>{user?.username || "User"}</h3>
                         <p>{user?.email || "user@example.com"}</p>
+                        {isAdmin && <span className="admin-badge">Admin</span>}
                     </div>
                 </div>
                 <button className="logout-button" onClick={handleLogout}>

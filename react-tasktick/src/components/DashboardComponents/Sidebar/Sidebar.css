@@ -207,3 +207,16 @@
         justify-content: center;
     }
 }
+
+.admin-badge {
+    display: inline-block;
+    background-color: #4a6cf7;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

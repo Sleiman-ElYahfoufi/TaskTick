@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import StatCards from "../../components/DashboardComponents/StatCards/StatCards";
 import ActiveProjects from "../../components/DashboardComponents/ActiveProjects/ActiveProjects";
 import ProductivityHeatmap from "../../components/DashboardComponents/ProductivityHeatmap/ProductivityHeatmap";
 import AIInsights from "../../components/DashboardComponents/AIInsights/AIInsights";
 import RecentActivity from "../../components/DashboardComponents/RecentActivity/RecentActivity";
-import dashboardService, {
-
-} from "../../services/dashboardService";
+import dashboardService from "../../services/dashboardService";
 import "./Dashboard.css";
 
 interface Project {
@@ -33,8 +33,9 @@ interface ActivityItem {
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
+    const { user } = useSelector((state: RootState) => state.auth);
 
-    const userId = 1;
+    const userId = user?.id ? parseInt(user.id) : 1;
 
     const [stats, setStats] = useState({
         activeProjects: 0,

@@ -15,19 +15,22 @@ import { dataSourceOptions } from '../database/data-source';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
 import { ProjectDecompositionModule } from './project-decomposition/project-decomposition.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(dataSourceOptions),
-    UsersModule, 
-    ProjectsModule, 
-    TasksModule, 
-    TimeTrackingsModule, 
-    TechStacksModule, 
-    UserTechStacksModule, 
-    AiInsightsModule, 
-    AuthModule, ProjectDecompositionModule
+    UsersModule,
+    ProjectsModule,
+    TasksModule,
+    TimeTrackingsModule,
+    TechStacksModule,
+    UserTechStacksModule,
+    AiInsightsModule,
+    AuthModule,
+    ProjectDecompositionModule,
+    AdminModule
   ],
   controllers: [AppController],
   providers: [
@@ -38,4 +41,4 @@ import { ProjectDecompositionModule } from './project-decomposition/project-deco
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

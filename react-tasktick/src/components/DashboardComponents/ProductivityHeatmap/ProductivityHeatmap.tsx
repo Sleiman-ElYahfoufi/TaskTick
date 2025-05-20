@@ -12,6 +12,9 @@ interface ProductivityBreakdown {
 }
 
 const ProductivityHeatmap: React.FC<ProductivityHeatmapProps> = ({ data }) => {
+    // Debug: Log the data received
+    console.log("ProductivityHeatmap received data:", data);
+
     const [tooltip, setTooltip] = useState<{
         show: boolean;
         content: string;
@@ -28,6 +31,7 @@ const ProductivityHeatmap: React.FC<ProductivityHeatmapProps> = ({ data }) => {
 
     const getGridData = () => {
         if (!data || !data.dailyBreakdown || data.dailyBreakdown.length === 0) {
+            console.log("No data available, creating empty grid");
             return Array(7)
                 .fill(0)
                 .map(() =>
@@ -44,6 +48,7 @@ const ProductivityHeatmap: React.FC<ProductivityHeatmapProps> = ({ data }) => {
         );
 
         const recentData = sortedData.slice(-49);
+        console.log("Sorted and sliced data for grid:", recentData);
 
         const grid = [];
         let dataIndex = 0;
@@ -65,11 +70,28 @@ const ProductivityHeatmap: React.FC<ProductivityHeatmapProps> = ({ data }) => {
     };
 
     const getIntensity = (cell: ProductivityBreakdown): number => {
-        if (!cell || !cell.taskCount) return 0;
-        if (cell.taskCount <= 1) return 1;
-        if (cell.taskCount <= 3) return 2;
-        if (cell.taskCount <= 5) return 3;
-        return 4;
+        // Debug: Log cell data and intensity
+        const intensity =
+            !cell || typeof cell.taskCount !== "number" || cell.taskCount <= 0
+                ? 0
+                : cell.taskCount === 1
+                ? 1
+                : cell.taskCount <= 3
+                ? 2
+                : cell.taskCount <= 5
+                ? 3
+                : 4;
+
+        if (intensity > 0) {
+            console.log(
+                "Cell with non-zero intensity:",
+                cell,
+                "intensity:",
+                intensity
+            );
+        }
+
+        return intensity;
     };
 
     const handleMouseOver = (

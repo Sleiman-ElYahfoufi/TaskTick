@@ -4,17 +4,17 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User, SystemRole } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {}
+  ) { }
 
-  async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
-    const existingUser = await this.usersRepository.findOne({ 
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.usersRepository.findOne({
       where: [
         { username: createUserDto.username },
         { email: createUserDto.email }
@@ -33,10 +33,31 @@ export class UsersService {
       password: hashedPassword,
     });
 
-    await this.usersRepository.save(user);
+    return this.usersRepository.save(user);
+  }
 
-    const { password, ...result } = user;
-    return result;
+  async createAdmin(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.usersRepository.findOne({
+      where: [
+        { username: createUserDto.username },
+        { email: createUserDto.email }
+      ]
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Username or email already exists');
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+
+    const user = this.usersRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+      system_role: SystemRole.ADMIN
+    });
+
+    return this.usersRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
@@ -44,10 +65,15 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['projects', 'timeTrackings', 'userTechStacks', 'aiInsights']
+    });
+
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+
     return user;
   }
 
@@ -61,12 +87,12 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
-    
+
     if (updateUserDto.password) {
       const salt = await bcrypt.genSalt();
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
     }
-    
+
     if (updateUserDto.username || updateUserDto.email) {
       const existingUser = await this.usersRepository.findOne({
         where: [
@@ -74,20 +100,24 @@ export class UsersService {
           { email: updateUserDto.email }
         ]
       });
-      
+
       if (existingUser && existingUser.id !== id) {
         throw new ConflictException('Username or email already exists');
       }
     }
-    
+
     const updatedUser = this.usersRepository.merge(user, updateUserDto);
     return this.usersRepository.save(updatedUser);
   }
 
+  async setAdminRole(userId: number): Promise<User> {
+    const user = await this.findOne(userId);
+    user.system_role = SystemRole.ADMIN;
+    return this.usersRepository.save(user);
+  }
+
   async remove(id: number): Promise<void> {
-    const result = await this.usersRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
+    const user = await this.findOne(id);
+    await this.usersRepository.remove(user);
   }
 }

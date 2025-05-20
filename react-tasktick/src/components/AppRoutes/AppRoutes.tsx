@@ -9,8 +9,10 @@ import GeneratedTasks from "../../pages/GeneratedTasks/GeneratedTasks";
 import AddProject from "../../pages/AddProject/AddProject";
 import Projects from "../../pages/Projects/Projects";
 import Dashboard from "../../pages/Dashboard/Dashboard";
+import Analytics from "../../pages/Admin/Analytics/Analytics";
 import DashboardLayout from "../../pages/DashboardLayout/DashboardLayout";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import AdminRoute from "../AdminRoute/AdminRoute";
 
 const AppRoutes = () => {
     return (
@@ -34,6 +36,9 @@ const AppRoutes = () => {
                     />
                     <Route path="tasks" element={<Tasks />} />
                     <Route path="settings" element={<Settings />} />
+                    <Route element={<AdminRoute />}>
+                        <Route path="analytics" element={<Analytics />} />
+                    </Route>
                 </Route>
             </Route>
         </Routes>
