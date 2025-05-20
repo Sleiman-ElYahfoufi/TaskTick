@@ -102,9 +102,18 @@ TaskTick is an AI-powered task management system designed  for software develope
 ### Add Title Here
 
 
- Validation                            | Testing                        |
- ------------------------------------- | ------------------------------------- |
- ![fsdaf](./readme/demo/validation.png) | ![fsdaf](./readme/demo/tests.png) |
+<div align="center">
+  <table>
+    <tr>
+      <td><strong>Validation</strong></td>
+      <td><strong>Testing</strong></td>
+    </tr>
+    <tr>
+      <td><img src="./readme/demo/validation.png" width="450"></td>
+      <td><img src="./readme/demo/tests.png" width="450"></td>
+    </tr>
+  </table>
+</div>
 
 | Services                                |
 | --------------------------------------- |
@@ -121,10 +130,18 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 - Description here.
 
-
-| Prompts                                  | Langchain                             |
-| ---------------------------------------  | ------------------------------------- |
-| ![Landing](./readme/demo/prompts.png)    | ![fsdaf](./readme/demo/langchain.png)|
+<div align="center">
+  <table>
+    <tr>
+      <td><strong>Prompts</strong></td>
+      <td><strong>Langchain</strong></td>
+    </tr>
+    <tr>
+      <td><img src="./readme/demo/prompts2.png" width="450"></td>
+      <td><img src="./readme/demo/langchain.png" width="450"></td>
+    </tr>
+  </table>
+</div>
 
 | Prompt Protection                     |
 | ------------------------------------- |
