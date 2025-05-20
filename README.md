@@ -27,17 +27,23 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 <br><br>
 
-### Component Flow Diagram
+### System Flow Diagram
 <img src="readme/demo/tech_stack.png"/>
 
 <br><br>
+
 ### Sequence Diagram
+
 <img src="https://mermaid.ink/svg/pako:eNqdVV1P2zAU_SuWpU1MKoimKSl-QGqJYJ1gYxR4mPpiktvUo7Ez24EB4r_v5sPQhLRI60sd-5zre889tp9ppGKgjBr4k4OMIBQ80Tyd67kk-Pv0iYSwEBJIxrUVkci4tIY8CLskmVYZaJIpI6xQUsjEsXhklSbXBrSbWWOTE62kBRkTbt7GOxOtHpDwpYsx4dFdTXDDne9g7LdZJzycFMiQW37LDZCd88fZz7NO5I8M5HhaoOvR-GLqcGsSjHO7BIksXhTqFor6do-OXAmMnKlEvK66aUTUObNWHHJZaG6sY9QwJIQTRm74SsTcQkPGcLK7Hq9YKutsh2ik9W5XkylpoCPRIh4joTDZij9iYLO8VVzHHYpcaPUbIkvOueQJpBi-8sR4ulGdYw1FOTVzm0wueFdllTgzfg9kKtF3fNWO-IasesqczpgcueLmjpyCBN1oZYVsaFuDIC45ZkseG5CtXh0ruRA6bWzb2S5XfaVX_GGbWuWvNelKpECuNG6ydjbf9aUEVNgFntqihm3NaQTFqtKUy3iDPJcQKR1XlPVm_q8011lc6jyz3ObmQ2WaqV53nuwp2siIZGnNRoGcfdrALnVOwEbLd8imKqdgyVdh8IrEI7naJkxZwOfKtN2HwVncebCroA5zo2fiPLLiXlg0ELcWtDRbpXdBG3lsVP5GmBzvryfsVTsb9097NNEipszqHHo0BTRA8Umfi_U5xTsrhTllOIy5vpvTuXxBDl7bv5RKHU2rPFlStuArg1956Y_6CXud1Zgh6GOVS0tZf9_bL6NQ9kz_UuaNgr2hdzAaDv3A8w4Dr0cfKdv1gv6eHwSHvn8w8nF2MHjp0ady4_5e3x_4w8HQH3nB4XC_jxSIBbbzvHpKyxf15R_zVGpm" />
 
+### Component Diagram
+
+<img src="readme/demo/component_diagram.png" />
+<br><br> <br>
 <!-- Project Highlights -->
 <img src="./readme/title4.svg"/>
 
-<br><br>
+<br>
 
 <div align="center">
 
