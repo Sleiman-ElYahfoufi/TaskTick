@@ -102,11 +102,11 @@ export class AiInsightGeneratorService {
 
   private getFallbackInsight(type: InsightType): string {
     const fallbacks = {
-      [InsightType.TIME_ACCURACY]: "You consistently underestimate tasks by 20%. Consider adding a buffer to your estimates.",
-      [InsightType.PRODUCTIVITY_PATTERN]: "Your productivity peaks between 10am-12pm. Schedule complex tasks during this window.",
-      [InsightType.TASK_BREAKDOWN]: "Breaking tasks into smaller chunks has improved your completion rate by 35%.",
-      [InsightType.TECH_PERFORMANCE]: "You complete React tasks 25% faster than Angular tasks."
+      [InsightType.TIME_ACCURACY]: "Not enough time tracking data yet. Most users underestimate tasks by 25-30%. We'll provide personalized accuracy insights once you complete more tasks.",
+      [InsightType.PRODUCTIVITY_PATTERN]: "Still collecting productivity pattern data. Users typically have peak productivity in 90-minute intervals. Complete more tasks to see your patterns.",
+      [InsightType.TASK_BREAKDOWN]: "Need more task data to analyze. Research shows breaking work into 1-2 hour chunks improves completion rates by 35%. We'll analyze your patterns soon.",
+      [InsightType.TECH_PERFORMANCE]: "Insufficient task history to compare performance across technologies. Track more tech-related tasks for personalized performance insights."
     };
-    return fallbacks[type];
-  }
+    return fallbacks[type] || "Keep tracking your tasks - we'll provide insights once we have enough data.";
+    }
 }

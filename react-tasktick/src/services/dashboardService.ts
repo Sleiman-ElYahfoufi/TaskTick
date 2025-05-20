@@ -167,13 +167,12 @@ class DashboardService {
 
 
     private transformToHeatmapData(dailyBreakdown: ProductivityBreakdown[]): any {
-
         return {
             dailyBreakdown: dailyBreakdown.map(day => ({
                 ...day,
-
                 date: day.date,
-                taskCount: day.taskCount || 0
+                taskCount: day.taskCount === 0 || day.taskCount === null || day.taskCount === undefined ? 0 : day.taskCount,
+                hours: day.hours || 0
             }))
         };
     }
