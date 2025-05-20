@@ -20,7 +20,7 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 ### User Flow Diagram
 
-<img src="https://mermaid.ink/svg/pako:eNp1U02PmzAQ_SuWT12VRDGGhXCohDY9rNSVKpX2UMPBgVlwA3ZkoNs0yX-v-QhKUpbDfPi9mXlj5CNOVQY4wK-leksLrhsUbWKJzPdF5UJ-YL1LHtBi8Ql9r0EfO4Oiwx7OA6_PDXrawG8o1R70CZmQTSna8LrYKq6z5K4izCohT6h3rLf_cQdrevUCjH8B2bLOjIShrAP76B6e6ruzoQdhX7X6BWlTJzOozSJe72YhyiJRwRzisAjSAn3bibKcLXXZs6xFXkwzRw4ZJXH2Q8Abuhd2gbfsSQNvAH1E4fNtB3uUPXa4EX_BtizSPN2hK_lXlzepDAnrfk2dzII2CyUvD41I3yHQ8RIaM-p2zZCODH7Zo2Mmd-CWfc5Ecw3FEls41yLDQaNbsHAFuuJdio8dI8ZNARXEODBhxvUuxrE8m5o9lz-Vqi5lWrV5gYNXXtYma_eZkbARPNe8mk41yAz0k2plgwOHrPomODjiPzhY-N7SXxN37VGX2tTzfAsfcEBWdOk4a3vtU-I8ejZ1zxb-289dLT1iO4Ta_sp3nceVTSwMZjulX4b31j-78z_-Mwzs" />
+<img src="readme/demo/userflow.png" />
 
 
 
