@@ -33,7 +33,7 @@ jobs:
 
             - name: Install dependencies
               working-directory: ./react-tasktick
-              run: npm install
+              run: npm install --legacy-peer-deps
             - name: Build React App
               working-directory: ./react-tasktick
               run: npm run build
