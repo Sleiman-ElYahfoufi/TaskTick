@@ -86,22 +86,13 @@ export const useTaskActionsHandler = ({
     const handleStartTimer = useCallback(
         (taskId: string | number) => {
             if (!user?.id) {
-                
-                    "[TaskActionsHandler] handleStartTimer - No user ID available"
-                );
                 return;
             }
 
             if (activeSession) {
-                
-                    "[TaskActionsHandler] handleStartTimer - Cannot start new timer, a session is already active"
-                );
                 return;
             }
 
-            
-                `[TaskActionsHandler] handleStartTimer - Starting timer for task ${taskId}`
-            );
             const numericUserId = parseInt(String(user.id), 10);
             const numericTaskId = parseInt(String(taskId), 10);
 
@@ -110,9 +101,6 @@ export const useTaskActionsHandler = ({
             );
 
             if (!currentTask) {
-                
-                    `[TaskActionsHandler] Task ${taskId} not found in state`
-                );
                 return;
             }
 
@@ -120,11 +108,6 @@ export const useTaskActionsHandler = ({
                 ...currentTask,
                 status: "In Progress",
             };
-
-            
-                `[TaskActionsHandler] handleStartTimer - Setting task ${taskId} status to In Progress while preserving other fields`,
-                taskData
-            );
 
             dispatch(
                 updateTask({
@@ -134,10 +117,6 @@ export const useTaskActionsHandler = ({
                 })
             )
                 .then(() => {
-                    
-                        `[TaskActionsHandler] handleStartTimer - Status updated, now starting time tracking session for user ${numericUserId}, task ${numericTaskId}`
-                    );
-
                     return dispatch(
                         startTaskSession({
                             userId: numericUserId,
@@ -145,26 +124,14 @@ export const useTaskActionsHandler = ({
                         })
                     );
                 })
-                .then((result) => {
-                    
-                        `[TaskActionsHandler] startTaskSession success:`,
-                        result
-                    );
-
+                .then(() => {
                     dispatch(fetchActiveSession(numericUserId));
 
                     dispatch(fetchTaskTimeSummary(numericTaskId));
                     dispatch(fetchTaskTimeTrackings(numericTaskId));
-
-                    
-                        `[TaskActionsHandler] Timer started and UI data refreshed for task ${numericTaskId}`
-                    );
                 })
-                .catch((error) => {
-                    
-                        `[TaskActionsHandler] Error in timer start flow:`,
-                        error
-                    );
+                .catch((_) => {
+                    // Handle error
                 });
         },
         [user, projectId, dispatch, tasks, activeSession]

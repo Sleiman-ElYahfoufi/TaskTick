@@ -40,7 +40,7 @@ api.interceptors.response.use(
         }
 
         if (error.response) {
-            const errorMessage = error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data
+             error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data
                 ? error.response.data.message
                 : error.message;
 

@@ -97,23 +97,12 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
             }
 
             const intervalTime = timerRunning ? 30000 : 120000;
-            
-                `[CurrentTask] Setting up heartbeat at ${intervalTime}ms interval for ${
-                    timerRunning ? "active" : "paused"
-                } session`
-            );
 
             heartbeatRef.current = setInterval(() => {
-                
-                    `[CurrentTask] Sending heartbeat for session ${activeSession.id}`
-                );
                 dispatch(updateSessionHeartbeat(activeSession.id));
             }, intervalTime);
 
             if (!initialHeartbeatSentRef.current) {
-                
-                    `[CurrentTask] Sending initial heartbeat for session ${activeSession.id}`
-                );
                 dispatch(updateSessionHeartbeat(activeSession.id));
                 initialHeartbeatSentRef.current = true;
             }
@@ -136,15 +125,9 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
 
     const handlePlayPause = () => {
         if (!activeSession) {
-            
             return;
         }
 
-        
-            `[CurrentTask] handlePlayPause - ${
-                timerRunning ? "Pausing" : "Resuming"
-            } session ${activeSession.id}`
-        );
         if (timerRunning) {
             dispatch(pauseSession(activeSession.id));
         } else {
@@ -154,7 +137,6 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
 
     const handleStop = () => {
         if (!activeSession) {
-            
             return;
         }
 
@@ -164,27 +146,14 @@ const CurrentTask: React.FC<CurrentTaskProps> = ({
         );
 
         if (!currentTask && taskId) {
-            
             return;
         }
 
-        
-            `[CurrentTask] handleStop - Stopping session ${activeSession.id} for task ${stoppedTaskId}`
-        );
-
         dispatch(endSession(activeSession.id)).then(() => {
-            
-                `[CurrentTask] handleStop - Session stopped, refreshing time data for task ${stoppedTaskId}`
-            );
-
             dispatch(fetchTaskTimeSummary(stoppedTaskId));
             dispatch(fetchTaskTimeTrackings(stoppedTaskId));
 
             if (taskId && projectId && currentTask) {
-                
-                    `[CurrentTask] handleStop - Updating task ${taskId} status to Completed while preserving other fields`
-                );
-
                 const taskData = {
                     ...currentTask,
                     status: "Completed",

@@ -88,7 +88,7 @@ class DashboardService {
 
 
 
-            projectsData.projects.forEach(p => {
+            projectsData.projects.forEach(_ => {
 
             });
 

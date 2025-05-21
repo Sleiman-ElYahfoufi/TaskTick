@@ -40,8 +40,7 @@ export const mapStatusToUI = (status: string): ProjectStatus => {
 
     // Default fallback
 
-    `Unknown status format: ${status}, defaulting to planning`
-    );
+    
 return "planning";
 };
 
