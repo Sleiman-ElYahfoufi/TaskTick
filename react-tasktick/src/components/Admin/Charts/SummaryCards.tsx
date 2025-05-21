@@ -22,7 +22,6 @@ interface SummaryCardsProps {
 
 const SummaryCards: React.FC<SummaryCardsProps> = ({
     overview,
-    userChange,
     taskChange,
     timeTrackingData,
 }) => {

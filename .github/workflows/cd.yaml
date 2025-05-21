@@ -15,51 +15,87 @@ jobs:
         steps:
             - name: Print branch info
               run: |
-                echo "Workflow triggered by branch: ${{ github.event.workflow_run.head_branch }}"
-            
+                  echo "Workflow triggered by branch: ${{ github.event.workflow_run.head_branch }}"
+
             - name: Checkout code for deployment files
               uses: actions/checkout@v3
               with:
-                ref: ${{ github.event.workflow_run.head_branch }}
-
-            - name: Copy deployment files to EC2
+                  ref: ${{ github.event.workflow_run.head_branch }}
+            - name: Uploading React App to EC2
               uses: appleboy/scp-action@v1
               with:
-                  host: ${{ secrets.EC2_HOST }}
+                  host: ${{ secrets.STAGING_HOST }}
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_KEY }}
-                  source: "docker-compose.yaml,deploy.sh,my.cnf"
+                  source: "react-tasktick/dist"
+                  target: "/home/${{ secrets.EC2_USER }}/"
+            - name: Uploading React App to S3
+              uses: appleboy/ssh-action@v1
+              with:
+                  host: ${{ secrets.STAGING_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_KEY }}
+                  script: |
+                      mkdir -p ~/.aws
+                      echo "[default]" > ~/.aws/config
+                      echo "region = ${{ secrets.AWS_DEFAULT_REGION }}" >> ~/.aws/config
+                      aws s3 cp react-tasktick/dist/ s3://fse-final-sleiman --recursive --no-sign-request
+                      rm -r react-tasktick/
+
+            - name: Copy database files to EC2
+              uses: appleboy/scp-action@v1
+              with:
+                  host: ${{ secrets.DB_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_KEY }}
+                  source: "docker-compose (Database).yaml"
                   target: "/home/${{ secrets.EC2_USER }}/"
 
             - name: Create secret files on server
               uses: appleboy/ssh-action@v0.1.10
               with:
-                  host: ${{ secrets.EC2_HOST }}
+                  host: ${{ secrets.DB_HOST }}
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_KEY }}
                   script: |
                       sudo mkdir -p /home/${{ secrets.EC2_USER }}/secrets
-                      
-                      sudo bash -c 'echo "${{ secrets.DB_PASSWORD }}" > /home/${{ secrets.EC2_USER }}/secrets/db_password'
-                      sudo bash -c 'echo "${{ secrets.DB_USER }}" > /home/${{ secrets.EC2_USER }}/secrets/db_user'
-                      sudo bash -c 'echo "${{ secrets.DB_NAME }}" > /home/${{ secrets.EC2_USER }}/secrets/db_name'
-                      
-                      sudo chmod 600 /home/${{ secrets.EC2_USER }}/secrets/*
-                      
-                      sudo chown -R ${{ secrets.EC2_USER }}:${{ secrets.EC2_USER }} /home/${{ secrets.EC2_USER }}/secrets
 
-            - name: Run deployment with migrations and seeds
-              uses: appleboy/ssh-action@v0.1.10
+                      sudo sh -c 'echo "${{ secrets.DB_PASSWORD }}" > /home/${{ secrets.EC2_USER }}/secrets/db_password'
+                      sudo sh -c 'echo "${{ secrets.DB_USER }}" > /home/${{ secrets.EC2_USER }}/secrets/db_user'
+                      sudo sh -c 'echo "${{ secrets.DB_NAME }}" > /home/${{ secrets.EC2_USER }}/secrets/db_name'
+                      sudo sh -c 'echo "${{ secrets.DB_HOST }}" > /home/${{ secrets.EC2_USER }}/secrets/db_host'
+
+                      sudo chmod 600 /home/${{ secrets.EC2_USER }}/secrets/*
+
+                      sudo chown -R ${{ secrets.EC2_USER }}:${{ secrets.EC2_USER }} /home/${{ secrets.EC2_USER }}/secrets
+                      sudo docker-compose -f "docker-compose (Database).yaml" up -d
+
+
+            - name: Copy database files to EC2
+              uses: appleboy/scp-action@v1
               with:
-                  host: ${{ secrets.EC2_HOST }}
+                  host: ${{ secrets.BACKEND_HOST }}
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_KEY }}
-                  script: |
-                      # Make deployment script executable
-                      sudo chmod +x /home/${{ secrets.EC2_USER }}/deploy.sh
+                  source: "docker-compose (Backend).yaml"
+                  target: "/home/${{ secrets.EC2_USER }}/"
 
+            - name: Run backend with migrations and seeds
+              uses: appleboy/ssh-action@v0.1.10
+              with:
+                  host: ${{ secrets.BACKEND_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_KEY }}
+
+                  script: |
                       # Change to directory with deployment files
                       cd /home/${{ secrets.EC2_USER }}
 
-                      # Run deployment script with migrations and seeds  
-                      sudo ./deploy.sh --with-migrations --with-seed
+                      # Update docker-compose file with secrets
+                      sed -i "s|DB_HOST=\${DB_HOST}|DB_HOST=${{ secrets.DB_HOST }}|g" "docker-compose (Backend).yaml"
+                      sed -i "s|DB_NAME=\${DB_NAME}|DB_NAME=${{ secrets.DB_NAME }}|g" "docker-compose (Backend).yaml"
+                      sed -i "s|DB_USER=\${DB_USER}|DB_USER=${{ secrets.DB_USER }}|g" "docker-compose (Backend).yaml"
+                      sed -i "s|DB_PASSWORD=\${DB_PASSWORD}|DB_PASSWORD=${{ secrets.DB_PASSWORD }}|g" "docker-compose (Backend).yaml"
+
+                      # Run docker-compose
+                      sudo docker-compose -f "docker-compose (Backend).yaml" up -d

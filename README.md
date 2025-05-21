@@ -67,33 +67,38 @@ TaskTick is an AI-powered task management system designed  for software develope
 
 ### User Screens (Web)
 
-| Landing                                 | Login                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/pages/landing.gif) | ![fsdaf](./readme/demo/pages/Login.png) |
-
-| Register                            | Onboarding                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/pages/sign-up.png) | ![fsdaf](./readme/demo/pages/onboarding.png) |
-
-
-| Dashboard                            | Projects                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/pages/dashboard.png) | ![fsdaf](./readme/demo/pages/projects.png) |
-
-| Add Project                            | Generated Tasks                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/pages/addProject.gif) | ![fsdaf](./readme/demo/pages/generatedTasks.gif) |
-
-| Project Details                         |   Tasks                         |   
-| --------------------------------------- | --------------------------------------- |
-| ![Landing](./readme/demo/pages/projectDetails.gif) | ![Landing](./readme/demo/pages/tasks.png) | 
-
-
-|   Settings                         |
+|   Landing                         |
 | ------------------------------------|
-| ![Landing](./readme/demo/pages/settings.png) | 
+| ![Landing](./readme/demo/pages/landing.gif) | 
+
+| Login                                 | Register                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/pages/Login.png) | ![fsdaf](./readme/demo/pages/sign-up.png) |
+
+| Onboarding                            | Dashboard                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/pages/onboarding.png) | ![fsdaf](./readme/demo/pages/dashboard.png) |
 
 
+| Projects                            | Add Project                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/pages/projects.png) | ![fsdaf](./readme/demo/pages/addProject.gif) |
+
+| Generated Task                            | Project Details                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/pages/generatedTasks.gif) | ![fsdaf](./readme/demo/pages/projectDetails.gif) |
+
+| Tasks                         |   Settings                         |   
+| --------------------------------------- | --------------------------------------- |
+| ![Landing](./readme/demo/pages/tasks.png) | ![Landing](./readme/demo/pages/settings.png) | 
+
+
+
+### Admin Screen (Web)
+
+|   Analytics                         |
+| ------------------------------------|
+| ![Landing](./readme/demo/pages/admin_analytics.png) | 
 <br><br>
 
 <!-- Development & Testing -->

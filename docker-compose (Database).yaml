@@ -1,0 +1,24 @@
+services:
+  database:
+    image: mysql:8.0-oracle
+    container_name: tasktick-database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_DATABASE_FILE: /run/secrets/db_name
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    secrets:
+      - db_name
+      - db_password
+
+volumes:
+  mysql-data:
+
+secrets:
+  db_name:
+    file: ./secrets/db_name
+  db_password:
+    file: ./secrets/db_password
