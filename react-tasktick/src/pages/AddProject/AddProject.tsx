@@ -70,8 +70,6 @@ const AddProject: React.FC = () => {
                 setIsLoading(false);
             }, 3000);
         } catch (err: any) {
-            console.error("Error generating tasks:", err);
-
             let errorMessage = "Failed to generate tasks. Please try again.";
 
             if (err.response && err.response.data) {

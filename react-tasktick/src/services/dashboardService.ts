@@ -58,7 +58,7 @@ class DashboardService {
                 dueToday: dueTodayTasks.length
             };
         } catch (error) {
-            console.error('Error fetching dashboard stats:', error);
+
             return {
                 activeProjects: 0,
                 tasksCompleted: 0,
@@ -83,13 +83,13 @@ class DashboardService {
 
     async getActiveProjects(userId: number): Promise<DashboardProject[]> {
         try {
-            console.log('Fetching active projects for user:', userId);
+
             const projectsData = await projectsService.getUserProjects(userId);
-            console.log('Total projects fetched:', projectsData.projects.length);
+
 
 
             projectsData.projects.forEach(p => {
-                console.log(`Project ID: ${p.id}, Name: ${p.name || p.title}, Status: ${p.status}, Total Tasks: ${p.totalTasks}, Completed Tasks: ${p.completedTasks}`);
+
             });
 
 
@@ -140,10 +140,10 @@ class DashboardService {
                 };
             });
 
-            console.log('Formatted projects for dashboard:', formattedProjects);
+
             return formattedProjects;
         } catch (error) {
-            console.error('Error fetching active projects:', error);
+
             return [];
         }
     }
@@ -160,7 +160,7 @@ class DashboardService {
 
             return [];
         } catch (error) {
-            console.error('Error fetching productivity data:', error);
+
             return [];
         }
     }
@@ -201,7 +201,7 @@ class DashboardService {
             const statsData = await this.getStats(userId);
             return this.generateInsights(projectsData.projects, statsData);
         } catch (error) {
-            console.error('Error fetching AI insights:', error);
+
 
             const projectsData = await projectsService.getUserProjects(userId);
             const statsData = await this.getStats(userId);

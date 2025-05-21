@@ -92,7 +92,7 @@ export const useProjectDetailsHandlers = () => {
     });
 
     const handleTimeClick = async (taskId: string | number) => {
-        console.log(`[ProjectDetails] handleTimeClick - Task ${taskId} time clicked`);
+
         setSelectedTaskId(taskId);
         await loadTaskTimeDetails(taskId, dispatch, setSelectedTaskDetails);
     };
@@ -109,7 +109,7 @@ export const useProjectDetailsHandlers = () => {
     const activeSession = useAppSelector(selectActiveSession);
     useEffect(() => {
         if (activeSession) {
-            console.log(`[ProjectDetails] Active session detected for task ${activeSession.task_id}`);
+
             setSelectedTaskId(activeSession.task_id);
             handleTimeClick(activeSession.task_id);
         }

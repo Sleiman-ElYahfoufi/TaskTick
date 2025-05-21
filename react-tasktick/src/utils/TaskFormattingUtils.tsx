@@ -18,7 +18,6 @@ export const processDateValue = (dateValue: any): string | null => {
 
         return `${year}-${month}-${day}`;
     } catch (error) {
-        console.error("Date processing error:", error);
         return null;
     }
 };

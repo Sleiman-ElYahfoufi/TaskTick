@@ -100,7 +100,6 @@ const Dashboard: React.FC = () => {
                     setLoading(false);
                 }
             } catch (error) {
-                console.error("Error fetching dashboard data:", error);
                 if (mounted) {
                     setLoading(false);
                 }

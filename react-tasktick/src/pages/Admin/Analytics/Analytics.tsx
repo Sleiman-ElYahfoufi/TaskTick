@@ -78,7 +78,6 @@ const Analytics: React.FC = () => {
                 setTasksProgressData(tasksProgress);
                 setTimeTrackingData(timeTracking);
             } catch (error) {
-                console.error("Error fetching analytics data:", error);
             } finally {
                 setLoading(false);
             }
@@ -91,12 +90,11 @@ const Analytics: React.FC = () => {
         currentValue: number,
         previousValue: number
     ): [number, boolean] => {
-        if (previousValue === 0) return [0, true]; 
+        if (previousValue === 0) return [0, true];
         const change = ((currentValue - previousValue) / previousValue) * 100;
         return [Math.round(change), change >= 0];
     };
 
-   
     let userChange: [number, boolean] = [0, true];
     let taskChange: [number, boolean] = [0, true];
 

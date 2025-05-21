@@ -40,7 +40,7 @@ export const useUserProfile = () => {
                     setExperience(fetchedUser.experience_level);
                 }
             } catch (error: any) {
-                console.error("Error in useUserProfile:", error);
+
                 setMessage(error.message || "Failed to load user data");
             } finally {
                 setLoading(false);
@@ -97,7 +97,7 @@ export const useTechStack = (userId?: number) => {
     const shouldUpdateParentRef = useRef(false);
     const userInteractionRef = useRef(false);
 
-    
+
     useEffect(() => {
         const loadTechStacks = async () => {
             try {
@@ -122,7 +122,7 @@ export const useTechStack = (userId?: number) => {
                 const data = await fetchUserTechStacks(userId);
                 setUserTechStacks(data);
             } catch (err: any) {
-                console.error("Failed to fetch user tech stacks:", err);
+
             }
         };
 
@@ -155,7 +155,7 @@ export const useTechStack = (userId?: number) => {
         }
     }, [techStacks, technologies, userTechStacks, isLoading, setTechnologies]);
 
-    
+
     useEffect(() => {
         if (!shouldUpdateParentRef.current || !userInteractionRef.current) {
             return;
@@ -240,7 +240,7 @@ export const useSettingsForm = () => {
         setIsSaving(true);
 
         try {
-            
+
             const updateData: UserUpdateData = {
                 username: profileData.username,
                 email: profileData.email,
@@ -252,10 +252,10 @@ export const useSettingsForm = () => {
                 updateData.password = profileData.password;
             }
 
-            
+
             const existingTechStacks = await fetchUserTechStacks(profileData.userId);
 
-            
+
             const updatedData = await saveUserSettings(
                 profileData.userId,
                 updateData,
@@ -263,7 +263,7 @@ export const useSettingsForm = () => {
                 existingTechStacks
             );
 
-            
+
             profileData.updateLocalStorage(updatedData);
 
             profileData.setMessage("Profile and tech stacks updated successfully");
