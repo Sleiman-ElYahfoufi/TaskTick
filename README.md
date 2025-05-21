@@ -182,3 +182,8 @@ TaskTick is deployed using AWS infrastructure with two EC2 instances, each runni
 |------------------------------------- |
 |![fsdaf](./readme/demo/TimeTracking_API.png) |
 <br><br>
+
+#### To Enter Admin dashboard
+Username: admin -
+Password: 12345678 to view dashboard data
+
