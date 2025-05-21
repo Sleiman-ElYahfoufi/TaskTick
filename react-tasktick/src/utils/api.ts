@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://13.39.242.149:3000',
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -40,7 +40,7 @@ api.interceptors.response.use(
         }
 
         if (error.response) {
-             error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data
+            error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data
                 ? error.response.data.message
                 : error.message;
 

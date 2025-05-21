@@ -37,6 +37,8 @@ jobs:
             - name: Build React App
               working-directory: ./react-tasktick
               run: npm run build
+              env:
+                  VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
             - name: Uploading React App to EC2
               uses: appleboy/scp-action@v1
