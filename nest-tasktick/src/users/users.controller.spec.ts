@@ -3,7 +3,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserRole, ExperienceLevel } from './entities/user.entity';
+import { User, UserRole, ExperienceLevel, SystemRole } from './entities/user.entity';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
@@ -20,6 +20,7 @@ describe('UsersController', () => {
     password: 'hashed_password',
     role: UserRole.SOFTWARE_ENGINEER,
     experience_level: ExperienceLevel.INTERMEDIATE,
+    system_role: SystemRole.USER,
     created_at: new Date(),
     updated_at: new Date(),
     projects: [],
@@ -32,15 +33,17 @@ describe('UsersController', () => {
     id: 1,
     username: 'testuser',
     email: 'test@example.com',
+    password: 'hashed_password',
     role: UserRole.SOFTWARE_ENGINEER,
     experience_level: ExperienceLevel.INTERMEDIATE,
+    system_role: SystemRole.USER,
     created_at: new Date(),
     updated_at: new Date(),
     projects: [],
     timeTrackings: [],
     userTechStacks: [],
     aiInsights: []
-  };
+  } as User;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -70,9 +73,9 @@ describe('UsersController', () => {
         }
       ]
     })
-    .overrideGuard(AuthGuard)
-    .useValue({ canActivate: jest.fn(() => true) })
-    .compile();
+      .overrideGuard(AuthGuard)
+      .useValue({ canActivate: jest.fn(() => true) })
+      .compile();
 
     controller = module.get<UsersController>(UsersController);
     service = module.get<UsersService>(UsersService);
