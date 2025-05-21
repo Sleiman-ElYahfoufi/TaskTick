@@ -88,9 +88,7 @@ const TechStack: React.FC<TechStackProps> = ({
                 if (response.data && Array.isArray(response.data)) {
                     setUserTechStacks(response.data);
                 }
-            } catch (err) {
-                console.error("Failed to fetch user tech stacks:", err);
-            }
+            } catch (err) {}
         };
 
         fetchUserTechStacks();

@@ -11,7 +11,7 @@ export const fetchUserData = async (userId: string): Promise<UserProfileData> =>
         const response = await api.get(`/users/${userId}`);
         return response.data;
     } catch (error) {
-        console.error("Error fetching user data:", error);
+
         throw new Error("Failed to load user data");
     }
 };
@@ -24,7 +24,7 @@ export const fetchUserTechStacks = async (userId: number): Promise<UserTechStack
         }
         return [];
     } catch (error) {
-        console.error("Failed to fetch user tech stacks:", error);
+
         return [];
     }
 };
@@ -49,7 +49,7 @@ export const updateUserProfile = async (
         const response = await api.patch(`/users/${userId}`, updateData);
         return response.data;
     } catch (error) {
-        console.error("Error updating profile:", error);
+
         throw new Error("Failed to update profile");
     }
 };
@@ -62,7 +62,7 @@ export const updateUserTechStacks = async (
     try {
         const techIdsToKeep = techSelections.map(selection => selection.techId);
 
-        
+
         const techStacksToDelete = existingTechStacks.filter(
             stack => !techIdsToKeep.includes(stack.tech_id)
         );
@@ -73,7 +73,7 @@ export const updateUserTechStacks = async (
             )
         );
 
-        
+
         await Promise.all(
             techSelections.map(async selection => {
                 const existingStack = existingTechStacks.find(
@@ -96,7 +96,7 @@ export const updateUserTechStacks = async (
             })
         );
     } catch (error) {
-        console.error("Error updating tech stacks:", error);
+
         throw new Error("Failed to update tech stacks");
     }
 };
@@ -108,15 +108,15 @@ export const saveUserSettings = async (
     existingTechStacks: UserTechStackData[]
 ): Promise<any> => {
     try {
-        
+
         const updatedUserData = await updateUserProfile(userId, profileData);
 
-        
+
         await updateUserTechStacks(userId, techSelections, existingTechStacks);
 
         return updatedUserData;
     } catch (error) {
-        console.error("Error saving settings:", error);
+
         throw new Error("Failed to save settings");
     }
 }; 

@@ -86,20 +86,20 @@ export const useTaskActionsHandler = ({
     const handleStartTimer = useCallback(
         (taskId: string | number) => {
             if (!user?.id) {
-                console.log(
+                
                     "[TaskActionsHandler] handleStartTimer - No user ID available"
                 );
                 return;
             }
 
             if (activeSession) {
-                console.log(
+                
                     "[TaskActionsHandler] handleStartTimer - Cannot start new timer, a session is already active"
                 );
                 return;
             }
 
-            console.log(
+            
                 `[TaskActionsHandler] handleStartTimer - Starting timer for task ${taskId}`
             );
             const numericUserId = parseInt(String(user.id), 10);
@@ -110,7 +110,7 @@ export const useTaskActionsHandler = ({
             );
 
             if (!currentTask) {
-                console.error(
+                
                     `[TaskActionsHandler] Task ${taskId} not found in state`
                 );
                 return;
@@ -121,7 +121,7 @@ export const useTaskActionsHandler = ({
                 status: "In Progress",
             };
 
-            console.log(
+            
                 `[TaskActionsHandler] handleStartTimer - Setting task ${taskId} status to In Progress while preserving other fields`,
                 taskData
             );
@@ -134,7 +134,7 @@ export const useTaskActionsHandler = ({
                 })
             )
                 .then(() => {
-                    console.log(
+                    
                         `[TaskActionsHandler] handleStartTimer - Status updated, now starting time tracking session for user ${numericUserId}, task ${numericTaskId}`
                     );
 
@@ -146,7 +146,7 @@ export const useTaskActionsHandler = ({
                     );
                 })
                 .then((result) => {
-                    console.log(
+                    
                         `[TaskActionsHandler] startTaskSession success:`,
                         result
                     );
@@ -156,12 +156,12 @@ export const useTaskActionsHandler = ({
                     dispatch(fetchTaskTimeSummary(numericTaskId));
                     dispatch(fetchTaskTimeTrackings(numericTaskId));
 
-                    console.log(
+                    
                         `[TaskActionsHandler] Timer started and UI data refreshed for task ${numericTaskId}`
                     );
                 })
                 .catch((error) => {
-                    console.error(
+                    
                         `[TaskActionsHandler] Error in timer start flow:`,
                         error
                     );

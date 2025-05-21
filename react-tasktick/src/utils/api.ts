@@ -14,9 +14,9 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
 
-            
-                console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
-            
+
+
+
         }
         return config;
     },
@@ -44,7 +44,7 @@ api.interceptors.response.use(
                 ? error.response.data.message
                 : error.message;
 
-            console.error(`API Error (${error.response.status}):`, errorMessage);
+
         }
 
         return Promise.reject(error);

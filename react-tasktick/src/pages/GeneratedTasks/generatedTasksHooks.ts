@@ -81,7 +81,7 @@ export const useGeneratedTasks = () => {
                 navigate("/dashboard/projects");
             }, 2000);
         } catch (err: any) {
-            console.error("Error saving project:", err);
+
             setError(err.message || "Failed to save project. Please try again.");
         } finally {
             setIsLoading(false);

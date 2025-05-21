@@ -67,10 +67,10 @@ class ProjectsService {
                 return response.data;
             }
 
-            console.warn('API response format is not as expected:', response.data);
+
             return { projects: [], total: 0 };
         } catch (error) {
-            console.error('Error fetching user projects:', error);
+
             return { projects: [], total: 0 };
         }
     }
@@ -138,7 +138,7 @@ class ProjectsService {
                 // Handle case where UI format is already in the object
                 status = 'in-progress';
             } else {
-                console.warn(`Unknown status "${project.status}" being mapped to "planning"`);
+
             }
         }
 
@@ -171,7 +171,7 @@ class ProjectsService {
             const response = await api.get<Project>(`/projects/${projectId}`);
             return this.mapProjectData(response.data);
         } catch (error) {
-            console.error(`Error fetching project ${projectId}:`, error);
+
             throw error;
         }
     }
@@ -217,7 +217,7 @@ class ProjectsService {
             const response = await api.post<Project>('/projects', project);
             return this.mapProjectData(response.data);
         } catch (error) {
-            console.error('Error creating project:', error);
+
             throw error;
         }
     }
@@ -309,7 +309,7 @@ class ProjectsService {
             }
             return this.mapProjectData(mergedResult);
         } catch (error) {
-            console.error(`Error updating project ${projectId}:`, error);
+
             throw error;
         }
     }
@@ -318,23 +318,23 @@ class ProjectsService {
         try {
             await api.delete(`/projects/${projectId}`);
         } catch (error) {
-            console.error(`Error deleting project ${projectId}:`, error);
+
             throw error;
         }
     }
 
     async updateProjectTask(taskId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
-        console.warn('projectsService.updateProjectTask is deprecated, use tasksService.updateTask instead');
+
         return tasksService.updateTask(taskId, taskData);
     }
 
     async addProjectTask(projectId: string | number, taskData: Partial<ProjectTask>): Promise<ProjectTask> {
-        console.warn('projectsService.addProjectTask is deprecated, use tasksService.createTask instead');
+
         return tasksService.createTask(projectId, taskData);
     }
 
     async deleteProjectTask(taskId: string | number): Promise<string | number> {
-        console.warn('projectsService.deleteProjectTask is deprecated, use tasksService.deleteTask instead');
+
         return tasksService.deleteTask(taskId);
     }
 

@@ -226,7 +226,7 @@ export const parseDate = (value: any): Date | null => {
 
         return null;
     } catch (e) {
-        console.error("Error parsing date:", e);
+
         return null;
     }
 };

@@ -13,7 +13,7 @@ class TasksService {
 
             return response.data.map(task => this.normalizeTaskData(task));
         } catch (error: any) {
-            console.error('Error fetching user tasks:', error);
+
             throw new Error(error.message || 'Failed to fetch tasks');
         }
     }
@@ -29,7 +29,7 @@ class TasksService {
 
             return response.data.map(task => this.normalizeTaskData(task));
         } catch (error: any) {
-            console.error(`Error fetching tasks for project ${projectId}:`, error);
+
             throw new Error(error.message || 'Failed to fetch project tasks');
         }
     }
@@ -80,7 +80,7 @@ class TasksService {
                         task.dueDate = dateObj.toISOString();
                     }
                 } catch (e) {
-                    console.warn(`Invalid date format for dueDate: ${dueDate}`);
+
                 }
             }
 
@@ -90,7 +90,7 @@ class TasksService {
             const response = await api.post<ProjectTask>('/tasks', task);
             return this.normalizeTaskData(response.data);
         } catch (error: any) {
-            console.error('Error creating task:', error);
+
             throw new Error(error.message || 'Failed to create task');
         }
     }
@@ -146,7 +146,7 @@ class TasksService {
                             updateData.dueDate = dateObj.toISOString();
                         }
                     } catch (e) {
-                        console.warn(`Invalid date format for dueDate: ${dueDate}`);
+
                     }
                 }
             }
@@ -162,7 +162,7 @@ class TasksService {
             const response = await api.patch<ProjectTask>(`/tasks/${taskId}`, updateData);
             return this.normalizeTaskData(response.data);
         } catch (error: any) {
-            console.error(`Error updating task ${taskId}:`, error);
+
             throw new Error(error.message || 'Failed to update task');
         }
     }
@@ -183,7 +183,7 @@ class TasksService {
             const taskData = { [field]: fieldValue } as Partial<ProjectTask>;
             return this.updateTask(taskId, taskData);
         } catch (error: any) {
-            console.error(`Error updating task ${taskId} field ${field}:`, error);
+
             throw new Error(error.message || `Failed to update ${field}`);
         }
     }
@@ -194,7 +194,7 @@ class TasksService {
             await api.delete(`/tasks/${taskId}`);
             return taskId;
         } catch (error: any) {
-            console.error(`Error deleting task ${taskId}:`, error);
+
             throw new Error(error.message || 'Failed to delete task');
         }
     }

@@ -39,10 +39,10 @@ export const mapStatusToUI = (status: string): ProjectStatus => {
     }
 
     // Default fallback
-    console.warn(
-        `Unknown status format: ${status}, defaulting to planning`
+
+    `Unknown status format: ${status}, defaulting to planning`
     );
-    return "planning";
+return "planning";
 };
 
 export const mapStatusToAPI = (status: string): string => {

@@ -12,8 +12,6 @@ interface ProductivityBreakdown {
 }
 
 const ProductivityHeatmap: React.FC<ProductivityHeatmapProps> = ({ data }) => {
-    // Debug: Log the data received
-    console.log("ProductivityHeatmap received data:", data);
 
     const [tooltip, setTooltip] = useState<{
         show: boolean;
@@ -70,7 +68,6 @@ const ProductivityHeatmap: React.FC<ProductivityHeatmapProps> = ({ data }) => {
     };
 
     const getIntensity = (cell: ProductivityBreakdown): number => {
-        // Debug: Log cell data and intensity
         const intensity =
             !cell || typeof cell.taskCount !== "number" || cell.taskCount <= 0
                 ? 0

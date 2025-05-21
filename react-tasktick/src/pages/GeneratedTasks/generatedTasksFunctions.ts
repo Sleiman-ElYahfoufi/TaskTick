@@ -192,7 +192,7 @@ export const loadDecompositionResults = (): {
             error: null
         };
     } catch (err) {
-        console.error("Error parsing saved tasks:", err);
+
         return {
             result: null,
             tasks: [],
