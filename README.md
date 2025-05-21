@@ -172,7 +172,7 @@ TaskTick is an AI-powered task management system designed  for software develope
  ![fsdaf](./readme/demo/Deployment_Flow.png)
 
 ### AWS Cloud Deployment:
-TaskTick is deployed using AWS infrastructure with an EC2 instance running the NestJS backend and MySQL database. The frontend is served from S3 buckets for improved performance and reliability. The deployment leverages load balancing for traffic management and auto-scaling to handle demand fluctuations, while CloudWatch monitors system health and performance metrics.
+TaskTick is deployed using AWS infrastructure with two EC2 instances, each running the NestJS backend and the MySQL database. The frontend is served from S3 bucket for improved performance and reliability. The deployment leverages load balancing for traffic management and auto-scaling to handle demand fluctuations.
 | Login                                   |     Project Decomposition                        | 
 | --------------------------------------- | ------------------------------------- | 
 | ![Landing](./readme/demo/Login_API.png) | ![fsdaf](./readme/demo/Project_Decompostion_API.png) | 
