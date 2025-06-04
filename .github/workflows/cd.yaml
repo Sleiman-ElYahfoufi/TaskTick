@@ -87,7 +87,7 @@ jobs:
                       sudo chmod 600 /home/${{ secrets.EC2_USER }}/secrets/*
 
                       sudo chown -R ${{ secrets.EC2_USER }}:${{ secrets.EC2_USER }} /home/${{ secrets.EC2_USER }}/secrets
-                      sudo docker-compose -f "docker-compose (Database).yaml" up -d
+                      sudo docker-compose up -d database
 
             - name: Copy database files to EC2
               uses: appleboy/scp-action@v1
@@ -116,4 +116,4 @@ jobs:
                       sed -i "s|DB_PASSWORD=\${DB_PASSWORD}|DB_PASSWORD=${{ secrets.DB_PASSWORD }}|g" "docker-compose (Backend).yaml"
 
                       # Run docker-compose
-                      sudo docker-compose -f "docker-compose (Backend).yaml" up -d
+                      sudo docker-compose up -d backend
